@@ -19,6 +19,7 @@ class ToolPage(QWidget):
         super().__init__(parent)
         # self.setObjectName("ToolPage")
         self.setFixedWidth(55)
+        self.setMouseTracking(True)
         self.setWindowFlag(Qt.FramelessWindowHint)
         StyleSheetUtils.setQssByFileName("./_rc/qss/ToolPage.qss", self)
         

@@ -1,8 +1,8 @@
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import QPixmap, QSize
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+
 from StyleSheetUtils import StyleSheetUtils
-from PyQt5.QtGui import QPainter
-from PyQt5.QtWidgets import QStyle, QStyleOption
 
 class SesPageToolBar(QWidget):
     def __init__(self, parent=None):
@@ -11,10 +11,10 @@ class SesPageToolBar(QWidget):
         self.hMainLayout = QHBoxLayout()
         self.setLayout(self.hMainLayout)
         
-        self.emojiBtn = self.makeBtn("./_rc/imgs/emojiBtn.png")
-        self.sendFileBtn = self.makeBtn("./_rc/imgs/sendFileBtn.png")
-        self.screenShotBtn = self.makeBtn("./_rc/imgs/screenShotBtn.png")
-        self.voiceTelphoneBtn = self.makeBtn("./_rc/imgs/voiceTelephoneBtn.png")
+        self.emojiBtn = self.makeBtn("./_rc/img/emojiBtn.png")
+        self.sendFileBtn = self.makeBtn("./_rc/img/sendFileBtn.png")
+        self.screenShotBtn = self.makeBtn("./_rc/img/screenShotBtn.png")
+        self.voiceTelphoneBtn = self.makeBtn("./_rc/img/voiceTelphoneBtn.png")
         
         self.hMainLayout.addWidget(self.emojiBtn)
         self.hMainLayout.addWidget(self.sendFileBtn)
@@ -26,7 +26,7 @@ class SesPageToolBar(QWidget):
         StyleSheetUtils.setQssByFileName("./_rc/qss/SesPageToolBar.qss", self)
     def makeBtn(self, iconPath,):
         btn = QPushButton()
-        btn.setIcon(QPixmap(iconPath))
+        btn.setIcon(QIcon(QPixmap(iconPath)))
         btn.setIconSize(QSize(20, 20))
         btn.setFixedSize(30, 30)
         return btn

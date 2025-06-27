@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt6.QtWidgets import *
+from PyQt6.QtCore import *
+from PyQt6.QtGui import *
 from StyleSheetUtils import StyleSheetUtils
 
 class SesPageTop(QWidget):
@@ -35,7 +35,7 @@ class SesPageTop(QWidget):
         self.titleLable = QLabel()
         self.titleLable.setText("just a title")
         self.titleLable.setFixedHeight(40)
-        self.titleLable.setAlignment(Qt.AlignLeft)
+        self.titleLable.setAlignment(Qt.AlignmentFlag.AlignLeft)
         
         self.moreBtn = self.makeBtn("./_rc/img/moreBtn.png")
         
@@ -71,4 +71,4 @@ class SesPageTop(QWidget):
         opt = QStyleOption()
         opt.initFrom(self)
         painter = QPainter(self)
-        self.style().drawPrimitive(QStyle.PE_Widget, opt, painter, self)
+        self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)

@@ -1,10 +1,11 @@
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QPushButton, QListWidget
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QSize, Qt
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QPushButton, QListWidget
+from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import QSize, Qt
 from VSplit import VSplit
-from PyQt5.QtGui import QPainter
-from PyQt5.QtWidgets import QStyle, QStyleOption
+from PyQt6.QtGui import QPainter
+from PyQt6.QtWidgets import QStyle, QStyleOption
 from StyleSheetUtils import StyleSheetUtils
+from SelectPage import SelectPage
 
 class MsgListPage(QWidget):
     def __init__(self, parent=None):
@@ -31,6 +32,7 @@ class MsgListPage(QWidget):
         self.hTopLayout.addWidget(self.searchEdit)
         self.hTopLayout.addSpacing(10)
         self.hTopLayout.addWidget(self.addBtn)
+        self.hTopLayout.addSpacing(10)
         
         self.vMainLayout.addSpacing(25)
         self.vMainLayout.addLayout(self.hTopLayout)
@@ -41,16 +43,29 @@ class MsgListPage(QWidget):
         
         self.list = QListWidget()
         self.list.setFixedWidth(255)
-        self.list.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.list.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.vMainLayout.addWidget(self.list)
         self.setFixedWidth(255)
         
+        
+        # 处理事件
+        self.addBtn.clicked.connect(self.onAddBtnClicked)
+        
         StyleSheetUtils.setQssByFileName("./_rc/qss/MsgListPage.qss", self)
+    
+    def onAddBtnClicked(self):
+        geom = self.addBtn.geometry()
+        gp = self.mapToGlobal(geom.topLeft())
+        gp.setY(self.addBtn.height() + gp.y())
+        
+        self.selectPage = SelectPage()
+        self.selectPage.move(gp)
+        self.selectPage.show()
     
     def paintEvent(self, event):
         opt = QStyleOption()
         opt.initFrom(self)
         painter = QPainter(self)
-        self.style().drawPrimitive(QStyle.PE_Widget, opt, painter, self)
+        self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
         
         

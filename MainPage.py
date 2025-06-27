@@ -1,21 +1,24 @@
 # import QWidget
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-# from PyQt5.QtWidgets import QHBoxLayout
+from PyQt6.QtWidgets import *
+from PyQt6.QtCore import *
+# from PyQt6.QtWidgets import QHBoxLayout
 from ToolPage import ToolPage
-from PyQt5.QtGui import *
+from PyQt6.QtGui import *
 from MsgListPage import MsgListPage
 from HSplit import HSplit
 from SesPage import SesPage
+from NetClientUtils import NetClientUtils
+from sigleton import singleton
 
 # res
 from _rc.res import *
 
+@singleton
 class MainPage(QWidget):
     def __init__(self):
         super().__init__()
         # self.setWindowTitle("Main Window")
-        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setMouseTracking(True)
         # self.setWindowIcon(QIcon("./_rc/img/app.ico"))
         
@@ -61,23 +64,9 @@ class MainPage(QWidget):
         self.resizeEdge = 5    # 边缘可拖动区域的宽度（像素）
         self.dragDirection = None  # 拖动方向，如 Qt.LeftEdge、Qt.RightEdge 等
 
-    # # 支持拖动
-    # def mousePressEvent(self, event):
-    #     if event.button() != Qt.LeftButton:
-    #         return
-        
-    #     self.pressed = True
-    #     self.pressedPos = event.pos()
-
-    # def mouseReleaseEvent(self, event):
-    #     self.pressed = False
-
-    # def mouseMoveEvent(self, event):
-    #     if self.pressed:
-    #         self.move(self.pos() + event.pos() - self.pressedPos)
 
     def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.MouseButton.LeftButton:
             pos = event.pos()
             rect = self.rect()
             x = pos.x()
@@ -86,29 +75,32 @@ class MainPage(QWidget):
             # 判断是否点击在窗口边缘
             if x < self.resizeEdge:
                 if y < self.resizeEdge:
-                    self.dragDirection = Qt.TopLeftCorner
+                    self.dragDirection = Qt.Corner.TopLeftCorner
                 elif y > rect.height() - self.resizeEdge:
-                    self.dragDirection = Qt.BottomLeftCorner
+                    self.dragDirection = Qt.Corner.BottomLeftCorner
                 else:
-                    self.dragDirection = Qt.LeftEdge
+                    self.dragDirection = Qt.Edge.LeftEdge
             elif x > rect.width() - self.resizeEdge:
                 if y < self.resizeEdge:
-                    self.dragDirection = Qt.TopRightCorner
+                    self.dragDirection = Qt.Corner.TopRightCorner
                 elif y > rect.height() - self.resizeEdge:
-                    self.dragDirection = Qt.BottomRightCorner
+                    self.dragDirection = Qt.Corner.BottomRightCorner
                 else:
-                    self.dragDirection = Qt.RightEdge
+                    self.dragDirection = Qt.Edge.RightEdge
             elif y < self.resizeEdge:
-                self.dragDirection = Qt.TopEdge
+                self.dragDirection = Qt.Edge.TopEdge
             elif y > rect.height() - self.resizeEdge:
-                self.dragDirection = Qt.BottomEdge
+                self.dragDirection = Qt.Edge.BottomEdge
             else:
                 self.dragDirection = None
 
             if self.dragDirection is not None:
                 self.dragging = True
-                self.dragStartPos = pos
+
+                # pos globalPos
+                self.dragStartPos = event.globalPosition()
                 self.originalGeometry = self.geometry()
+                # print(f"mousePressEvent Dragging: {self.dragDirection},  Original Geometry: {self.originalGeometry} Evnet Pos: {event.pos()} gloabalPos: {event.globalPosition()}")
                 event.accept()
             else:
                 # super().mousePressEvent(event)
@@ -119,36 +111,48 @@ class MainPage(QWidget):
 
     def mouseMoveEvent(self, event):
         if self.dragging:
-            dx = event.x() - self.dragStartPos.x()
-            dy = event.y() - self.dragStartPos.y()
+            dx = event.globalPosition().x() - self.dragStartPos.x()
+            dy = event.globalPosition().y() - self.dragStartPos.y()
             new_rect = QRect(self.originalGeometry)
 
             # 根据拖动方向调整窗口大小
-            if self.dragDirection == Qt.LeftEdge:
+            if self.dragDirection == Qt.Edge.LeftEdge:
                 new_rect.setLeft(self.originalGeometry.left() + dx)
-            elif self.dragDirection == Qt.RightEdge:
+            elif self.dragDirection == Qt.Edge.RightEdge:
                 new_rect.setRight(self.originalGeometry.right() + dx)
-            elif self.dragDirection == Qt.TopEdge:
+            elif self.dragDirection == Qt.Edge.TopEdge:
                 new_rect.setTop(self.originalGeometry.top() + dy)
-            elif self.dragDirection == Qt.BottomEdge:
+            elif self.dragDirection == Qt.Edge.BottomEdge:
                 new_rect.setBottom(self.originalGeometry.bottom() + dy)
-            elif self.dragDirection == Qt.TopLeftCorner:
+            elif self.dragDirection == Qt.Corner.TopLeftCorner:
                 new_rect.setTop(self.originalGeometry.top() + dy)
                 new_rect.setLeft(self.originalGeometry.left() + dx)
-            elif self.dragDirection == Qt.TopRightCorner:
+            elif self.dragDirection == Qt.Corner.TopRightCorner:
                 new_rect.setTop(self.originalGeometry.top() + dy)
                 new_rect.setRight(self.originalGeometry.right() + dx)
-            elif self.dragDirection == Qt.BottomLeftCorner:
+            elif self.dragDirection == Qt.Corner.BottomLeftCorner:
                 new_rect.setBottom(self.originalGeometry.bottom() + dy)
                 new_rect.setLeft(self.originalGeometry.left() + dx)
-            elif self.dragDirection == Qt.BottomRightCorner:
+            elif self.dragDirection == Qt.Corner.BottomRightCorner:
                 new_rect.setBottom(self.originalGeometry.bottom() + dy)
                 new_rect.setRight(self.originalGeometry.right() + dx)
 
             # dragStartPos更新
             # self.dragStartPos = event.pos()
+            
+            if new_rect.width() < self.minimumWidth() or new_rect.height() < self.minimumHeight():
+                event.accept()
+                return
+
             self.setGeometry(new_rect)
+            # self.originalGeometry = new_rect
+            # self.dragStartPos = event.pos()
+
+
             event.accept()
+            
+            # print(f"mouseMoveEvent Dragging: {self.dragDirection},  Original Geometry: {self.originalGeometry}, New Geometry: {new_rect} Evnet Pos: {event.pos()} dragStartPos: {self.dragStartPos}")
+
         elif self.pressed:
             self.move(self.pos() + event.pos() - self.pressedPos)
         else:
@@ -159,30 +163,30 @@ class MainPage(QWidget):
             y = pos.y()
 
             if x < self.resizeEdge or x > rect.width() - self.resizeEdge or y < self.resizeEdge or y > rect.height() - self.resizeEdge:
-                cursor_shape = Qt.ArrowCursor
+                cursor_shape = Qt.CursorShape.ArrowCursor
                 if x < self.resizeEdge:
                     if y < self.resizeEdge:
-                        cursor_shape = Qt.SizeFDiagCursor
+                        cursor_shape = Qt.CursorShape.SizeFDiagCursor
                     elif y > rect.height() - self.resizeEdge:
-                        cursor_shape = Qt.SizeBDiagCursor
+                        cursor_shape = Qt.CursorShape.SizeBDiagCursor
                     else:
-                        cursor_shape = Qt.SizeHorCursor
+                        cursor_shape = Qt.CursorShape.SizeHorCursor
                 elif x > rect.width() - self.resizeEdge:
                     if y < self.resizeEdge:
-                        cursor_shape = Qt.SizeBDiagCursor
+                        cursor_shape = Qt.CursorShape.SizeBDiagCursor
                     elif y > rect.height() - self.resizeEdge:
-                        cursor_shape = Qt.SizeFDiagCursor
+                        cursor_shape = Qt.CursorShape.SizeFDiagCursor
                     else:
-                        cursor_shape = Qt.SizeHorCursor
+                        cursor_shape = Qt.CursorShape.SizeHorCursor
                 elif y < self.resizeEdge or y > rect.height() - self.resizeEdge:
-                    cursor_shape = Qt.SizeVerCursor
+                    cursor_shape = Qt.CursorShape.SizeVerCursor
                 self.setCursor(cursor_shape)
             else:
-                self.setCursor(Qt.ArrowCursor)
+                self.setCursor(Qt.CursorShape.ArrowCursor)
             super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.MouseButton.LeftButton:
             self.dragging = False
             self.dragDirection = None
             self.pressed = False

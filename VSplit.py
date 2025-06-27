@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget
 from StyleSheetUtils import StyleSheetUtils
-from PyQt5.QtGui import QPainter
-from PyQt5.QtWidgets import QStyle, QStyleOption
+from PyQt6.QtGui import QPainter
+from PyQt6.QtWidgets import QStyle, QStyleOption
 
 class VSplit(QWidget):
     def __init__(self, parent=None):
@@ -13,4 +13,4 @@ class VSplit(QWidget):
         opt = QStyleOption()
         opt.initFrom(self)
         painter = QPainter(self)
-        self.style().drawPrimitive(QStyle.PE_Widget, opt, painter, self)
+        self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)

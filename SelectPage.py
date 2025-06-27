@@ -5,6 +5,9 @@ from StyleSheetUtils import StyleSheetUtils
 
 # from MainPage import MainPage
 class SelectPage(QWidget):
+    
+    clickedAddBtn = pyqtSignal()
+    clickedCreateBtn = pyqtSignal()
     def __init__(self, parent=None):
         super().__init__(parent)
         self.vMainLayout = QVBoxLayout()
@@ -12,21 +15,26 @@ class SelectPage(QWidget):
         self.vMainLayout.setSpacing(0)
         self.setLayout(self.vMainLayout)
         
-        self.add = QPushButton("添加好友/群聊")
-        self.create = QPushButton("创建群聊")
+        self.addBtn = QPushButton("添加好友/群聊")
+        self.createBtn = QPushButton("创建群聊")
         
-        self.vMainLayout.addWidget(self.add)
-        self.vMainLayout.addWidget(self.create)
+        self.vMainLayout.addWidget(self.addBtn)
+        self.vMainLayout.addWidget(self.createBtn)
          
-        # self.setWindowFlags(Qt.WindowType.Popup)
+        self.addBtn.clicked.connect(self.onClickedAddBtn)
+        self.createBtn.clicked.connect(self.onClickedCreateBtn)
+        
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Popup)
         StyleSheetUtils.setQssByFileName("./_rc/qss/SelectPage.qss", self)
         
-    # def event(self, a0):
-    #     if a0.type() == QEvent.Type.ActionChanged:
-    #         self.close()
-    #     return super().event(a0)
-    
+    def onClickedAddBtn(self):
+        self.clickedAddBtn.emit()
+        self.close()
+        
+    def onClickedCreateBtn(self):
+        self.clickedCreateBtn.emit()
+        self.close()
+        
     def paintEvent(self, event):
         opt = QStyleOption()
         opt.initFrom(self)

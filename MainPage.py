@@ -63,6 +63,10 @@ class MainPage(QWidget):
         self.dragging = False  # 是否正在拖动
         self.resizeEdge = 5    # 边缘可拖动区域的宽度（像素）
         self.dragDirection = None  # 拖动方向，如 Qt.LeftEdge、Qt.RightEdge 等
+        
+        # connect;
+        self.midPage.clickedAddBtn.connect(lambda: print("clicked addBtn"))
+        self.midPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
 
 
     def mousePressEvent(self, event):

@@ -1,13 +1,15 @@
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QLineEdit, QPushButton, QListWidget
-from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import QSize, Qt
+from PyQt6.QtWidgets import *
+from PyQt6.QtGui import *
+from PyQt6.QtCore import *
 from VSplit import VSplit
-from PyQt6.QtGui import QPainter
-from PyQt6.QtWidgets import QStyle, QStyleOption
 from StyleSheetUtils import StyleSheetUtils
 from SelectPage import SelectPage
 
 class MsgListPage(QWidget):
+    
+    clickedAddBtn = pyqtSignal()
+    clickedCreateBtn = pyqtSignal()
+    
     def __init__(self, parent=None):
         super().__init__(parent)
         
@@ -59,6 +61,10 @@ class MsgListPage(QWidget):
         gp.setY(self.addBtn.height() + gp.y())
         
         self.selectPage = SelectPage()
+        
+        self.selectPage.clickedAddBtn.connect(lambda: self.clickedAddBtn.emit())
+        self.selectPage.clickedCreateBtn.connect(lambda: self.clickedCreateBtn.emit())
+        
         self.selectPage.move(gp)
         self.selectPage.show()
     

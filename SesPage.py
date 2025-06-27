@@ -37,13 +37,6 @@ class SesPage(QWidget):
         self.edit.setAcceptDrops(False)
         self.edit.setAcceptRichText(True)
 
-        self.vMainLayout.addWidget(self.sesPageTop)
-        self.vMainLayout.addWidget(self.sp1)
-        self.vMainLayout.addWidget(self.list, 2)
-        self.vMainLayout.addWidget(self.sp2)
-        self.vMainLayout.addWidget(self.sesPageToolBar)
-        self.vMainLayout.addWidget(self.edit, 1)
-
         self.hBottomLayout = QHBoxLayout()
         self.sendBtn = QPushButton("发送[s]")
         self.sendBtn.setFixedSize(70, 30)
@@ -51,6 +44,14 @@ class SesPage(QWidget):
         self.hBottomLayout.addStretch(1)
         self.hBottomLayout.addWidget(self.sendBtn)
         self.hBottomLayout.addSpacing(15)
+        
+        self.vMainLayout.addWidget(self.sesPageTop)
+        self.vMainLayout.addWidget(self.sp1)
+        self.vMainLayout.addWidget(self.list, 2)
+        self.vMainLayout.addWidget(self.sp2)
+        self.vMainLayout.addWidget(self.sesPageToolBar)
+        self.vMainLayout.addWidget(self.edit, 1)
+        self.vMainLayout.addLayout(self.hBottomLayout)
 
         StyleSheetUtils.setQssByFileName("./_rc/qss/SesPage.qss", self)
 

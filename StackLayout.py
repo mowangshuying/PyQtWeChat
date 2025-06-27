@@ -7,7 +7,7 @@ class StackLayout(QStackedLayout):
         super().__init__(parent)
         self.map = {}
     
-    def addWidget(self, key, widget):
+    def addWidgetByKey(self, key, widget):
         super().addWidget(widget)
         self.map[key] = widget
         

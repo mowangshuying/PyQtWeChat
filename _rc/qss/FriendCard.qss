@@ -1,0 +1,10 @@
+FriendCard {
+    background-color: rgb(243, 243, 243);
+    border: 1px solid rgb(130,135,144);
+    border-radius: 4px;
+}
+
+QPushButton {
+    background-color: aqua;
+    border: 1px solid transparent;
+}

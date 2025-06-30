@@ -24,11 +24,14 @@ class RegLoginPage(QWidget):
         self.hTopLayout.setContentsMargins(0, 0, 0, 0)
         self.top.setLayout(self.hTopLayout)
         
-        self.title = QLabel()
+        self.titleLabel = QLabel()
+        self.titleLabel.setObjectName("titleLabel")
         self.minBtn = self.makeBtn("./_rc/img/minBtn.png")
+        self.minBtn.setObjectName("minBtn")
         self.closeBtn = self.makeBtn("./_rc/img/closeBtn.png")
+        self.closeBtn.setObjectName("closeBtn")
         
-        self.hTopLayout.addWidget(self.title)
+        self.hTopLayout.addWidget(self.titleLabel)
         self.hTopLayout.addStretch()
         self.hTopLayout.addWidget(self.minBtn)
         self.hTopLayout.addWidget(self.closeBtn)
@@ -44,32 +47,33 @@ class RegLoginPage(QWidget):
         self.account.setPlaceholderText("请输入用户名")
         self.account.setText("")
         
-        self.password = QLineEdit()
-        self.password.setFixedSize(256, 36)
-        self.password.setPlaceholderText("请输入密码")
-        self.password.setText("")
+        self.passwordEdit = QLineEdit()
+        self.passwordEdit.setFixedSize(256, 36)
+        self.passwordEdit.setPlaceholderText("请输入密码")
+        self.passwordEdit.setText("")
         
         self.hBtnLayout = QHBoxLayout()
         self.regOrLogin = QCheckBox("注册")
-        self.remmberPassword = QCheckBox("记住密码")
+        self.remmberPasswordCheckBox = QCheckBox("记住密码")
         self.hBtnLayout.addWidget(self.regOrLogin)
         self.hBtnLayout.addStretch()
-        self.hBtnLayout.addWidget(self.remmberPassword)
+        self.hBtnLayout.addWidget(self.remmberPasswordCheckBox)
         
-        self.btn = QPushButton("登录")
-        self.btn.setFixedSize(256, 36)
+        self.loginBtn = QPushButton("登录")
+        self.loginBtn.setObjectName("loginBtn")
+        self.loginBtn.setFixedSize(256, 36)
         
         self.vBottomLayout.addWidget(self.account)
-        self.vBottomLayout.addWidget(self.password)
+        self.vBottomLayout.addWidget(self.passwordEdit)
         self.vBottomLayout.addLayout(self.hBtnLayout)
-        self.vBottomLayout.addWidget(self.btn)
+        self.vBottomLayout.addWidget(self.loginBtn)
         # self.vBottomLayout.addSpacing(200)
         
         self.vMainLayout.addWidget(self.top)
         self.vMainLayout.addWidget(self.bottom)
         
         
-        self.btn.clicked.connect(self.onBtnClicked)
+        self.loginBtn.clicked.connect(self.onBtnClicked)
        
         self.__netClientUtils = NetClientUtils()
                 
@@ -91,14 +95,14 @@ class RegLoginPage(QWidget):
         return btn
     
     def requesRegUser(self):
-        data = {"username": self.account.text(),  "nickname" : self.account.text(), "password": self.password.text(), "sex": 0}
+        data = {"username": self.account.text(),  "nickname" : self.account.text(), "password": self.passwordEdit.text(), "sex": 0}
         self.__netClientUtils.request(MsgCmd.regUser, data, lambda msg: print(msg))
 
     def responseRegUser(self, msg):
         pass
         
     def requestLogin(self):
-        self.__netClientUtils.request(MsgCmd.login, {"username": self.account.text(), "password": self.password.text()}, self.responseLogin)
+        self.__netClientUtils.request(MsgCmd.login, {"username": self.account.text(), "password": self.passwordEdit.text()}, self.responseLogin)
         
     def responseLogin(self, msg):
         if msg["state"] == MsgState.ok:

@@ -9,6 +9,8 @@ from HSplit import HSplit
 from SesPage import SesPage
 from NetClientUtils import NetClientUtils
 from sigleton import singleton
+from StackLayout import StackLayout
+from AddFriendsPage import AddFriendsPage
 
 # res
 from _rc.res import *
@@ -38,23 +40,14 @@ class MainPage(QWidget):
         # sp
         self.sp = HSplit()
         self.hMainLayout.addWidget(self.sp)
-        
-        # self.hMainLayout.addStretch(1)
-        self.sesPage = SesPage(self)
-        # sesPage.maxBtn clicked connect lambda: self.sesPage.showMaximized()
 
-        self.sesPage.getMinBtn().clicked.connect(lambda: self.showMinimized())
-
-        # if max then normal, if normal then max
-        self.sesPage.getMaxBtn().clicked.connect(lambda: self.showNormal() if self.isMaximized() else self.showMaximized())
-        
-        self.sesPage.getCloseBtn().clicked.connect(lambda: self.close())
-
-        self.hMainLayout.addWidget(self.sesPage, 1)
+        self.rightLayout = StackLayout()
+        self.__initRightPage()
+        self.hMainLayout.addLayout(self.rightLayout, 1)
         
         self.setLayout(self.hMainLayout)
 
-        self.resize(800, 600)
+        self.resize(1000, 750)
 
 
         self.pressed = False
@@ -65,9 +58,30 @@ class MainPage(QWidget):
         self.dragDirection = None  # 拖动方向，如 Qt.LeftEdge、Qt.RightEdge 等
         
         # connect;
-        self.midPage.clickedAddBtn.connect(lambda: print("clicked addBtn"))
+        self.midPage.clickedAddBtn.connect(self.onClickedAddBtn)
         self.midPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
 
+
+    def __initRightPage(self):
+        # SesPage;
+        self.sesPage = SesPage(self)
+        self.sesPage.getMinBtn().clicked.connect(lambda: self.showMinimized())
+        self.sesPage.getMaxBtn().clicked.connect(lambda: self.showNormal() if self.isMaximized() else self.showMaximized())
+        self.sesPage.getCloseBtn().clicked.connect(lambda: self.close())
+        self.rightLayout.addWidgetByKey("SesPage", self.sesPage)
+
+        # AddFriendsPage;
+        self.addFriendsPage = AddFriendsPage(self)
+        self.addFriendsPage.getMinBtn().clicked.connect(lambda: self.showMinimized())
+        self.addFriendsPage.getMaxBtn().clicked.connect(lambda: self.showNormal() if self.isMaximized() else self.showMaximized())
+        self.addFriendsPage.getCloseBtn().clicked.connect(lambda: self.close())
+        self.rightLayout.addWidgetByKey("AddFriendsPage", self.addFriendsPage)
+        self.rightLayout.setCurrentWidgetByKey("SesPage")
+
+    def onClickedAddBtn(self):
+        self.rightLayout.setCurrentWidgetByKey("AddFriendsPage")
+
+        
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
@@ -115,8 +129,8 @@ class MainPage(QWidget):
 
     def mouseMoveEvent(self, event):
         if self.dragging:
-            dx = event.globalPosition().x() - self.dragStartPos.x()
-            dy = event.globalPosition().y() - self.dragStartPos.y()
+            dx = (int)(event.globalPosition().x() - self.dragStartPos.x())
+            dy = (int)(event.globalPosition().y() - self.dragStartPos.y())
             new_rect = QRect(self.originalGeometry)
 
             # 根据拖动方向调整窗口大小

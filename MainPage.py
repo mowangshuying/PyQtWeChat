@@ -75,12 +75,18 @@ class MainPage(QWidget):
         self.addFriendsPage.getMinBtn().clicked.connect(lambda: self.showMinimized())
         self.addFriendsPage.getMaxBtn().clicked.connect(lambda: self.showNormal() if self.isMaximized() else self.showMaximized())
         self.addFriendsPage.getCloseBtn().clicked.connect(lambda: self.close())
+        # self.addFriendsPage.clickedSearchBtn.connect(lambda: self.onClickedSearchFriendBtn)
+        
+        
         self.rightLayout.addWidgetByKey("AddFriendsPage", self.addFriendsPage)
         self.rightLayout.setCurrentWidgetByKey("SesPage")
 
     def onClickedAddBtn(self):
         self.rightLayout.setCurrentWidgetByKey("AddFriendsPage")
-
+        
+    # def onClickedSearchFriendBtn(self, text):
+    #     # search friend;
+    #     print(text)
         
 
     def mousePressEvent(self, event):

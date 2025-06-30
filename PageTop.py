@@ -3,7 +3,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from StyleSheetUtils import StyleSheetUtils
 
-class SesPageTop(QWidget):
+class PageTop(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.vMainLayout = QVBoxLayout()
@@ -47,7 +47,7 @@ class SesPageTop(QWidget):
 
         self.setFixedHeight(65)
         self.setMouseTracking(True)
-        StyleSheetUtils.setQssByFileName("./_rc/qss/SesPageTop.qss", self)
+        StyleSheetUtils.setQssByFileName("./_rc/qss/PageTop.qss", self)
         
         
                 
@@ -67,6 +67,9 @@ class SesPageTop(QWidget):
     def getCloseBtn(self):
         return self.closeBtn
     
+    def setTitle(self, title):
+        self.titleLable.setText(title)
+
     def paintEvent(self, event):
         opt = QStyleOption()
         opt.initFrom(self)

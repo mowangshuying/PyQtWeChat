@@ -6,12 +6,15 @@ from MainPage import MainPage
 from StyleSheetUtils import StyleSheetUtils
 from NetClientUtils import NetClientUtils
 from Msg import *
+from Data import *
 
 from NetClientUtils import *
 
 class RegLoginPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        
+        self.__dataMgr = DataMgr()
         
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setSpacing(0)
@@ -106,6 +109,11 @@ class RegLoginPage(QWidget):
         
     def responseLogin(self, msg):
         if msg["state"] == MsgState.ok:
+            
+            self.__dataMgr.setId(msg["data"]["userid"])
+            data = Data(msg["data"]["userid"], msg["data"]["username"], "")
+            self.__dataMgr.addData(data)
+            
             mainPage = MainPage()
             mainPage.show()
             self.close()
@@ -132,5 +140,11 @@ class RegLoginPage(QWidget):
             event.accept()
         else:
             super().mouseReleaseEvent(event)
+            
+    def paintEvent(self, event):
+        opt = QStyleOption()
+        opt.initFrom(self)
+        painter = QPainter(self)
+        self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
         
         

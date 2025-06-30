@@ -3,7 +3,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 
 from StyleSheetUtils import StyleSheetUtils
-from SesPageTop import SesPageTop
+from PageTop import PageTop
 from SesPageToolBar import SesPageToolBar
 # from SesPage import SesPage
 # from HSplit import HSplit
@@ -21,8 +21,8 @@ class SesPage(QWidget):
         self.vMainLayout.setSpacing(0)
         self.setLayout(self.vMainLayout)
 
-        self.sesPageTop = SesPageTop(self)
-        self.vMainLayout.addWidget(self.sesPageTop)
+        self.pageTop = PageTop(self)
+        self.vMainLayout.addWidget(self.pageTop)
 
         self.sp1 = VSplit(self)
 
@@ -45,7 +45,7 @@ class SesPage(QWidget):
         self.hBottomLayout.addWidget(self.sendBtn)
         self.hBottomLayout.addSpacing(15)
         
-        self.vMainLayout.addWidget(self.sesPageTop)
+        self.vMainLayout.addWidget(self.pageTop)
         self.vMainLayout.addWidget(self.sp1)
         self.vMainLayout.addWidget(self.list, 2)
         self.vMainLayout.addWidget(self.sp2)
@@ -56,13 +56,13 @@ class SesPage(QWidget):
         StyleSheetUtils.setQssByFileName("./_rc/qss/SesPage.qss", self)
 
     def getMinBtn(self):
-        return self.sesPageTop.getMinBtn()
+        return self.pageTop.getMinBtn()
     
     def getMaxBtn(self):
-        return self.sesPageTop.getMaxBtn()
+        return self.pageTop.getMaxBtn()
     
     def getCloseBtn(self):
-        return self.sesPageTop.getCloseBtn()
+        return self.pageTop.getCloseBtn()
 
     def paintEvent(self, event):
         opt = QStyleOption()

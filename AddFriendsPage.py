@@ -2,24 +2,32 @@ from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 
-from AddFriendsPageTop import AddFriendsPageTop
+from PageTop import PageTop
 from FlowLayout import FlowLayout
 from VSplit import VSplit
 from FriendCard import FriendCard
 
 from StyleSheetUtils import StyleSheetUtils
+from NetClientUtils import NetClientUtils
+from Msg import MsgCmd, MsgState, MsgType
+from Data import *
 
 class AddFriendsPage(QWidget):
+    
+    clickedSearchBtn = pyqtSignal(str)
     def __init__(self, parent=None):
         super().__init__(parent)
+        
+        self.__dataMgr = DataMgr()
+        
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
         self.vMainLayout.setSpacing(0)
         self.setLayout(self.vMainLayout)
 
-        self.addFriendsPageTop = AddFriendsPageTop(self)
-        self.addFriendsPageTop.setTitle("搜索好友/添加好友")
-        self.vMainLayout.addWidget(self.addFriendsPageTop)
+        self.pageTop = PageTop(self)
+        self.pageTop.setTitle("搜索好友/添加好友")
+        self.vMainLayout.addWidget(self.pageTop)
 
         self.sp = VSplit()
         self.vMainLayout.addWidget(self.sp)
@@ -46,22 +54,44 @@ class AddFriendsPage(QWidget):
 
         self.container = QWidget()
         self.flowLayout = FlowLayout(self.container)
+        self.flowLayout.setContentsMargins(30, 20, 30, 20)
         self.container.setLayout(self.flowLayout)
         self.vMainLayout.addWidget(self.container)
 
+        self.__netClientUtils = NetClientUtils()
+        
+        self.searchBtn.clicked.connect(self.onClicedSearchBtn)
         StyleSheetUtils.setQssByFileName("./_rc/qss/AddFriendsPage.qss", self)
 
     def addCard(self, card):
         self.flowLayout.addWidget(card)
 
     def getMinBtn(self):
-        return self.addFriendsPageTop.getMinBtn()
+        return self.pageTop.getMinBtn()
     
     def getMaxBtn(self):
-        return self.addFriendsPageTop.getMaxBtn()
+        return self.pageTop.getMaxBtn()
     
     def getCloseBtn(self):
-        return self.addFriendsPageTop.getCloseBtn()
+        return self.pageTop.getCloseBtn()
+    
+    def onClicedSearchBtn(self):
+        # get Text from searchEdit
+        text = self.searchEdit.text()
+        data = {"str":text}
+        self.__netClientUtils.request(MsgCmd.findUser, data, self.responseFindUser)
+        
+    def responseFindUser(self, msg):
+        if msg["state"] == MsgState.ok:
+            # 返回回来的data是一个数组
+            data = msg["data"]
+            # 遍历数组添加元素
+            for item in data:
+                card = FriendCard()
+                card.setUserName(item["username"])
+                self.flowLayout.addWidget(card)
+                self.__dataMgr.addDataByINH(item["userid"], item["username"], "")
+            
 
     def paintEvent(self, event):
         opt = QStyleOption()
@@ -80,7 +110,6 @@ if __name__ == "__main__":
         card = FriendCard()
         card.setNameAndImg("user" + str(i), QPixmap("./_rc/img/headImg.png"))
         w.addCard(card)
-
 
     w.show()
     app.exec()

@@ -26,7 +26,7 @@ class NetClientUtils(QObject):
         super().__init__(parent)
 
         self.callers = []
-
+        self.time = time.time()
         self.websock = QWebSocket()
         self.websock.connected.connect(self.onConnected)
         self.websock.disconnected.connect(self.onDisconnected)

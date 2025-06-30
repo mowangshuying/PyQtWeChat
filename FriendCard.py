@@ -11,8 +11,7 @@ class FriendCard(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         
-        # self.friendid = -1
-        self.__dataMgr = DataMgr()
+        self.__users = Users()
         self.__netClientUtils = NetClientUtils()
         
         self.hMainLayout = QHBoxLayout()
@@ -63,8 +62,8 @@ class FriendCard(QWidget):
         self.friendid = friendid
 
     def onClickedAddFriendbtn(self):
-        ownerid = self.__dataMgr.getId()
-        friendid = self.__dataMgr.getIdByName(self.usernameLabel.text())
+        ownerid = self.__users.getId()
+        friendid = self.__users.getIdByName(self.usernameLabel.text())
         data = {"ownerid":ownerid, "friendid":friendid, "applymsg":"---- 添加好友 ----"}
         self.__netClientUtils.request(MsgCmd.applyAddUser, data, lambda msg: print(msg))
         

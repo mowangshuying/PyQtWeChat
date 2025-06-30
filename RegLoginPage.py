@@ -14,8 +14,8 @@ class RegLoginPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         
-        self.__dataMgr = DataMgr()
-        
+        self.__users = Users()
+
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setSpacing(0)
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
@@ -109,11 +109,8 @@ class RegLoginPage(QWidget):
         
     def responseLogin(self, msg):
         if msg["state"] == MsgState.ok:
-            
-            self.__dataMgr.setId(msg["data"]["userid"])
-            data = Data(msg["data"]["userid"], msg["data"]["username"], "")
-            self.__dataMgr.addData(data)
-            
+            self.__users.setId(msg["data"]["userid"])
+            self.__users.addDetail(-1, msg["data"]["userid"], msg["data"]["username"], "", 0, 0, 0)
             mainPage = MainPage()
             mainPage.show()
             self.close()

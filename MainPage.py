@@ -11,6 +11,7 @@ from NetClientUtils import NetClientUtils
 from sigleton import singleton
 from StackLayout import StackLayout
 from AddFriendsPage import AddFriendsPage
+from DoApplyFriendsPage import DoApplyFriendsPage
 
 # res
 from _rc.res import *
@@ -75,11 +76,17 @@ class MainPage(QWidget):
         self.addFriendsPage.getMinBtn().clicked.connect(lambda: self.showMinimized())
         self.addFriendsPage.getMaxBtn().clicked.connect(lambda: self.showNormal() if self.isMaximized() else self.showMaximized())
         self.addFriendsPage.getCloseBtn().clicked.connect(lambda: self.close())
-        # self.addFriendsPage.clickedSearchBtn.connect(lambda: self.onClickedSearchFriendBtn)
+        self.rightLayout.addWidgetByKey("AddFriendsPage", self.addFriendsPage)        
         
+        # DoApplyFriendsPage
+        self.doApplyFriendsPage = DoApplyFriendsPage()
+        self.addFriendsPage.getMinBtn().clicked.connect(lambda: self.showMinimized())
+        self.addFriendsPage.getMaxBtn().clicked.connect(lambda: self.showNormal() if self.isMaximized() else self.showMaximized())
+        self.addFriendsPage.getCloseBtn().clicked.connect(lambda: self.close())
+        self.rightLayout.addWidgetByKey("DoApplyFriendsPage", self.doApplyFriendsPage)
+
+        self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
         
-        self.rightLayout.addWidgetByKey("AddFriendsPage", self.addFriendsPage)
-        self.rightLayout.setCurrentWidgetByKey("SesPage")
 
     def onClickedAddBtn(self):
         self.rightLayout.setCurrentWidgetByKey("AddFriendsPage")

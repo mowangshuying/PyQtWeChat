@@ -17,8 +17,8 @@ class AddFriendsPage(QWidget):
     clickedSearchBtn = pyqtSignal(str)
     def __init__(self, parent=None):
         super().__init__(parent)
-        
-        self.__dataMgr = DataMgr()
+    
+        self.__users = Users()
         
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
@@ -90,7 +90,7 @@ class AddFriendsPage(QWidget):
                 card = FriendCard()
                 card.setUserName(item["username"])
                 self.flowLayout.addWidget(card)
-                self.__dataMgr.addDataByINH(item["userid"], item["username"], "")
+                self.__users.addDetail(-1, item["userid"], item["username"], "", 0, 0, 0)
             
 
     def paintEvent(self, event):

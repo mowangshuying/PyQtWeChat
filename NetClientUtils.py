@@ -19,6 +19,7 @@ class NetEventCaller:
         self.sendTime = time.time()
         self.rand = ""
         self.cmd = ""
+        self.msgType = MsgType.response
 
 @singleton
 class NetClientUtils(QObject):
@@ -35,11 +36,12 @@ class NetClientUtils(QObject):
         # 连接远端服务器
         self.websock.open(QUrl("ws://127.0.0.1:5000"))
 
-    def register(self, cmd, call):
+    def register(self, msgType, cmd, call):
         caller = NetEventCaller()
         caller.call = call
         caller.cmd = cmd
         caller.rand = ""
+        caller.msgType = msgType
         self.callers.append(caller)
         
 
@@ -55,20 +57,25 @@ class NetClientUtils(QObject):
 
     # @pyqtSlot()
     def onTextMessageReceived(self, message):
-        # print("message:", message)
+        print("onTextMessageReceived:", message)
         data = json.loads(message)
         
         rand = data["rand"]
         msgType = data["msgType"]
         cmd = data["cmd"]
         
-        for callers in self.callers:
-            if callers.rand == rand and callers.cmd == cmd:
-                callers.call(data)
-                
-                # 判断rand是否为空
-                if rand != "":
-                    self.callers.remove(callers)
+        if msgType == MsgType.response:
+            for caller in self.callers:
+                if caller.rand == rand and caller.cmd == cmd and caller.msgType == MsgType.response:
+                    caller.call(data)
+                    # 判断rand是否为空
+                    if rand != "":
+                        self.callers.remove(caller)
+                        
+        if msgType == MsgType.push:
+                for caller in self.callers:
+                    if caller.cmd == cmd and caller.msgType == MsgType.push:
+                        caller.call(data)
         
 
     def getRandString(self):
@@ -119,6 +126,7 @@ class NetClientUtils(QObject):
             caller = NetEventCaller()
             caller.call = call
             caller.cmd = cmd
+            caller.msgType = MsgType.response
             caller.rand = msg["rand"]
             self.callers.append(caller)
             

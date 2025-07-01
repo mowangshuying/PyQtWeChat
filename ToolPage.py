@@ -7,6 +7,12 @@ from _rc.res import *
 from StyleSheetUtils import StyleSheetUtils
 
 class ToolPage(QWidget):
+    
+    clickedHeadBtn = pyqtSignal()
+    clickedUserBtn = pyqtSignal()
+    clickedGroupBtn = pyqtSignal()
+    clickedFriendsBtn = pyqtSignal()
+    clickedMsgsBtn = pyqtSignal()
     def __init__(self, parent = None):
         super().__init__(parent)
         
@@ -30,6 +36,15 @@ class ToolPage(QWidget):
         
         self.setFixedWidth(55)
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
+        
+        
+        # connect;
+        self.headBtn.clicked.connect(lambda: self.clickedHeadBtn.emit())
+        self.userBtn.clicked.connect(lambda: self.clickedUserBtn.emit())
+        self.groupBtn.clicked.connect(lambda: self.clickedGroupBtn.emit())
+        self.friendsBtn.clicked.connect(lambda: self.clickedFriendsBtn.emit())
+        self.msgsBtn.clicked.connect(lambda: self.clickedMsgsBtn.emit())
+        
         StyleSheetUtils.setQssByFileName("./_rc/qss/ToolPage.qss", self)
         
     def makeBtn(self, iconPath, s = 30): 

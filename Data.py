@@ -43,7 +43,7 @@ class Users:
     def getIdByName(self, name):
         for user in self.list:
             if user.username == name:
-                return user.id
+                return user.userid
 
 
     
@@ -170,3 +170,9 @@ class FriendApplys:
         apply.applystate = applystate
         apply.applymsg = applymsg
         self.add(apply)
+        
+    def getApplyById(self, id):
+        for apply in self.list:
+            if apply.id == id:
+                return apply
+        return None

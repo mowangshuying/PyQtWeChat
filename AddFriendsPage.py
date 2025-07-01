@@ -83,6 +83,9 @@ class AddFriendsPage(QWidget):
         
     def responseFindUser(self, msg):
         if msg["state"] == MsgState.ok:
+            # print msg;
+            print(msg)
+            
             # 返回回来的data是一个数组
             data = msg["data"]
             # 遍历数组添加元素

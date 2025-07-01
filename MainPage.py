@@ -59,8 +59,8 @@ class MainPage(QWidget):
         self.dragDirection = None  # 拖动方向，如 Qt.LeftEdge、Qt.RightEdge 等
         
         # connect;
-        self.midPage.clickedAddBtn.connect(self.onClickedAddBtn)
-        self.midPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
+        self.__connected()
+        
 
 
     def __initRightPage(self):
@@ -87,15 +87,20 @@ class MainPage(QWidget):
 
         self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
         
+    def __connected(self):
+        self.midPage.clickedAddBtn.connect(self.onClickedAddBtn)
+        self.midPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
+        self.toolPage.clickedFriendsBtn.connect(self.onClickedFriendsBtn)
+        
 
     def onClickedAddBtn(self):
         self.rightLayout.setCurrentWidgetByKey("AddFriendsPage")
         
-    # def onClickedSearchFriendBtn(self, text):
-    #     # search friend;
-    #     print(text)
-        
-
+    # 切换到申请列表
+    def onClickedFriendsBtn(self):
+        self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
+        self.doApplyFriendsPage.requestGetApplyList()
+     
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
             pos = event.pos()

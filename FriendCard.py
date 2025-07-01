@@ -8,9 +8,9 @@ from Msg import *
 from Data import *
 
 class FriendCard(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None): 
         super().__init__(parent)
-        
+
         self.__users = Users()
         self.__netClientUtils = NetClientUtils()
         

@@ -36,6 +36,24 @@ class DoApplyFriendsListItem(QWidget):
         self.hMainLayout.addWidget(self.agreeBtn)
         self.hMainLayout.addWidget(self.refuseBtn)
 
+    def setHeadImg(self, headimg):
+        self.headImgLabel.setPixmap(headimg)
+
+    def setName(self, name):
+        self.nameLabel.setText(name)
+    
+    def setMsg(self, msg):
+        self.msgLabel.setText(msg)
+
+    def setState(self, state):
+        if state == 0:
+            self.agreeBtn.setText("等待同意")
+        elif state == 1:
+            self.agreeBtn.setText("已同意")
+        elif state == 2:
+            self.agreeBtn.setText("已拒绝")
+        
+
     def onClickedAgreeBtn(self):
         pass
 

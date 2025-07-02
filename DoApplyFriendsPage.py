@@ -10,6 +10,11 @@ from Data import *
 from Msg import *
 from Data import *
 
+from NetClientUtils import *
+from Data import *
+from Msg import *
+
+@singleton
 class DoApplyFriendsPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -32,6 +37,7 @@ class DoApplyFriendsPage(QWidget):
 
         self.list = QListWidget()
         self.vMainLayout.addWidget(self.list)
+        self.__netClientUtils.register(MsgType.push, MsgCmd.doApplyAddUser, self.onPushDoApplyAddUser)
 
     def add(self, id, headimg, username, msg, state):
         item = DoApplyFriendsListItem()
@@ -39,24 +45,56 @@ class DoApplyFriendsPage(QWidget):
         item.setName(username)
         item.setMsg(msg)
         item.setId(id)
-        # item.setState(state)
-
-        # print("item sizeHint:" + str(item.sizeHint()))
+        item.setState(state)
+        
+        item.clickedAgreeBtn.connect(self.onClickedAgreeBtn)
+        item.clickedRefuseBtn.connect(self.onClickedRefuseBtn)
+        
         listItem = QListWidgetItem(self.list)
         listItem.setSizeHint(QSize(200, 40))
         
         self.list.addItem(listItem)
         self.list.setItemWidget(listItem, item)
+        
+    # 根据id从list中查到指定的item
+    def setStateById(self, id, state):
+        for i in range(self.list.count()):
+            item = self.list.item(i)
+            widget = self.list.itemWidget(item)
+            if widget.getId() == id:
+                widget.setState(state) 
+        
+    def onClickedAgreeBtn(self, id):
+        apply = self.__friendApplys.getApplyById(id)
+        ownerid = apply.ownerid
+        friendid = apply.friendid
+        applystate = 1
+        applymsg = apply.applymsg
+        data = { "id":id, "ownerid": ownerid, "friendid": friendid, "applystate": applystate, "applymsg": applymsg}
+        self.__netClientUtils.request(MsgCmd.doApplyAddUser, data, None)
+    
+    def onClickedRefuseBtn(self, id):
+        apply = self.__friendApplys.getApplyById(id)
+        ownerid = apply.ownerid
+        friendid = apply.friendid
+        applystate = 0
+        applymsg = apply.applymsg
+        data = {"id": id ,"ownerid": ownerid, "friendid": friendid, "applystate": applystate, "applymsg": applymsg}
+        self.__netClientUtils.request(MsgCmd.doApplyAddUser, data, None)
+
+    def onPushDoApplyAddUser(self, msg):
+        apply = self.__friendApplys.getApplyById(msg["data"]["id"])
+        if apply.ownerid == self.__users.getId():
+            self.setStateById(msg["data"]["id"], msg["data"]["applystate"])
+        elif apply.friendid == self.__users.getId():
+            self.setStateById(msg["data"]["id"], msg["data"]["applystate"])
 
     def requestGetApplyList(self):
         dataJson = {"ownerid": self.__users.getId()}
-        self.__netClientUtils.request(MsgCmd.getApplyFriendList, dataJson, self.responseGetApplyList)
+        self.__netClientUtils.request(MsgCmd.getApplyFriendList, dataJson, self.onResponseGetApplyList)
 
-    def responseGetApplyList(self, msg):
-        print(msg)
-        # if msg.cmd != MsgCmd.getApplyFriendList:
-        #     return
-        
+    def onResponseGetApplyList(self, msg):
+        self.list.clear()
         for item in msg["data"]:
             id = item["id"]
             ownerid = item["ownerid"]
@@ -67,6 +105,5 @@ class DoApplyFriendsPage(QWidget):
             
             self.__friendApplys.addDetail(id, ownerid, friendid, appplystate, applymsg)
             self.add(id, "", friendUsername, applymsg, appplystate)
-
         
         

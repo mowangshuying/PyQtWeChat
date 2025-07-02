@@ -7,6 +7,9 @@ from Data import *
 from Msg import *
 
 class DoApplyFriendsListItem(QWidget):
+    
+    clickedAgreeBtn = pyqtSignal(int)
+    clickedRefuseBtn = pyqtSignal(int)
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -33,6 +36,7 @@ class DoApplyFriendsListItem(QWidget):
         self.vInfoLayout.addWidget(self.nameLabel)
         self.vInfoLayout.addWidget(self.msgLabel)
 
+        self.stateBtn = QPushButton("状态")
         self.agreeBtn = QPushButton("同意")
         self.refuseBtn = QPushButton("拒绝")
 
@@ -40,6 +44,7 @@ class DoApplyFriendsListItem(QWidget):
         self.hMainLayout.addSpacing(10)
         self.hMainLayout.addLayout(self.vInfoLayout)
         self.hMainLayout.addStretch(1)
+        self.hMainLayout.addWidget(self.stateBtn)
         self.hMainLayout.addWidget(self.agreeBtn)
         self.hMainLayout.addWidget(self.refuseBtn)
         
@@ -59,32 +64,55 @@ class DoApplyFriendsListItem(QWidget):
         self.msgLabel.setText(msg)
 
     def setState(self, state):
-        if state == 0:
-            self.agreeBtn.setText("等待同意")
-        elif state == 1:
-            self.agreeBtn.setText("已同意")
-        elif state == 2:
-            self.agreeBtn.setText("已拒绝")
+        apply = self.__friendApplys.getApplyById(self.id)
+        
+        if apply.ownerid == self.__users.getId():
+            if state == 0:
+                self.stateBtn.show()
+                self.stateBtn.setText("等待同意")
+                self.agreeBtn.hide()
+                self.refuseBtn.hide()
+            else:
+                self.agreeBtn.hide()
+                self.refuseBtn.hide()
+                self.stateBtn.show()
+                if state == 1:
+                    self.stateBtn.setText("已同意")
+                elif state == 2:
+                    self.stateBtn.setText("已拒绝")
+        elif apply.friendid == self.__users.getId():
+            if (state == 0):
+                self.stateBtn.hide()
+                self.agreeBtn.show()
+                self.refuseBtn.show()
+            else:
+                self.agreeBtn.hide()
+                self.refuseBtn.hide()
+                self.stateBtn.show()
+                if state == 1:
+                    self.stateBtn.setText("已同意")
+                elif state == 2:
+                    self.stateBtn.setText("已拒绝")
         
     def setId(self, id):
         self.id = id
-
-    def onClickedAgreeBtn(self):
-        # 同意好友申请.
-        # ownerid = self.__users.getId()
-        # friendid = self.__users.getIdByName(self.usernameLabel.text())
         
-        apply = self.__friendApplys.getApplyById(self.id)
-        ownerid = apply.ownerid
-        friendid = apply.friendid
-        applystate = 1
-        applymsg = apply.applymsg
-        data = {"ownerid": ownerid, "friendid": friendid, "applystate": applystate, "applymsg": applymsg}
-        self.__netClientUtils.request(MsgCmd.doApplyAddUser, data, self.responseAddUser)
+    def getId(self):
+        return self.id
+    def onClickedAgreeBtn(self):
+        self.clickedAgreeBtn.emit(self.id)
+        # apply = self.__friendApplys.getApplyById(self.id)
+        # ownerid = apply.ownerid
+        # friendid = apply.friendid
+        # applystate = 1
+        # applymsg = apply.applymsg
+        # data = {"ownerid": ownerid, "friendid": friendid, "applystate": applystate, "applymsg": applymsg}
+        # self.__netClientUtils.request(MsgCmd.doApplyAddUser, data, None)
+        # pass
+    
+    # def onPushDoApplyAddUser(self, msg):
+        # 改变按钮状态
+        # self.setState(1)
     
     def onClickedRefuseBtn(self):
-        # print("onClickedRefuseBtn")
-        pass
-    
-    def responseAddUser(self, msg):
-        pass
+        self.clickedRefuseBtn.emit(self.id)

@@ -169,10 +169,27 @@ class FriendApplys:
         apply.friendid = friendid
         apply.applystate = applystate
         apply.applymsg = applymsg
-        self.add(apply)
+        # self.add(apply)
+        
+        if self.hasById(id):
+            self.replaceById(id, apply)
+        else:
+            self.add(apply)
         
     def getApplyById(self, id):
         for apply in self.list:
             if apply.id == id:
                 return apply
         return None
+    
+    def hasById(self, id):
+        for apply in self.list:
+            if apply.id == id:
+                return True
+        return False
+    
+    def replaceById(self, id, apply):
+        for i in range(len(self.list)):
+            if self.list[i].id == id:
+                self.list[i] = apply
+                return

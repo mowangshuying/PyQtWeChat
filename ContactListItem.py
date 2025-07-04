@@ -2,9 +2,10 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 
+from StyleSheetUtils import StyleSheetUtils
 from qfluentwidgets import *
 
-class ContactListItem(QWidget):
+class ContactListItem(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.hMainLayout = QHBoxLayout()
@@ -20,6 +21,9 @@ class ContactListItem(QWidget):
         self.hMainLayout.addSpacing(15)
         self.hMainLayout.addWidget(self.nameLabel)
         self.setFixedHeight(65)
+        
+        # StyleSheetUtils.setQssByFileName("", self)
+        
         
     def setHeadImg(self, headimg: QPixmap):
         self.headImgLabel.setPixmap(headimg)

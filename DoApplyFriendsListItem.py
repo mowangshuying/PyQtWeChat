@@ -7,7 +7,7 @@ from Data import *
 from Msg import *
 from qfluentwidgets import *
 
-class DoApplyFriendsListItem(QWidget):
+class DoApplyFriendsListItem(QFrame):
     
     clickedAgreeBtn = pyqtSignal(int)
     clickedRefuseBtn = pyqtSignal(int)

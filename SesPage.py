@@ -3,6 +3,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 
 from StyleSheetUtils import StyleSheetUtils
+from ListWidgetEx import ListWidgetEx
 from SesPageToolBar import SesPageToolBar
 from VSplit import VSplit
 
@@ -21,7 +22,7 @@ class SesPage(QWidget):
 
         self.sp1 = VSplit(self)
 
-        self.list = QListWidget(self)
+        self.list = ListWidgetEx(self)
         self.list.setAcceptDrops(False)
 
         self.sp2 = VSplit(self)

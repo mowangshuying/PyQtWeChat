@@ -6,7 +6,8 @@ from StyleSheetUtils import StyleSheetUtils
 from NetClientUtils import NetClientUtils
 from Msg import *
 from Data import *
-# from SelectPage import SelectPage
+from ListWidgetEx import ListWidgetEx
+from StyleSheetUtils import StyleSheetUtils
 from sigleton import *
 from ContactListItem import ContactListItem
 from qfluentwidgets import *
@@ -33,12 +34,12 @@ class ContactListPage(QWidget):
         self.hTopLayout.setContentsMargins(0, 0, 0, 0)
         self.hTopLayout.setSpacing(0)
         
-        self.searchEdit = QLineEdit()
-        self.addBtn = QPushButton()
+        self.searchEdit = LineEdit()
+        self.addBtn = PrimaryToolButton()
         self.searchEdit.setFixedHeight(25)
         self.addBtn.setIconSize(QSize(20, 20))
         self.addBtn.setFixedSize(25, 25)
-        self.addBtn.setIcon(QIcon("./_rc/img/add.png"))
+        self.addBtn.setIcon(FluentIcon.ADD)
         
         self.hTopLayout.addSpacing(10)
         self.hTopLayout.addWidget(self.searchEdit)
@@ -53,11 +54,12 @@ class ContactListPage(QWidget):
         self.sp = VSplit()
         self.vMainLayout.addWidget(self.sp)
         
-        self.list = QListWidget()
+        self.list = ListWidgetEx()
         self.list.setFixedWidth(255)
         self.list.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.vMainLayout.addWidget(self.list)
         self.setFixedWidth(255)
+        
         
         
         # 处理事件
@@ -73,7 +75,6 @@ class ContactListPage(QWidget):
         self.list.addItem(listItem)
         self.list.setItemWidget(listItem, item)
         
-    
     def onAddBtnClicked(self):
         geom = self.addBtn.geometry()
         gp = self.mapToGlobal(geom.topLeft())
@@ -92,5 +93,5 @@ class ContactListPage(QWidget):
         self.list.clear()
         for item in msg["data"]:
             friendname = item["friendusername"]
-            self.add(QPixmap(""), friendname)
+            self.add(QPixmap(), friendname)
             

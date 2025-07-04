@@ -5,7 +5,7 @@ from PyQt6.QtGui import *
 # from PageTop import *
 from VSplit import *
 from DoApplyFriendsListItem import *
-
+from ListWidgetEx import *
 from Data import *
 from Msg import *
 from Data import *
@@ -15,7 +15,7 @@ from Data import *
 from Msg import *
 
 from qfluentwidgets import *
-
+from StyleSheetUtils import StyleSheetUtils
 @singleton
 class DoApplyFriendsPage(QWidget):
     def __init__(self, parent=None):
@@ -34,9 +34,11 @@ class DoApplyFriendsPage(QWidget):
         self.sp = VSplit()
         self.vMainLayout.addWidget(self.sp)
 
-        self.list = QListWidget()
+        self.list = ListWidgetEx()
         self.vMainLayout.addWidget(self.list)
         self.__netClientUtils.register(MsgType.push, MsgCmd.doApplyAddUser, self.onPushDoApplyAddUser)
+        # StyleSheetUtils.setQssByFileName("./_rc/qss/DoApplyFriendsPage.qss", self)
+        
 
     def add(self, id, headimg, username, msg, state):
         item = DoApplyFriendsListItem()
@@ -90,9 +92,9 @@ class DoApplyFriendsPage(QWidget):
 
     def requestGetApplyList(self):
         dataJson = {"ownerid": self.__users.getId()}
-        self.__netClientUtils.request(MsgCmd.getApplyFriendList, dataJson, self.onResponseGetApplyList)
+        self.__netClientUtils.request(MsgCmd.getApplyFriendList, dataJson, self.responseGetApplyList)
 
-    def onResponseGetApplyList(self, msg):
+    def responseGetApplyList(self, msg):
         self.list.clear()
         for item in msg["data"]:
             id = item["id"]

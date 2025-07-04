@@ -5,7 +5,12 @@ from VSplit import VSplit
 from StyleSheetUtils import StyleSheetUtils
 # from SelectPage import SelectPage
 from qfluentwidgets import *
+from ListWidgetEx import ListWidgetEx
+from sigleton import singleton
+from NetClientUtils import NetClientUtils
+from Data import *
 
+@singleton
 class MsgListPage(QWidget):
     
     clickedAddBtn = pyqtSignal()
@@ -13,6 +18,9 @@ class MsgListPage(QWidget):
     
     def __init__(self, parent=None):
         super().__init__(parent)
+        
+        self.__netClientUtils = NetClientUtils()
+        self.__users = Users()
         
         self.vMainLayout = QVBoxLayout()
         self.setLayout(self.vMainLayout)
@@ -44,7 +52,7 @@ class MsgListPage(QWidget):
         self.sp = VSplit()
         self.vMainLayout.addWidget(self.sp)
         
-        self.list = QListWidget()
+        self.list = ListWidgetEx()
         self.list.setFixedWidth(255)
         self.list.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.vMainLayout.addWidget(self.list)

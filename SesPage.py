@@ -3,10 +3,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 
 from StyleSheetUtils import StyleSheetUtils
-from PageTop import PageTop
 from SesPageToolBar import SesPageToolBar
-# from SesPage import SesPage
-# from HSplit import HSplit
 from VSplit import VSplit
 
 class SesPage(QWidget):
@@ -21,8 +18,6 @@ class SesPage(QWidget):
         self.vMainLayout.setSpacing(0)
         self.setLayout(self.vMainLayout)
 
-        self.pageTop = PageTop(self)
-        self.vMainLayout.addWidget(self.pageTop)
 
         self.sp1 = VSplit(self)
 
@@ -45,7 +40,6 @@ class SesPage(QWidget):
         self.hBottomLayout.addWidget(self.sendBtn)
         self.hBottomLayout.addSpacing(15)
         
-        self.vMainLayout.addWidget(self.pageTop)
         self.vMainLayout.addWidget(self.sp1)
         self.vMainLayout.addWidget(self.list, 2)
         self.vMainLayout.addWidget(self.sp2)
@@ -54,21 +48,6 @@ class SesPage(QWidget):
         self.vMainLayout.addLayout(self.hBottomLayout)
 
         StyleSheetUtils.setQssByFileName("./_rc/qss/SesPage.qss", self)
-
-    def getMinBtn(self):
-        return self.pageTop.getMinBtn()
-    
-    def getMaxBtn(self):
-        return self.pageTop.getMaxBtn()
-    
-    def getCloseBtn(self):
-        return self.pageTop.getCloseBtn()
-
-    def paintEvent(self, event):
-        opt = QStyleOption()
-        opt.initFrom(self)
-        painter = QPainter(self)
-        self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
 
 
         

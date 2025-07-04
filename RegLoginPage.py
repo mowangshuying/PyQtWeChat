@@ -9,8 +9,12 @@ from Msg import *
 from Data import *
 
 from NetClientUtils import *
+from qfluentwidgets.components.widgets.frameless_window import FramelessWindow
+from qfluentwidgets.components.widgets.button import *
+from qfluentwidgets.components.widgets.line_edit import *
+from qfluentwidgets.components.widgets.check_box import *
 
-class RegLoginPage(QWidget):
+class RegLoginPage(FramelessWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         
@@ -21,91 +25,62 @@ class RegLoginPage(QWidget):
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.vMainLayout)
         
-        self.top = QWidget()
-        self.hTopLayout = QHBoxLayout()
-        self.hTopLayout.setSpacing(0)
-        self.hTopLayout.setContentsMargins(0, 0, 0, 0)
-        self.top.setLayout(self.hTopLayout)
-        
-        self.titleLabel = QLabel()
-        self.titleLabel.setObjectName("titleLabel")
-        self.minBtn = self.makeBtn("./_rc/img/minBtn.png")
-        self.minBtn.setObjectName("minBtn")
-        self.closeBtn = self.makeBtn("./_rc/img/closeBtn.png")
-        self.closeBtn.setObjectName("closeBtn")
-        
-        self.hTopLayout.addWidget(self.titleLabel)
-        self.hTopLayout.addStretch()
-        self.hTopLayout.addWidget(self.minBtn)
-        self.hTopLayout.addWidget(self.closeBtn)
-        
+        self.titleBar.maxBtn.hide()
         
         self.bottom = QWidget()
         self.bottom.setFixedHeight(200)
         self.vBottomLayout =  QVBoxLayout()
         self.bottom.setLayout(self.vBottomLayout)
         
-        self.account = QLineEdit()
-        self.account.setFixedSize(256, 36)
-        self.account.setPlaceholderText("请输入用户名")
-        self.account.setText("")
+        self.accountEdit = LineEdit()
+        self.accountEdit.setFixedSize(256, 36)
+        self.accountEdit.setPlaceholderText("请输入用户名")
+        self.accountEdit.setText("")
         
-        self.passwordEdit = QLineEdit()
+        self.passwordEdit = LineEdit()
         self.passwordEdit.setFixedSize(256, 36)
         self.passwordEdit.setPlaceholderText("请输入密码")
         self.passwordEdit.setText("")
         
         self.hBtnLayout = QHBoxLayout()
-        self.regOrLogin = QCheckBox("注册")
-        self.remmberPasswordCheckBox = QCheckBox("记住密码")
+        self.regOrLogin = CheckBox("注册")
+        self.remmberPasswordCheckBox = CheckBox("记住密码")
         self.hBtnLayout.addWidget(self.regOrLogin)
         self.hBtnLayout.addStretch()
         self.hBtnLayout.addWidget(self.remmberPasswordCheckBox)
         
-        self.loginBtn = QPushButton("登录")
+        self.loginBtn = PrimaryPushButton("登录")
         self.loginBtn.setObjectName("loginBtn")
         self.loginBtn.setFixedSize(256, 36)
         
-        self.vBottomLayout.addWidget(self.account)
+        self.vBottomLayout.addWidget(self.accountEdit)
         self.vBottomLayout.addWidget(self.passwordEdit)
         self.vBottomLayout.addLayout(self.hBtnLayout)
         self.vBottomLayout.addWidget(self.loginBtn)
-        # self.vBottomLayout.addSpacing(200)
-        
-        self.vMainLayout.addWidget(self.top)
+        self.vMainLayout.addSpacing(36)
         self.vMainLayout.addWidget(self.bottom)
         
         
         self.loginBtn.clicked.connect(self.onBtnClicked)
        
         self.__netClientUtils = NetClientUtils()
-                
-        self.minBtn.clicked.connect(lambda: self.showMinimized())
-        self.closeBtn.clicked.connect(lambda: self.close())
         
 
-        self.pressed = False
-        self.pressedPos = None
+        # self.pressed = False
+        # self.pressedPos = None
         
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
-        StyleSheetUtils.setQssByFileName("./_rc/qss/RegLoginPage.qss", self)
-        
-    def makeBtn(self, iconPath):
-        btn = QPushButton()
-        btn.setIcon(QIcon(QPixmap(iconPath)))
-        btn.setIconSize(QSize(20, 20))
-        btn.setFixedSize(30, 30)
-        return btn
+        # self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+        self.setFixedSize(274, 236)
     
     def requesRegUser(self):
-        data = {"username": self.account.text(),  "nickname" : self.account.text(), "password": self.passwordEdit.text(), "sex": 0}
+        data = {"username": self.accountEdit.text(),  "nickname" : self.accountEdit.text(), "password": self.passwordEdit.text(), "sex": 0}
         self.__netClientUtils.request(MsgCmd.regUser, data, lambda msg: print(msg))
 
     def responseRegUser(self, msg):
         pass
         
     def requestLogin(self):
-        self.__netClientUtils.request(MsgCmd.login, {"username": self.account.text(), "password": self.passwordEdit.text()}, self.responseLogin)
+        self.__netClientUtils.request(MsgCmd.login, {"username": self.accountEdit.text(), "password": self.passwordEdit.text()}, self.responseLogin)
         
     def responseLogin(self, msg):
         if msg["state"] == MsgState.ok:
@@ -120,28 +95,5 @@ class RegLoginPage(QWidget):
             self.requesRegUser()
         else:
             self.requestLogin()
-        
-    def mousePressEvent(self, event):
-        if event.button() == Qt.MouseButton.LeftButton:
-            self.pressed = True
-            self.pressedPos = event.pos()
-
-
-    def mouseMoveEvent(self, event):
-        if self.pressed:
-            self.move(self.pos() + event.pos() - self.pressedPos)
-
-    def mouseReleaseEvent(self, event):
-        if event.button() == Qt.MouseButton.LeftButton:
-            self.pressed = False
-            event.accept()
-        else:
-            super().mouseReleaseEvent(event)
-            
-    def paintEvent(self, event):
-        opt = QStyleOption()
-        opt.initFrom(self)
-        painter = QPainter(self)
-        self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
         
         

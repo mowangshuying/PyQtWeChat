@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 
-from PageTop import *
+# from PageTop import *
 from VSplit import *
 from DoApplyFriendsListItem import *
 
@@ -13,6 +13,8 @@ from Data import *
 from NetClientUtils import *
 from Data import *
 from Msg import *
+
+from qfluentwidgets import *
 
 @singleton
 class DoApplyFriendsPage(QWidget):
@@ -28,10 +30,7 @@ class DoApplyFriendsPage(QWidget):
         self.vMainLayout.setSpacing(0)
         self.setLayout(self.vMainLayout)
 
-        self.pageTop = PageTop(self)
-        self.pageTop.setTitle("申请列表")
-        self.vMainLayout.addWidget(self.pageTop)
-
+        self.vMainLayout.addSpacing(65)
         self.sp = VSplit()
         self.vMainLayout.addWidget(self.sp)
 

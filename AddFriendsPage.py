@@ -2,7 +2,6 @@ from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 
-from PageTop import PageTop
 from FlowLayout import FlowLayout
 from VSplit import VSplit
 from FriendCard import FriendCard
@@ -11,6 +10,8 @@ from StyleSheetUtils import StyleSheetUtils
 from NetClientUtils import NetClientUtils
 from Msg import MsgCmd, MsgState, MsgType
 from Data import *
+
+from qfluentwidgets import *
 
 class AddFriendsPage(QWidget):
     
@@ -24,21 +25,18 @@ class AddFriendsPage(QWidget):
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
         self.vMainLayout.setSpacing(0)
         self.setLayout(self.vMainLayout)
-
-        self.pageTop = PageTop(self)
-        self.pageTop.setTitle("搜索好友/添加好友")
-        self.vMainLayout.addWidget(self.pageTop)
-
+        
+        self.vMainLayout.addSpacing(65)
         self.sp = VSplit()
         self.vMainLayout.addWidget(self.sp)
 
-        self.searchEdit = QLineEdit()
-        self.searchEdit.setObjectName("searchEdit")
+        self.searchEdit = LineEdit()
+        # self.searchEdit.setObjectName("searchEdit")
         self.searchEdit.setFixedSize(360, 30)
         self.searchEdit.setPlaceholderText("搜索")
 
-        self.searchBtn = QPushButton()
-        self.searchBtn.setObjectName("searchBtn")
+        self.searchBtn = PushButton()
+        # self.searchBtn.setObjectName("searchBtn")
         self.searchBtn.setText("搜索")
         self.searchBtn.setFixedSize(80, 30)
 
@@ -61,19 +59,10 @@ class AddFriendsPage(QWidget):
         self.__netClientUtils = NetClientUtils()
         
         self.searchBtn.clicked.connect(self.onClicedSearchBtn)
-        StyleSheetUtils.setQssByFileName("./_rc/qss/AddFriendsPage.qss", self)
+        # StyleSheetUtils.setQssByFileName("./_rc/qss/AddFriendsPage.qss", self)
 
     def addCard(self, card):
         self.flowLayout.addWidget(card)
-
-    def getMinBtn(self):
-        return self.pageTop.getMinBtn()
-    
-    def getMaxBtn(self):
-        return self.pageTop.getMaxBtn()
-    
-    def getCloseBtn(self):
-        return self.pageTop.getCloseBtn()
     
     def onClicedSearchBtn(self):
         # get Text from searchEdit
@@ -96,11 +85,11 @@ class AddFriendsPage(QWidget):
                 self.__users.addDetail(-1, item["userid"], item["username"], "", 0, 0, 0)
             
 
-    def paintEvent(self, event):
-        opt = QStyleOption()
-        opt.initFrom(self)
-        painter = QPainter(self)
-        self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
+    # def paintEvent(self, event):
+    #     opt = QStyleOption()
+    #     opt.initFrom(self)
+    #     painter = QPainter(self)
+    #     self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
 
 
 if __name__ == "__main__":

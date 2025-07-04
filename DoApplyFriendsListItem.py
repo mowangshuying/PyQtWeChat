@@ -5,6 +5,7 @@ from PyQt6.QtGui import *
 from NetClientUtils import NetClientUtils
 from Data import *
 from Msg import *
+from qfluentwidgets import *
 
 class DoApplyFriendsListItem(QWidget):
     
@@ -24,21 +25,21 @@ class DoApplyFriendsListItem(QWidget):
         self.hMainLayout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.hMainLayout)
 
-        self.headImgLabel = QLabel()
+        self.headImgLabel = ImageLabel()
         self.headImgLabel.setFixedSize(30, 30)
 
         self.vInfoLayout = QVBoxLayout()
-        self.nameLabel = QLabel()
-        self.msgLabel = QLabel()
+        self.nameLabel = StrongBodyLabel()
+        self.msgLabel = BodyLabel()
         self.nameLabel.setText("username")
         self.msgLabel.setText("msg")
 
         self.vInfoLayout.addWidget(self.nameLabel)
         self.vInfoLayout.addWidget(self.msgLabel)
 
-        self.stateBtn = QPushButton("状态")
-        self.agreeBtn = QPushButton("同意")
-        self.refuseBtn = QPushButton("拒绝")
+        self.stateBtn = PushButton("状态")
+        self.agreeBtn = PushButton("同意")
+        self.refuseBtn = PushButton("拒绝")
 
         self.hMainLayout.addWidget(self.headImgLabel)
         self.hMainLayout.addSpacing(10)
@@ -101,18 +102,6 @@ class DoApplyFriendsListItem(QWidget):
         return self.id
     def onClickedAgreeBtn(self):
         self.clickedAgreeBtn.emit(self.id)
-        # apply = self.__friendApplys.getApplyById(self.id)
-        # ownerid = apply.ownerid
-        # friendid = apply.friendid
-        # applystate = 1
-        # applymsg = apply.applymsg
-        # data = {"ownerid": ownerid, "friendid": friendid, "applystate": applystate, "applymsg": applymsg}
-        # self.__netClientUtils.request(MsgCmd.doApplyAddUser, data, None)
-        # pass
-    
-    # def onPushDoApplyAddUser(self, msg):
-        # 改变按钮状态
-        # self.setState(1)
     
     def onClickedRefuseBtn(self):
         self.clickedRefuseBtn.emit(self.id)

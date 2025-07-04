@@ -71,7 +71,7 @@ class ContactListPage(QWidget):
         item.setName(username)
         
         listItem = QListWidgetItem(self.list)
-        listItem.setSizeHint(QSize(200, 40))
+        listItem.setSizeHint(QSize(200, 65))
         self.list.addItem(listItem)
         self.list.setItemWidget(listItem, item)
         

@@ -18,31 +18,36 @@ class ToolPage(QWidget):
         
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.vMainLayout.setSpacing(0)
         self.setLayout(self.vMainLayout)
         
-        self.headBtn = self.makeBtn("./_rc/img/headBtn.png", 40)
-        self.userBtn = self.makeBtn("./_rc/img/userBtn.png")
-        self.groupBtn = self.makeBtn("./_rc/img/groupBtn.png")
-        self.friendsBtn = self.makeBtn("./_rc/img/friendsBtn.png")
-        self.msgsBtn = self.makeBtn("./_rc/img/msgsBtn.png")
+        self.headBtn = self.makeBtn("./_rc/img/head_1.jpg", 40)
+        self.userBtn = self.makeBtn("./_rc/img/contact_list.png")
+        self.msgsBtn = self.makeBtn("./_rc/img/chat_icon.png")
         
+        # 头像
         self.vMainLayout.addSpacing(20)
         self.vMainLayout.addWidget(self.headBtn, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.vMainLayout.addSpacing(30)
+        
+        # 用户
         self.vMainLayout.addWidget(self.userBtn,0, Qt.AlignmentFlag.AlignHCenter)
-        self.vMainLayout.addWidget(self.groupBtn, 0, Qt.AlignmentFlag.AlignHCenter)
-        self.vMainLayout.addWidget(self.friendsBtn, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.vMainLayout.addSpacing(15)
+        
+        # 消息
         self.vMainLayout.addWidget(self.msgsBtn, 0, Qt.AlignmentFlag.AlignHCenter)
+        # self.vMainLayout.addSpacing(10)
         self.vMainLayout.addStretch()
         
-        self.setFixedWidth(55)
+        self.setFixedWidth(56)
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         
         
         # connect;
         self.headBtn.clicked.connect(lambda: self.clickedHeadBtn.emit())
         self.userBtn.clicked.connect(lambda: self.clickedUserBtn.emit())
-        self.groupBtn.clicked.connect(lambda: self.clickedGroupBtn.emit())
-        self.friendsBtn.clicked.connect(lambda: self.clickedFriendsBtn.emit())
+        # self.groupBtn.clicked.connect(lambda: self.clickedGroupBtn.emit())
+        # self.friendsBtn.clicked.connect(lambda: self.clickedFriendsBtn.emit())
         self.msgsBtn.clicked.connect(lambda: self.clickedMsgsBtn.emit())
         
         StyleSheetUtils.setQssByFileName("./_rc/qss/ToolPage.qss", self)

@@ -28,32 +28,43 @@ class MainPage(FramelessWindow):
     def __init__(self):
         super().__init__()
         # self.titleBar.raise_()
+        self.vMainLayout = QVBoxLayout()
+        self.vMainLayout.setContentsMargins(0, 0, 0, 0)
+        self.vMainLayout.setSpacing(0)
+        self.setLayout(self.vMainLayout)
     
-        self.hMainLayout = QHBoxLayout()
-        self.hMainLayout.setSpacing(0)
-        self.hMainLayout.setContentsMargins(0, 0, 0, 0)
+        self.hLayout = QHBoxLayout()
+        self.hLayout.setSpacing(0)
+        self.hLayout.setContentsMargins(0, 0, 0, 0)
+        self.vMainLayout.addLayout(self.hLayout)
         
         # left;
         self.toolPage = ToolPage(self)
-        self.hMainLayout.addWidget(self.toolPage)
+        self.hLayout.addWidget(self.toolPage)
         
         # mid;
         # self.midPage = MsgListPage()
         # self.hMainLayout.addWidget(self.midPage)
         self.midLayout = StackLayout()
         self.__initMidPage()
-        self.hMainLayout.addLayout(self.midLayout)
+        self.hLayout.addLayout(self.midLayout)
         
         # sp
         self.sp = HSplit()
-        self.hMainLayout.addWidget(self.sp)
+        self.hLayout.addWidget(self.sp)
 
         self.rightLayout = StackLayout()
         self.__initRightPage()
-        self.hMainLayout.addLayout(self.rightLayout, 1)
+        self.hLayout.addLayout(self.rightLayout, 1)
         
-        self.setLayout(self.hMainLayout)
+        # self.setLayout(self.hLayout)
 
+        # status label;
+        self.statusLabel = QLabel("status...")
+        self.statusLabel.setFixedHeight(20)
+        self.statusLabel.setStyleSheet("background-color: rgb(29,124,202); font-size: 12px; color: white;")
+        self.vMainLayout.addWidget(self.statusLabel)
+        
         self.resize(1000, 750)
 
         
@@ -93,11 +104,11 @@ class MainPage(FramelessWindow):
         self.msgListPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
         self.toolPage.clickedFriendsBtn.connect(self.onClickedFriendsBtn)
         
+    def setStatusText(self, text):
+        self.statusLabel.setText(text)
 
     def onClickedAddBtn(self):
-        # self.titleBar.raise_()
         self.rightLayout.setCurrentWidgetByKey("AddFriendsPage")
-        # self.setTitleBar(TitleBar(self))
         self.titleBar.raise_()
     # 切换到申请列表
     def onClickedFriendsBtn(self):

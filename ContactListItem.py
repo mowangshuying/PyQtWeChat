@@ -15,6 +15,7 @@ class ContactListItem(QFrame):
         
         self.headImgLabel = ImageLabel()
         self.headImgLabel.setFixedSize(40, 40)
+        self.headImgLabel.setImage("./_rc/img/head_2.jpg")
         
         self.nameLabel = StrongBodyLabel()
         self.hMainLayout.addWidget(self.headImgLabel)

@@ -2,7 +2,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 
-from FlowLayout import FlowLayout
+# from FlowLayout import FlowLayout
 from VSplit import VSplit
 from FriendCard import FriendCard
 
@@ -12,6 +12,7 @@ from Msg import MsgCmd, MsgState, MsgType
 from Data import *
 
 from qfluentwidgets import *
+from FlowLayout import FlowLayout
 
 class AddFriendsPage(QWidget):
     
@@ -61,8 +62,18 @@ class AddFriendsPage(QWidget):
         self.searchBtn.clicked.connect(self.onClicedSearchBtn)
         # StyleSheetUtils.setQssByFileName("./_rc/qss/AddFriendsPage.qss", self)
 
-    def addCard(self, card):
+    def addCard(self, item):
+        card = FriendCard()
+        card.setUserName(item["username"])
+        
+        # 遍历flowLayout
+        for i in range(self.flowLayout.count()):
+            curWidget = self.flowLayout.itemAt(i)
+            if curWidget.widget().getUserName() == card.getUserName():
+                return
+            
         self.flowLayout.addWidget(card)
+        self.__users.addDetail(-1, item["userid"], item["username"], "", 0, 0, 0)
     
     def onClicedSearchBtn(self):
         # get Text from searchEdit
@@ -72,24 +83,27 @@ class AddFriendsPage(QWidget):
         
     def responseFindUser(self, msg):
         if msg["state"] == MsgState.ok:
-            # print msg;
-            print(msg)
+            
+            # 清空当前的所有元素
+            self.vMainLayout.removeWidget(self.container)
+            self.container.deleteLater()
+            
+            self.container = QWidget()
+            self.flowLayout = FlowLayout(self.container)
+            self.flowLayout.setContentsMargins(30, 20, 30, 20)
+            self.container.setLayout(self.flowLayout)
+            self.vMainLayout.addWidget(self.container)
+            
             
             # 返回回来的data是一个数组
+            # 判断是否含有data字段
+            if "data" not in msg:
+                return
+            
             data = msg["data"]
             # 遍历数组添加元素
             for item in data:
-                card = FriendCard()
-                card.setUserName(item["username"])
-                self.flowLayout.addWidget(card)
-                self.__users.addDetail(-1, item["userid"], item["username"], "", 0, 0, 0)
-            
-
-    # def paintEvent(self, event):
-    #     opt = QStyleOption()
-    #     opt.initFrom(self)
-    #     painter = QPainter(self)
-    #     self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
+                self.addCard(item)
 
 
 if __name__ == "__main__":

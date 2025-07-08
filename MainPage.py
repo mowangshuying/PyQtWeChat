@@ -79,6 +79,7 @@ class MainPage(FramelessWindow):
         self.msgListPage = MsgListPage()
         self.midLayout.addWidgetByKey("MsgListPage", self.msgListPage)
         
+        # contactListPage;
         self.contactListPage = ContactListPage()
         self.contactListPage.requestGetFriendList()
         self.midLayout.addWidgetByKey("ContactListPage", self.contactListPage)
@@ -102,16 +103,25 @@ class MainPage(FramelessWindow):
     def __connected(self):
         self.msgListPage.clickedAddBtn.connect(self.onClickedAddBtn)
         self.msgListPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
-        self.toolPage.clickedFriendsBtn.connect(self.onClickedFriendsBtn)
+        
+        self.contactListPage.clickedAddBtn.connect(self.onClickedAddBtn)
+        self.contactListPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
+        
+        self.contactListPage.clickedListItem.connect(self.__onClickedContactListItem)
         
     def setStatusText(self, text):
         self.statusLabel.setText(text)
 
+    def __onClickedContactListItem(self, str):
+        
+        # 切换到申请
+        if str == "新的朋友":
+            self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
+            self.doApplyFriendsPage.requestGetApplyList()
+            self.titleBar.raise_()
+            return 
+
+        
     def onClickedAddBtn(self):
         self.rightLayout.setCurrentWidgetByKey("AddFriendsPage")
         self.titleBar.raise_()
-    # 切换到申请列表
-    def onClickedFriendsBtn(self):
-        self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
-        self.doApplyFriendsPage.requestGetApplyList()
-        self.titleBar.raise_() 

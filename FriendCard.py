@@ -50,6 +50,9 @@ class FriendCard(QWidget):
 
     def setUserName(self, name):
         self.usernameLabel.setText(name)
+        
+    def getUserName(self):
+        return self.usernameLabel.text()
 
     def setImg(self, img):
         self.headImg.setPixmap(img)
@@ -60,6 +63,9 @@ class FriendCard(QWidget):
         
     def setFriendId(self, friendid):
         self.friendid = friendid
+        
+    def getFriendId(self):
+        return self.friendid
 
     def onClickedAddFriendbtn(self):
         ownerid = self.__users.getId()

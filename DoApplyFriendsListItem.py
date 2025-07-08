@@ -25,10 +25,15 @@ class DoApplyFriendsListItem(QFrame):
         self.hMainLayout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.hMainLayout)
 
-        self.headImgLabel = ImageLabel()
+        self.headImgLabel = ImageLabel(QPixmap("./_rc/img/head_2.jpg"))
         self.headImgLabel.setFixedSize(30, 30)
 
+        self.vInfoWidget = QWidget()
         self.vInfoLayout = QVBoxLayout()
+        self.vInfoLayout.setContentsMargins(0, 0, 0, 0)
+        self.vInfoLayout.setSpacing(0)
+        self.vInfoWidget.setLayout(self.vInfoLayout)
+        
         self.nameLabel = StrongBodyLabel()
         self.msgLabel = BodyLabel()
         self.nameLabel.setText("username")
@@ -42,9 +47,8 @@ class DoApplyFriendsListItem(QFrame):
         self.refuseBtn = PushButton("拒绝")
 
         self.hMainLayout.addWidget(self.headImgLabel)
-        self.hMainLayout.addSpacing(10)
-        self.hMainLayout.addLayout(self.vInfoLayout)
-        self.hMainLayout.addStretch(1)
+        self.hMainLayout.addSpacing(15)
+        self.hMainLayout.addWidget(self.vInfoWidget, 1)
         self.hMainLayout.addWidget(self.stateBtn)
         self.hMainLayout.addWidget(self.agreeBtn)
         self.hMainLayout.addWidget(self.refuseBtn)
@@ -56,6 +60,7 @@ class DoApplyFriendsListItem(QFrame):
         self.refuseBtn.clicked.connect(self.onClickedRefuseBtn)
 
     def setHeadImg(self, headimg):
+        headimg = headimg.scaled(30, 30, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         self.headImgLabel.setPixmap(headimg)
 
     def setName(self, name):

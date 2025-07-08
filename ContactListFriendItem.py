@@ -16,8 +16,9 @@ class ContactListFriendItem(ContactListItem):
         
         
         self.headImgLabel = ImageLabel()
-        self.headImgLabel.setFixedSize(40, 40)
-        self.headImgLabel.setImage("./_rc/img/head_2.jpg")
+        # self.headImgLabel.setFixedSize(40, 40)
+        self.setHeadImg(QPixmap("./_rc/img/head_2.jpg"))
+        # self.headImgLabel.setImage("./_rc/img/head_2.jpg")
         
         self.nameLabel = StrongBodyLabel()
         self.hMainLayout.addWidget(self.headImgLabel)
@@ -30,6 +31,10 @@ class ContactListFriendItem(ContactListItem):
         
     def setHeadImg(self, headimg: QPixmap):
         self.headImgLabel.setPixmap(headimg)
+        self.headImgLabel.setScaledSize(QSize(40, 40))
         
     def setName(self, name: str):
         self.nameLabel.setText(name)
+        
+    def getName(self) -> str:
+        return self.nameLabel.text()

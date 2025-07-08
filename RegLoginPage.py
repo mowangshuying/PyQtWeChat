@@ -86,9 +86,10 @@ class RegLoginPage(FramelessWindow):
         if msg["state"] == MsgState.ok:
             self.__users.setId(msg["data"]["userid"])
             self.__users.addDetail(-1, msg["data"]["userid"], msg["data"]["username"], "", 0, 0, 0)
+            self.deleteLater()
             mainPage = MainPage()
             mainPage.show()
-            self.close()
+            
         
     def onBtnClicked(self):
         if self.regOrLogin.isChecked():

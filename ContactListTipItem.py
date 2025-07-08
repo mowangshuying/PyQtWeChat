@@ -10,8 +10,12 @@ class ContactListTipItem(ContactListItem):
         super().__init__(parent)
         self.setItemType(ContactListItemType.Tip)
         self.hMainLayout = QHBoxLayout()
-        self.label = StrongBodyLabel()
-        self.setFixedSize(250, 25)
+        self.setLayout(self.hMainLayout)
+        
+        self.label = CaptionLabel()
+        self.setFixedSize(250, 30)
+        self.hMainLayout.addWidget(self.label)
+        
         
     def setTip(self, str):
         self.label.setText(str)

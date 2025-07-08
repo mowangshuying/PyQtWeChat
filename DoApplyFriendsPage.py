@@ -16,6 +16,7 @@ from Msg import *
 
 from qfluentwidgets import *
 from StyleSheetUtils import StyleSheetUtils
+
 @singleton
 class DoApplyFriendsPage(QWidget):
     def __init__(self, parent=None):
@@ -37,12 +38,11 @@ class DoApplyFriendsPage(QWidget):
         self.list = ListWidgetEx()
         self.vMainLayout.addWidget(self.list)
         self.__netClientUtils.register(MsgType.push, MsgCmd.doApplyAddUser, self.onPushDoApplyAddUser)
-        # StyleSheetUtils.setQssByFileName("./_rc/qss/DoApplyFriendsPage.qss", self)
         
 
     def add(self, id, headimg, username, msg, state):
         item = DoApplyFriendsListItem()
-        item.setHeadImg(QPixmap(""))
+        item.setHeadImg(QPixmap("./_rc/img/head_2.jpg"))
         item.setName(username)
         item.setMsg(msg)
         item.setId(id)

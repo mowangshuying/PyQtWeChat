@@ -107,6 +107,16 @@ class ContactListPage(QWidget):
         self.list.setItemWidget(listItem, item)        
     
     def addFriend(self, headimg, username):
+
+        # 判断是否含有该用户
+        for i in range(self.list.count()):
+            widget = self.list.itemWidget(self.list.item(i))
+            # if item.getName() == username:
+                # return
+            if widget.getItemType() == ContactListItemType.Friend:
+                if widget.getName() == username:
+                    return
+
         item = ContactListFriendItem()
         item.setHeadImg(headimg)
         item.setName(username)

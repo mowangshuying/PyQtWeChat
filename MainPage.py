@@ -119,7 +119,18 @@ class MainPage(FramelessWindow):
             self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
             self.doApplyFriendsPage.requestGetApplyList()
             self.titleBar.raise_()
-            return 
+            return
+
+        # 查找会话
+        if (not self.rightLayout.hasByKey(str)) and str !="" :
+            # 创建一个MsgListPage
+            self.sesPage = SesPage(self)
+            # self.sesPage.setTitle(str)
+            self.rightLayout.addWidgetByKey(str, self.sesPage)
+
+        # 直接切换
+        self.rightLayout.setCurrentWidgetByKey(str)
+             
 
         
     def onClickedAddBtn(self):

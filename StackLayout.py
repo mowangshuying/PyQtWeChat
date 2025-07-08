@@ -20,3 +20,6 @@ class StackLayout(QStackedLayout):
         w = self.map[key]
         if w != None:
             self.setCurrentWidget(w)
+
+    def hasByKey(self, key):
+        return self.map.get(key) != None

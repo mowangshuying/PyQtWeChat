@@ -96,15 +96,24 @@ class DoApplyFriendsPage(QWidget):
 
     def responseGetApplyList(self, msg):
         self.list.clear()
+
+        # 判断是否含有"data"
+        if "data" not in msg: 
+            return
+
         for item in msg["data"]:
             id = item["id"]
             ownerid = item["ownerid"]
             friendid = item["friendid"]
-            friendUsername = item["friendUsername"]
+            friendname = item["friendname"]
+            ownername = item["ownername"]
             appplystate = item["applystate"]
             applymsg = item["applymsg"]
             
             self.__friendApplys.addDetail(id, ownerid, friendid, appplystate, applymsg)
-            self.add(id, "", friendUsername, applymsg, appplystate)
+            if ownerid == self.__users.getId():
+                self.add(id, "", friendname, applymsg, appplystate)
+            elif friendid == self.__users.getId():
+                self.add(id, "", ownername, applymsg, appplystate)
         
         

@@ -9,7 +9,7 @@ from Data import *
 from ListWidgetEx import ListWidgetEx
 from StyleSheetUtils import StyleSheetUtils
 from sigleton import *
-from ContactListItem import ContactListItem
+from ContactListFriendItem import ContactListFriendItem
 from qfluentwidgets import *
 
 @singleton
@@ -66,7 +66,7 @@ class ContactListPage(QWidget):
         self.addBtn.clicked.connect(self.onAddBtnClicked)
     
     def add(self, headimg, username):
-        item = ContactListItem()
+        item = ContactListFriendItem()
         item.setHeadImg(headimg)
         item.setName(username)
         
@@ -86,12 +86,14 @@ class ContactListPage(QWidget):
         menu.exec(gp)
         
     def requestGetFriendList(self):
-        dataJson = {"ownerid": self.__users.getId()}
-        self.__netClientUtils.request(MsgCmd.getFriendList, dataJson, self.responseGetFriendList)
+        # dataJson = {"ownerid": self.__users.getId()}
+        # self.__netClientUtils.request(MsgCmd.getFriendList, dataJson, self.responseGetFriendList)
+        pass
         
     def responseGetFriendList(self, msg):
-        self.list.clear()
-        for item in msg["data"]:
-            friendname = item["friendusername"]
-            self.add(QPixmap(), friendname)
+        # self.list.clear()
+        # for item in msg["data"]:
+            # friendname = item["friendusername"]
+            # self.add(QPixmap(), friendname)
+        pass
             

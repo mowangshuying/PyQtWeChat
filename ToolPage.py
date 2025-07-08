@@ -44,11 +44,11 @@ class ToolPage(QWidget):
         
         
         # connect;
-        self.headBtn.clicked.connect(lambda: self.clickedHeadBtn.emit())
-        self.userBtn.clicked.connect(lambda: self.clickedUserBtn.emit())
+        self.headBtn.clicked.connect(self.__onClickedHeadBtn)
+        self.userBtn.clicked.connect(self.__onClickedUserBtn)
         # self.groupBtn.clicked.connect(lambda: self.clickedGroupBtn.emit())
         # self.friendsBtn.clicked.connect(lambda: self.clickedFriendsBtn.emit())
-        self.msgsBtn.clicked.connect(lambda: self.clickedMsgsBtn.emit())
+        self.msgsBtn.clicked.connect(self.__onClickedMsgsBtn)
         
         StyleSheetUtils.setQssByFileName("./_rc/qss/ToolPage.qss", self)
         
@@ -59,6 +59,18 @@ class ToolPage(QWidget):
         btn.setFixedSize(s, s)
         return btn
         
+    def __onClickedHeadBtn(self):
+        self.clickedHeadBtn.emit()
+        
+    def __onClickedUserBtn(self):
+        self.userBtn.setIcon(QIcon(QPixmap("./_rc/img/contact_list_press.png")))
+        self.msgsBtn.setIcon(QIcon(QPixmap("./_rc/img/chat_icon.png")))
+        self.clickedUserBtn.emit()
+        
+    def __onClickedMsgsBtn(self):
+        self.userBtn.setIcon(QIcon(QPixmap("./_rc/img/contact_list.png")))
+        self.msgsBtn.setIcon(QIcon(QPixmap("./_rc/img/chat_icon_press.png")))
+        self.clickedMsgsBtn.emit()
     
     def paintEvent(self, event):
         opt = QStyleOption()

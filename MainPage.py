@@ -125,11 +125,12 @@ class MainPage(FramelessWindow):
         if (not self.rightLayout.hasByKey(str)) and str !="" :
             # 创建一个MsgListPage
             self.sesPage = SesPage(self)
-            # self.sesPage.setTitle(str)
+            self.sesPage.setTitle(str)
             self.rightLayout.addWidgetByKey(str, self.sesPage)
 
         # 直接切换
         self.rightLayout.setCurrentWidgetByKey(str)
+        self.titleBar.raise_()
              
 
         

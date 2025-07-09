@@ -8,13 +8,21 @@ from SesPageToolBar import SesPageToolBar
 from VSplit import VSplit
 
 from qfluentwidgets import *
+from Def import *
+from Data import *
+from  ChatListItem import ChatListItem
+from TextBubble import TextBubble
+from Msg import *
 
 class SesPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+        self.__user = Users()
+
         self.setAcceptDrops(True)
         self.setMouseTracking(True)
+        self.sesType = SesType.Friend
 
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
@@ -61,10 +69,59 @@ class SesPage(QWidget):
         self.vMainLayout.addWidget(self.edit, 1)
         self.vMainLayout.addLayout(self.hBottomLayout)
 
+        self.sendBtn.clicked.connect(self.onClickedSendBtn)
         StyleSheetUtils.setQssByFileName("./_rc/qss/SesPage.qss", self)
 
     def setTitle(self, str):
         self.titleLabel.setText(str)
+        
+    def appendChatMsg(self, msg):
+        id = msg["id"]
+        ownerid = msg["ownerid"]
+        friendid = msg["friendid"]
+        msgtype = msg["msgtype"]
+        text = msg["msgdata"]
+        
+        if ownerid == self.__user.getId():
+            chatItem = ChatListItem(ChatRole.Self)
+            chatItem.setUserName(self.__user.getIdByName(self.__user.getId()))
+            chatItem.setUserIcon("./_rc/img/head_2.jpg")
+            
+            textBubble = TextBubble(ChatRole.Self, text)
+            chatItem.setBubble(textBubble)
+            
+            listItem = QListWidgetItem()
+            listItem.setSizeHint(chatItem.sizeHint()) 
+            self.list.addItem(listItem)   
+            self.list.setItemWidget(listItem, chatItem)
+            
+        if ownerid == self.__user.getId():
+            chatItem = ChatListItem(ChatRole.Other)
+            chatItem.setUserName(self.__user.getIdByName(friendid))
+            chatItem.setUserIcon("./_rc/img/head_2.jpg")
+            
+            textBubble = TextBubble(ChatRole.Self, text)
+            chatItem.setBubble(textBubble)
+            
+            listItem = QListWidgetItem()
+            listItem.setSizeHint(chatItem.sizeHint()) 
+            self.list.addItem(listItem)   
+            self.list.setItemWidget(listItem, chatItem)
+            
+    def onClickedSendBtn(self):
+        msgText = self.textEdit.toPlainText()
+        if msgText == "":
+            return
+        
+        data = {"ownerid":self.__user.getId(), 
+                "friendid":self.__user.getIdByName(self.titleLabel.text()),
+                "msgtype":MsgType.text,
+                "msgdata":msgText
+                }
+        
+        
+        
+            
 
 
         

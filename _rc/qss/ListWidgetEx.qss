@@ -7,17 +7,15 @@ QListWidget {
 }
 
 QListWidget::item {
-    color: black;
-    background: rgb(243, 243, 243);
-    height: 35px;
-    margin-top: 3px;
-    border-radius: 4px;
+    background-color: transparent;
 }
 
 QListWidget::item:hover {
-    background-color: rgb(234, 234, 234);
+    /* background-color: rgb(234, 234, 234); */
+    background-color: transparent;
 }
 
 QListWidget::item:selected {
-    background-color: rgb(234, 234, 234);
+    /* background-color: rgb(234, 234, 234); */
+    background-color: transparent;
 }

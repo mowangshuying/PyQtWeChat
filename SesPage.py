@@ -13,12 +13,15 @@ from Data import *
 from  ChatListItem import ChatListItem
 from TextBubble import TextBubble
 from Msg import *
+from NetClientUtils import *
+from ChatView import *
 
 class SesPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
         self.__user = Users()
+        self.__netClientUtils = NetClientUtils()
 
         self.setAcceptDrops(True)
         self.setMouseTracking(True)
@@ -42,8 +45,10 @@ class SesPage(QWidget):
 
         self.sp1 = VSplit(self)
 
-        self.list = ListWidgetEx(self)
-        self.list.setAcceptDrops(False)
+        self.list = ChatView()
+        # self.list.setObjectName("list")
+        # self.list.setAcceptDrops(False)
+        # self.list.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
 
         self.sp2 = VSplit(self)
 
@@ -76,7 +81,7 @@ class SesPage(QWidget):
         self.titleLabel.setText(str)
         
     def appendChatMsg(self, msg):
-        id = msg["id"]
+        # id = msg["id"]
         ownerid = msg["ownerid"]
         friendid = msg["friendid"]
         msgtype = msg["msgtype"]
@@ -84,40 +89,55 @@ class SesPage(QWidget):
         
         if ownerid == self.__user.getId():
             chatItem = ChatListItem(ChatRole.Self)
-            chatItem.setUserName(self.__user.getIdByName(self.__user.getId()))
+            chatItem.setUserName(self.__user.getNameById(ownerid))
             chatItem.setUserIcon("./_rc/img/head_2.jpg")
             
             textBubble = TextBubble(ChatRole.Self, text)
             chatItem.setBubble(textBubble)
+
+            # listItem = QListWidgetItem()
+            # self.list.addItem(listItem)
             
-            listItem = QListWidgetItem()
-            listItem.setSizeHint(chatItem.sizeHint()) 
-            self.list.addItem(listItem)   
-            self.list.setItemWidget(listItem, chatItem)
+            # chatItem.setProperty("listitem", listItem)   
+            # self.list.setItemWidget(listItem, chatItem)
+            self.list.appendChatItem(chatItem)
             
-        if ownerid == self.__user.getId():
+        if friendid == self.__user.getId():
             chatItem = ChatListItem(ChatRole.Other)
-            chatItem.setUserName(self.__user.getIdByName(friendid))
+            chatItem.setUserName(self.__user.getNameById(friendid))
             chatItem.setUserIcon("./_rc/img/head_2.jpg")
             
-            textBubble = TextBubble(ChatRole.Self, text)
-            chatItem.setBubble(textBubble)
+            textBubble = TextBubble(ChatRole.Other, text)
             
-            listItem = QListWidgetItem()
-            listItem.setSizeHint(chatItem.sizeHint()) 
-            self.list.addItem(listItem)   
-            self.list.setItemWidget(listItem, chatItem)
+            height = textBubble.getTextHeight()
+            print(height)
+            
+            chatItem.setBubble(textBubble)
+            self.list.appendChatItem(chatItem)
+            
+            # listItem = QListWidgetItem()
+            # listItem.setSizeHint(chatItem.sizeHint()) 
+            # self.list.addItem(listItem)   
+            # self.list.setItemWidget(listItem, chatItem)
             
     def onClickedSendBtn(self):
-        msgText = self.textEdit.toPlainText()
+        msgText = self.edit.toPlainText()
         if msgText == "":
             return
         
         data = {"ownerid":self.__user.getId(), 
                 "friendid":self.__user.getIdByName(self.titleLabel.text()),
-                "msgtype":MsgType.text,
+                "msgtype": 0,
                 "msgdata":msgText
                 }
+        
+        self.__netClientUtils.request(MsgCmd.sendMsg, data, self.responseSendMsg)
+        
+    def responseSendMsg(self, msg):
+        if msg["state"] == "ok":
+            self.appendChatMsg(msg["data"])
+        
+        
         
         
         

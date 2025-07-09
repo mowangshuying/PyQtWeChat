@@ -23,3 +23,6 @@ class StackLayout(QStackedLayout):
 
     def hasByKey(self, key):
         return self.map.get(key) != None
+    
+    def getByKey(self, key):
+        return self.map.get(key)

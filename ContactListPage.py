@@ -171,10 +171,8 @@ class ContactListPage(QWidget):
         self.__netClientUtils.request(MsgCmd.getFriendList, dataJson, self.responseGetFriendList)
         
     def responseGetFriendList(self, msg):
-        # self.list.clear()
         for item in msg["data"]:
             friendname = item["friendusername"]
             self.addFriend(QPixmap("./_rc/img/head_2.jpg"), friendname)
-        # pass
-        # self.__syncEvent.set()
+            self.__users.addDetail(-1, item["friend"]["userid"], item["friend"]["username"], "", 0, 0, 0)
             

@@ -19,6 +19,8 @@ from qfluentwidgets.components.widgets.button import *
 from qfluentwidgets.components.widgets.line_edit import *
 from qfluentwidgets.components.widgets.check_box import *
 from qframelesswindow import TitleBar
+from NetClientUtils import *
+from Data import *
 
 # res
 from _rc.res import *
@@ -27,6 +29,10 @@ from _rc.res import *
 class MainPage(FramelessWindow):
     def __init__(self):
         super().__init__()
+        
+        self.__netClientUtils = NetClientUtils()
+        self.__users = Users()
+        
         # self.titleBar.raise_()
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
@@ -73,6 +79,8 @@ class MainPage(FramelessWindow):
         self.setTitleBar(TitleBar(self))
         self.titleBar.raise_()
         
+        # register msg
+        self.__netClientUtils.register(MsgType.push, MsgCmd.sendMsg, self.__responseSendMsg)
 
     def __initMidPage(self):
         # msgListPage
@@ -137,3 +145,10 @@ class MainPage(FramelessWindow):
     def onClickedAddBtn(self):
         self.rightLayout.setCurrentWidgetByKey("AddFriendsPage")
         self.titleBar.raise_()
+        
+    def __responseSendMsg(self, msg):
+        ownerid = msg["data"]["ownerid"]
+        sesPage =  self.rightLayout.getByKey(self.__users.getNameById(ownerid))
+        if sesPage != None: 
+            sesPage.appendChatMsg(msg["data"])
+            

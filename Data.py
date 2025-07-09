@@ -44,6 +44,12 @@ class Users:
         for user in self.list:
             if user.username == name:
                 return user.userid
+            
+            
+    def getNameById(self, id):
+        for user in self.list:
+            if user.userid == id:
+                return user.username
 
 
     

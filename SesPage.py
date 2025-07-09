@@ -59,7 +59,7 @@ class SesPage(QWidget):
         self.edit.setAcceptRichText(True)
 
         self.hBottomLayout = QHBoxLayout()
-        self.sendBtn = QPushButton("发送[s]")
+        self.sendBtn = PushButton("发送[s]")
         self.sendBtn.setFixedSize(70, 30)
 
         self.hBottomLayout.addStretch(1)
@@ -104,7 +104,7 @@ class SesPage(QWidget):
             
         if friendid == self.__user.getId():
             chatItem = ChatListItem(ChatRole.Other)
-            chatItem.setUserName(self.__user.getNameById(friendid))
+            chatItem.setUserName(self.__user.getNameById(ownerid))
             chatItem.setUserIcon("./_rc/img/head_2.jpg")
             
             textBubble = TextBubble(ChatRole.Other, text)

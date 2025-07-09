@@ -120,6 +120,12 @@ class MainPage(FramelessWindow):
     def setStatusText(self, text):
         self.statusLabel.setText(text)
 
+
+    def __makeSesPageByKey(self, key):
+        self.sesPage = SesPage(self)
+        self.sesPage.setTitle(key)
+        self.rightLayout.addWidgetByKey(key, self.sesPage)        
+
     def __onClickedContactListItem(self, str):
         
         # 切换到申请
@@ -131,10 +137,7 @@ class MainPage(FramelessWindow):
 
         # 查找会话
         if (not self.rightLayout.hasByKey(str)) and str !="" :
-            # 创建一个MsgListPage
-            self.sesPage = SesPage(self)
-            self.sesPage.setTitle(str)
-            self.rightLayout.addWidgetByKey(str, self.sesPage)
+            self.__makeSesPageByKey(str)
 
         # 直接切换
         self.rightLayout.setCurrentWidgetByKey(str)
@@ -149,6 +152,9 @@ class MainPage(FramelessWindow):
     def __responseSendMsg(self, msg):
         ownerid = msg["data"]["ownerid"]
         sesPage =  self.rightLayout.getByKey(self.__users.getNameById(ownerid))
-        if sesPage != None: 
-            sesPage.appendChatMsg(msg["data"])
+        if sesPage == None: 
+            self.__makeSesPageByKey(self.__users.getNameById(ownerid))
+            sesPage = self.rightLayout.getByKey(self.__users.getNameById(ownerid))
+            
+        sesPage.appendChatMsg(msg["data"])
             

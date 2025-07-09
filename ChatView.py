@@ -2,6 +2,9 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 
+from qfluentwidgets import *
+from StyleSheetUtils import StyleSheetUtils
+
 class ChatView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -11,7 +14,7 @@ class ChatView(QWidget):
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.vMainLayout)
         
-        self.scrollArea = QScrollArea()
+        self.scrollArea = SmoothScrollArea()
         self.setObjectName("scrollArea")
         self.vMainLayout.addWidget(self.scrollArea)
         
@@ -24,7 +27,7 @@ class ChatView(QWidget):
         self.widget.setLayout(self.vWidgetLayout)
         self.scrollArea.setWidget(self.widget)
         
-        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        # self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         vScrollBar = self.scrollArea.verticalScrollBar()
         vScrollBar.rangeChanged.connect(self.onVScrollRangeChanged)
         
@@ -35,11 +38,13 @@ class ChatView(QWidget):
         
         vScrollBar.setHidden(True)
         self.scrollArea.setWidgetResizable(True)
-        self.scrollArea.installEventFilter(self)
+        # self.scrollArea.installEventFilter(self)
+        StyleSheetUtils.setQssByFileName("./_rc/qss/ChatView.qss", self)
         
     def appendChatItem(self, item):
         layout = self.scrollArea.widget().layout()
         layout.addWidget(item)
+        self._isAppended = True
         
     def removeAllChatItem(self):
         for i in range(self.scrollArea.widget().layout().count() - 1):
@@ -52,18 +57,18 @@ class ChatView(QWidget):
             vScrollBar = self.scrollArea.verticalScrollBar() 
             vScrollBar.setSliderPosition(vScrollBar.maximum())
             
-            QTime.singleShot(100, self.onTimer)      
+            QTimer.singleShot(100, self.onTimer)      
         
     def onTimer(self):
         self._isAppended = False
         
-    def eventFilter(self, a0, a1):
-        if a1.type() == QEvent.Type.Enter and a0 == self.scrollArea:
-            self.scrollArea.verticalScrollBar().setHidden(self.scrollArea.verticalScrollBar().maximum() == 0)
-        elif a1.type() == QEvent.Type.Leave and a0 == self.scrollArea: 
-            self.scrollArea.verticalScrollBar().setHidden(True)
+    # def eventFilter(self, a0, a1):
+    #     if a1.type() == QEvent.Type.Enter and a0 == self.scrollArea:
+    #         self.scrollArea.verticalScrollBar().setHidden(self.scrollArea.verticalScrollBar().maximum() == 0)
+    #     elif a1.type() == QEvent.Type.Leave and a0 == self.scrollArea: 
+    #         self.scrollArea.verticalScrollBar().setHidden(True)
                
-        return super().eventFilter(a0, a1)
+    #     return super().eventFilter(a0, a1)
     def paintEvent(self, a0):
         opt = QStyleOption()   
         opt.initFrom(self)

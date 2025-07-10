@@ -135,6 +135,8 @@ class SesPage(QWidget):
         
     def responseSendMsg(self, msg):
         if msg["state"] == "ok":
+            # 清空eidt
+            self.edit.clear()
             self.appendChatMsg(msg["data"])
         
         

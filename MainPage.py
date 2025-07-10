@@ -66,7 +66,7 @@ class MainPage(FramelessWindow):
         # self.setLayout(self.hLayout)
 
         # status label;
-        self.statusLabel = QLabel("status...")
+        self.statusLabel = QLabel("")
         self.statusLabel.setFixedHeight(20)
         self.statusLabel.setStyleSheet("background-color: rgb(29,124,202); font-size: 12px; color: white;")
         self.vMainLayout.addWidget(self.statusLabel)

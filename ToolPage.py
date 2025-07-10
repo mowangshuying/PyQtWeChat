@@ -5,6 +5,7 @@ from PyQt6.QtGui import *
 
 from _rc.res import *
 from StyleSheetUtils import StyleSheetUtils
+from UserInfoPage import UserInfoPage
 
 class ToolPage(QWidget):
     
@@ -46,6 +47,8 @@ class ToolPage(QWidget):
         self.setFixedWidth(56)
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         
+        self.userInfoPage = UserInfoPage()
+        self.userInfoPage.hide()
         
         # connect;
         self.headBtn.clicked.connect(self.__onClickedHeadBtn)
@@ -63,7 +66,17 @@ class ToolPage(QWidget):
         return btn
         
     def __onClickedHeadBtn(self):
-        self.clickedHeadBtn.emit()
+        # self.clickedHeadBtn.emit()
+        # self.userInfoPage.deleteLater()
+        
+        self.userInfoPage = UserInfoPage()
+        gPoint = self.headBtn.mapToGlobal(QPoint(0, 0))
+        rect = self.userInfoPage.geometry()
+        rect.setX(gPoint.x() + self.headBtn.width() / 2)
+        rect.setY(gPoint.y() + self.headBtn.height() / 2)
+        self.userInfoPage.setGeometry(rect)
+        self.userInfoPage.show()
+        
         
     def __onClickedUserBtn(self):
         self.userBtn.setIcon(QIcon(QPixmap("./_rc/img/contact_list_press.png")))

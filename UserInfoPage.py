@@ -10,7 +10,7 @@ from StyleSheetUtils import StyleSheetUtils
 from Data import *
 
 class UserInfoPage(QWidget):
-    clickedChangeImgBtn = pyqtSignal()
+    clickedChangeHeadImgBtn = pyqtSignal()
     def __init__(self, parent=None):
         super().__init__(parent)
         

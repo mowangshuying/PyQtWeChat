@@ -75,8 +75,8 @@ class ToolPage(QWidget):
         
         gPoint = self.headBtn.mapToGlobal(QPoint(0, 0))
         rect = self.userInfoPage.geometry()
-        rect.setX(gPoint.x() + self.headBtn.width() / 2)
-        rect.setY(gPoint.y() + self.headBtn.height() / 2)
+        rect.setX(gPoint.x() + self.headBtn.width() // 2)
+        rect.setY(gPoint.y() + self.headBtn.height() // 2)
         self.userInfoPage.setGeometry(rect)
         self.userInfoPage.show()
         

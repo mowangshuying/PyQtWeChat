@@ -78,5 +78,5 @@ class UserInfoPage(QWidget):
         self.hide()
         
     def onClickedChangeHeadImgBtn(self):
-        self.clickedChangeHeadImgBtn.emit()
+        self.clickedChangeImgBtn.emit()
         

@@ -2,7 +2,6 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 
-
 from _rc.res import *
 from StyleSheetUtils import StyleSheetUtils
 from UserInfoPage import UserInfoPage
@@ -15,6 +14,7 @@ class ToolPage(QWidget):
     # clickedFriendsBtn = pyqtSignal()
     clickedMsgsBtn = pyqtSignal()
     clickedSettingBtn = pyqtSignal()
+    clickedChangeHeadImgBtn = pyqtSignal()
     def __init__(self, parent = None):
         super().__init__(parent)
         
@@ -70,6 +70,9 @@ class ToolPage(QWidget):
         # self.userInfoPage.deleteLater()
         
         self.userInfoPage = UserInfoPage()
+        self.userInfoPage.clickedChangeImgBtn.connect(self.onClickedChangedHeadImgBtn)
+        # 
+        
         gPoint = self.headBtn.mapToGlobal(QPoint(0, 0))
         rect = self.userInfoPage.geometry()
         rect.setX(gPoint.x() + self.headBtn.width() / 2)
@@ -95,6 +98,10 @@ class ToolPage(QWidget):
         self.msgsBtn.setIcon(QIcon(QPixmap("./_rc/img/chat_icon.png")))
         self.settingBtn.setIcon(QIcon(QPixmap("./_rc/img/settings_press.png")))
         self.clickedSettingBtn.emit()
+        
+    def onClickedChangedHeadImgBtn(self):
+        print("=============== &&&&&&&&&&&&&& ================")
+        self.clickedChangeHeadImgBtn.emit()
     
     def paintEvent(self, event):
         opt = QStyleOption()

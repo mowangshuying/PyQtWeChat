@@ -13,6 +13,7 @@ from sigleton import singleton
 from StackLayout import StackLayout
 from AddFriendsPage import AddFriendsPage
 from DoApplyFriendsPage import DoApplyFriendsPage
+from PictureToolPage import PictureToolPage
 
 from qfluentwidgets.components.widgets.frameless_window import FramelessWindow
 from qfluentwidgets.components.widgets.button import *
@@ -106,6 +107,10 @@ class MainPage(FramelessWindow):
         # DoApplyFriendsPage
         self.doApplyFriendsPage = DoApplyFriendsPage()
         self.rightLayout.addWidgetByKey("DoApplyFriendsPage", self.doApplyFriendsPage)
+        
+        self.pictrueToolPage = PictureToolPage()    
+        self.rightLayout.addWidgetByKey("PictureToolPage", self.pictrueToolPage)
+        
         self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
         
     def __connected(self):
@@ -116,6 +121,7 @@ class MainPage(FramelessWindow):
         self.contactListPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
         
         self.contactListPage.clickedListItem.connect(self.__onClickedContactListItem)
+        self.toolPage.clickedChangeHeadImgBtn.connect(self.__onClickedChangedHeadImgBtn)
         
     def setStatusText(self, text):
         self.statusLabel.setText(text)
@@ -147,6 +153,10 @@ class MainPage(FramelessWindow):
         
     def onClickedAddBtn(self):
         self.rightLayout.setCurrentWidgetByKey("AddFriendsPage")
+        self.titleBar.raise_()
+        
+    def __onClickedChangedHeadImgBtn(self):
+        self.rightLayout.setCurrentWidgetByKey("PictureToolPage")
         self.titleBar.raise_()
         
     def __responseSendMsg(self, msg):

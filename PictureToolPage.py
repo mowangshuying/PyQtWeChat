@@ -5,9 +5,16 @@ from PyQt6.QtCore import *
 from VSplit import *
 from qfluentwidgets import *
 
+from NetClientUtils import *
+from Base64Utils import *
+
 class PictureToolPage(QWidget):
     def __init__(self, parent = None):
         super().__init__(parent)
+        
+        self.picture = None
+        self.__netClientUtils = NetClientUtils()
+        self.__base64Utils = Base64Utils()
         
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
@@ -51,16 +58,19 @@ class PictureToolPage(QWidget):
         
     def onClickedUploadBtn(self):
         path = QFileDialog.getOpenFileName(self, "选择图片", "", "*.png *.jpg *.jpeg *.bmp")
-        # if path.isEmpty():
-            # return
         
         picture = QPixmap(path[0])
-        # picture.load(path)
         picture = picture.scaled(250, 250)
+        self.picture = picture
         self.picLabel.setPixmap(picture)
     
     def onClickedCancelBtn(self):
         self.close()
         
     def onClickedDetermineBtn(self):
-        pass
+        if self.picture == None:
+            return
+        
+        base64Str = self.__base64Utils.pixmapToBase64String(self.picture)
+        
+        

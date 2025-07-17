@@ -66,11 +66,9 @@ class ToolPage(QWidget):
         return btn
         
     def __onClickedHeadBtn(self):
-        # self.clickedHeadBtn.emit()
-        # self.userInfoPage.deleteLater()
         
         self.userInfoPage = UserInfoPage()
-        self.userInfoPage.clickedChangeImgBtn.connect(self.onClickedChangedHeadImgBtn)
+        self.userInfoPage.clickedChangeHeadImgBtn.connect(self.onClickedChangedHeadImgBtn)
         # 
         
         gPoint = self.headBtn.mapToGlobal(QPoint(0, 0))
@@ -100,7 +98,7 @@ class ToolPage(QWidget):
         self.clickedSettingBtn.emit()
         
     def onClickedChangedHeadImgBtn(self):
-        print("=============== &&&&&&&&&&&&&& ================")
+        # print("=============== &&&&&&&&&&&&&& ================")
         self.clickedChangeHeadImgBtn.emit()
     
     def paintEvent(self, event):

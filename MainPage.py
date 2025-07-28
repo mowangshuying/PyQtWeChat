@@ -22,6 +22,7 @@ from qfluentwidgets.components.widgets.check_box import *
 from qframelesswindow import TitleBar
 from NetClientUtils import *
 from Data import *
+from BusUtils import BusUtils
 
 # res
 from _rc.res import *
@@ -33,6 +34,7 @@ class MainPage(FramelessWindow):
         
         self.__netClientUtils = NetClientUtils()
         self.__users = Users()
+        self.__busUtils = BusUtils()
         
         # self.titleBar.raise_()
         self.vMainLayout = QVBoxLayout()
@@ -123,6 +125,11 @@ class MainPage(FramelessWindow):
         self.contactListPage.clickedListItem.connect(self.__onClickedContactListItem)
         self.toolPage.clickedChangeHeadImgBtn.connect(self.__onClickedChangedHeadImgBtn)
         
+        # bus utils
+        self.__busUtils.changeHeadImgSuc.connect(self.__onChangeHeadImgSuc)
+        self.__busUtils.statusBarTextChanged.connect(self.__onStatusBarTextChanged)
+        
+        
     def setStatusText(self, text):
         self.statusLabel.setText(text)
 
@@ -158,6 +165,14 @@ class MainPage(FramelessWindow):
     def __onClickedChangedHeadImgBtn(self):
         self.rightLayout.setCurrentWidgetByKey("PictureToolPage")
         self.titleBar.raise_()
+        
+    def __onChangeHeadImgSuc(self):
+        self.toolPage.reloadHeadImg()
+        
+    def __onStatusBarTextChanged(self, text):
+        self.statusLabel.setText(text)
+        # 操过3秒后清除
+        QTimer.singleShot(3000, lambda: self.statusLabel.setText(""))
         
     def __responseSendMsg(self, msg):
         ownerid = msg["data"]["ownerid"]

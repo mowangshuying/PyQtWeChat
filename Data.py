@@ -56,6 +56,11 @@ class Users:
         for user in self.list:
             if user.userid == id:
                 return user.headimg
+            
+    def updateHeadImgByUserid(self, userid, headimg):
+        for user in self.list:
+            if user.userid == userid:
+                user.headimg = headimg
 
 
     

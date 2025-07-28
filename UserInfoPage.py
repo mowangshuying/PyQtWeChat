@@ -81,5 +81,10 @@ class UserInfoPage(QWidget):
         self.hide()
         
     def onClickedChangeHeadImgBtn(self):
+        self.hide()
         self.clickedChangeHeadImgBtn.emit()
+        
+    def reloadHeadImg(self):
+        self.headLabel.setPixmap(self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(self.__users.getId())))
+        self.headLabel.setFixedSize(60, 60)
         

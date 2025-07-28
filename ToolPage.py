@@ -115,6 +115,14 @@ class ToolPage(QWidget):
     def onClickedChangedHeadImgBtn(self):
         # print("=============== &&&&&&&&&&&&&& ================")
         self.clickedChangeHeadImgBtn.emit()
+        
+    def reloadHeadImg(self):
+        self.headBtn.setIcon(QIcon(self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(self.__users.getId()))))
+        self.headBtn.setIconSize(QSize(40, 40))
+        # self.haedBtn.setFixedSize(40, 40)
+        self.headBtn.setFixedSize(40, 40)
+        # self.userInfoPage.headLabel.setPixmap(self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(self.__users.getId())))
+        self.userInfoPage.reloadHeadImg()
     
     def paintEvent(self, event):
         opt = QStyleOption()

@@ -29,12 +29,13 @@ class Users:
     def add(self, user):
         self.list.append(user)
 
-    def addDetail(self, id, userid, username, nickname, sex, state, createdate):
+    def addDetail(self, id, userid, username, nickname, headimg, sex, state, createdate):
         user = _User()
         user.id = id
         user.userid = userid
         user.username = username
         user.nickname = nickname
+        user.headimg = headimg
         user.sex = sex
         user.state = state
         user.createdate = createdate
@@ -50,6 +51,11 @@ class Users:
         for user in self.list:
             if user.userid == id:
                 return user.username
+            
+    def getHeadImgById(self, id):
+        for user in self.list:
+            if user.userid == id:
+                return user.headimg
 
 
     

@@ -8,13 +8,15 @@ from qfluentwidgets import *
 from StyleSheetUtils import StyleSheetUtils
 
 from Data import *
+from Base64Utils import Base64Utils
 
 class UserInfoPage(QWidget):
     clickedChangeHeadImgBtn = pyqtSignal()
     def __init__(self, parent=None):
         super().__init__(parent)
         
-        self.__user = Users()
+        self.__users = Users()
+        self.__base64Utils = Base64Utils()
         
         self.vMainLayout = QVBoxLayout()
         self.setLayout(self.vMainLayout)
@@ -44,14 +46,15 @@ class UserInfoPage(QWidget):
         self.nameLabel = BodyLabel()
         self.userIdLabel = BodyLabel()
         
-        self.nameLabel.setText("用户名:" + self.__user.getNameById(self.__user.getId()))
-        self.userIdLabel.setText("用户ID:" + str(self.__user.getId()))
+        self.nameLabel.setText("用户名:" + self.__users.getNameById(self.__users.getId()))
+        self.userIdLabel.setText("用户ID:" + str(self.__users.getId()))
         
         self.vInfoLayout.addWidget(self.nameLabel, 0, Qt.AlignmentFlag.AlignLeft)
         self.vInfoLayout.addWidget(self.userIdLabel, 0, Qt.AlignmentFlag.AlignLeft)
         self.vInfoLayout.addStretch()
         
-        self.headLabel = ImageLabel("./_rc/img/head_2.jpg")
+        # self.headLabel = ImageLabel("./_rc/img/head_2.jpg")
+        self.headLabel = ImageLabel(self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(self.__users.getId())))
         self.headLabel.setFixedSize(60, 60)
         
         self.changeHeadImgBtn = PrimaryPushButton("修改头像")

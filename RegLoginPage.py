@@ -85,7 +85,7 @@ class RegLoginPage(FramelessWindow):
     def responseLogin(self, msg):
         if msg["state"] == MsgState.ok:
             self.__users.setId(msg["data"]["userid"])
-            self.__users.addDetail(-1, msg["data"]["userid"], msg["data"]["username"], "", 0, 0, 0)
+            self.__users.addDetail(-1, msg["data"]["userid"], msg["data"]["username"], msg["data"]["nickname"], msg["data"]["headimg"], 0, 0, 0)
             self.deleteLater()
             mainPage = MainPage()
             mainPage.show()

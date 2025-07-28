@@ -1,6 +1,8 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
+from Data import *
+from Base64Utils import Base64Utils
 
 from _rc.res import *
 from StyleSheetUtils import StyleSheetUtils
@@ -18,15 +20,21 @@ class ToolPage(QWidget):
     def __init__(self, parent = None):
         super().__init__(parent)
         
+        self.__users = Users()
+        self.__base64Utils = Base64Utils()
+        
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self.vMainLayout.setSpacing(0)
         self.setLayout(self.vMainLayout)
         
-        self.headBtn = self.makeBtn("./_rc/img/head_1.jpg", 40)
+        self.headBtn = self.makeBtnByPixmap(self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(self.__users.getId())), 40)
         self.userBtn = self.makeBtn("./_rc/img/contact_list.png")
         self.msgsBtn = self.makeBtn("./_rc/img/chat_icon.png")
         self.settingBtn = self.makeBtn("./_rc/img/settings.png")
+        
+    
+        
         
         # 头像
         self.vMainLayout.addSpacing(20)
@@ -61,6 +69,13 @@ class ToolPage(QWidget):
     def makeBtn(self, iconPath, s = 30): 
         btn = QPushButton()
         btn.setIcon(QIcon(QPixmap(iconPath)))
+        btn.setIconSize(QSize(s, s))
+        btn.setFixedSize(s, s)
+        return btn
+    
+    def makeBtnByPixmap(self, pixmap, s = 30):
+        btn = QPushButton()
+        btn.setIcon(QIcon(pixmap))
         btn.setIconSize(QSize(s, s))
         btn.setFixedSize(s, s)
         return btn

@@ -73,7 +73,7 @@ class AddFriendsPage(QWidget):
                 return
             
         self.flowLayout.addWidget(card)
-        self.__users.addDetail(-1, item["userid"], item["username"], "", 0, 0, 0)
+        self.__users.addDetail(-1, item["userid"], item["username"], "", item["headimg"], 0, 0, 0)
     
     def onClicedSearchBtn(self):
         # get Text from searchEdit

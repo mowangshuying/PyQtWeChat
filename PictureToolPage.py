@@ -7,6 +7,7 @@ from qfluentwidgets import *
 
 from NetClientUtils import *
 from Base64Utils import *
+from Data import *
 
 class PictureToolPage(QWidget):
     def __init__(self, parent = None):
@@ -15,6 +16,7 @@ class PictureToolPage(QWidget):
         self.picture = None
         self.__netClientUtils = NetClientUtils()
         self.__base64Utils = Base64Utils()
+        self.__users = Users()
         
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
@@ -73,4 +75,10 @@ class PictureToolPage(QWidget):
         
         base64Str = self.__base64Utils.pixmapToBase64String(self.picture)
         
+        data = {"userid" : self.__users.getId(), "headimg" : base64Str}
+        self.__netClientUtils.request(MsgCmd.changeHeadImg, data, self.__onResponseChangeHeadImg)
+        
+    def __onResponseChangeHeadImg(self, msg):
+        if msg["state"] == MsgState.ok:
+            print("Change head img ok.")
         

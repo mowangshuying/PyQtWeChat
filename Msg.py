@@ -25,6 +25,7 @@ class MsgCmd:
         logout = "logout"
         regUser = "regUser"
         changePassword = "changePassword"
+        changeHeadImg = "changeHeadImg"
         sendMsg = "sendMsg"
         sendGroupMsg = "sendGroupMsg"
         updateSessionList = "updateSessionList"

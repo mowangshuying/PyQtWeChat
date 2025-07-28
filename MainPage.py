@@ -125,9 +125,11 @@ class MainPage(FramelessWindow):
         self.contactListPage.clickedListItem.connect(self.__onClickedContactListItem)
         self.toolPage.clickedChangeHeadImgBtn.connect(self.__onClickedChangedHeadImgBtn)
         
+        
         # bus utils
         self.__busUtils.changeHeadImgSuc.connect(self.__onChangeHeadImgSuc)
         self.__busUtils.statusBarTextChanged.connect(self.__onStatusBarTextChanged)
+        self.__busUtils.agreeAddFriend.connect(self.__onAgreeAddFriend)
         
         
     def setStatusText(self, text):
@@ -173,6 +175,9 @@ class MainPage(FramelessWindow):
         self.statusLabel.setText(text)
         # 操过3秒后清除
         QTimer.singleShot(3000, lambda: self.statusLabel.setText(""))
+        
+    def __onAgreeAddFriend(self, msg):
+        self.contactListPage.requestGetFriendList()
         
     def __responseSendMsg(self, msg):
         ownerid = msg["data"]["ownerid"]

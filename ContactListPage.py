@@ -14,6 +14,7 @@ from ContactListFriendItem import ContactListFriendItem
 from ContactListTipItem import ContactListTipItem
 from qfluentwidgets import *
 from SyncEvent import *
+from Base64Utils import Base64Utils
 
 @singleton
 class ContactListPage(QWidget):
@@ -28,6 +29,7 @@ class ContactListPage(QWidget):
         self.__netClientUtils = NetClientUtils()
         self.__users = Users()
         self.__syncEvent = SyncEvent()
+        self.__base64Utils = Base64Utils()
         
         self.vMainLayout = QVBoxLayout()
         self.setLayout(self.vMainLayout)
@@ -173,6 +175,7 @@ class ContactListPage(QWidget):
     def responseGetFriendList(self, msg):
         for item in msg["data"]:
             friendname = item["friendusername"]
-            self.addFriend(QPixmap("./_rc/img/head_2.jpg"), friendname)
+            headimg = item["friend"]["headimg"]
+            self.addFriend(self.__base64Utils.base64StringToPixmap(headimg), friendname)
             self.__users.addDetail(-1, item["friend"]["userid"], item["friend"]["username"], "", item["friend"]["headimg"], 0, 0, 0)
             

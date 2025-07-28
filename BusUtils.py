@@ -8,3 +8,5 @@ from sigleton import singleton
 class BusUtils(QObject):
     changeHeadImgSuc = pyqtSignal()
     statusBarTextChanged = pyqtSignal(str)
+    agreeAddFriend = pyqtSignal(int)
+    refuseAddFriend = pyqtSignal(int)

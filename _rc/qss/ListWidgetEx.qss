@@ -1,23 +1,23 @@
 QListWidget {
-    background-color: rgb(243, 243, 243);
-    outline: none;
-    border: 1px solid transparent;
-    border-radius: 0px;
-    padding: 4px;
+  background-color: rgb(243, 243, 243);
+  outline: none;
+  border: 1px solid transparent;
+  border-radius: 0px;
+  padding: 4px;
 }
 
 QListWidget::item {
-    color: black;
-    background: rgb(243, 243, 243);
-    height: 35px;
-    margin-top: 3px;
-    border-radius: 4px;
+  color: black;
+  background: rgb(243, 243, 243);
+  height: 35px;
+  margin-top: 3px;
+  border-radius: 4px;
 }
 
 QListWidget::item:hover {
-    background-color: rgb(234, 234, 234);
+  background-color: rgb(234, 234, 234);
 }
 
 QListWidget::item:selected {
-    background-color: rgb(234, 234, 234);
+  background-color: rgb(234, 234, 234);
 }

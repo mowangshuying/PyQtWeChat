@@ -1,8 +1,8 @@
 SesPageToolBar {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 QPushButton {
-    background-color: transparent;
-    border:  1px solid transparent;
+  background-color: transparent;
+  border: 1px solid transparent;
 }

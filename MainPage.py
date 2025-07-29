@@ -1,7 +1,5 @@
-# import QWidget
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
-# from PyQt6.QtWidgets import QHBoxLayout
 from ToolPage import ToolPage
 from PyQt6.QtGui import *
 from MsgListPage import MsgListPage
@@ -14,6 +12,7 @@ from StackLayout import StackLayout
 from AddFriendsPage import AddFriendsPage
 from DoApplyFriendsPage import DoApplyFriendsPage
 from PictureToolPage import PictureToolPage
+from ContactInfoPage import ContactInfoPage
 
 from qfluentwidgets.components.widgets.frameless_window import FramelessWindow
 from qfluentwidgets.components.widgets.button import *
@@ -110,8 +109,13 @@ class MainPage(FramelessWindow):
         self.doApplyFriendsPage = DoApplyFriendsPage()
         self.rightLayout.addWidgetByKey("DoApplyFriendsPage", self.doApplyFriendsPage)
         
+        # PictureToolPage
         self.pictrueToolPage = PictureToolPage()    
         self.rightLayout.addWidgetByKey("PictureToolPage", self.pictrueToolPage)
+        
+        # ContactInfoPage
+        self.contactInfoPage = ContactInfoPage()
+        self.rightLayout.addWidgetByKey("ContactInfoPage", self.contactInfoPage)
         
         self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
         

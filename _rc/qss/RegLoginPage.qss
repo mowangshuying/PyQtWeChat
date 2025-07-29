@@ -1,5 +1,5 @@
 RegLoginPage {
-    background-color: rgb(243, 243, 243);
+  background-color: rgb(243, 243, 243);
 }
 
 /* QPushButton {
@@ -7,35 +7,34 @@ RegLoginPage {
     border: 1px solid transparent; 
 } */
 
-
 #titleLabel {
-    padding: 0px;
-    border: none;
-    color: black;
-    font: 14px;
-    background-color: transparent;
-    min-height: 28px;
+  padding: 0px;
+  border: none;
+  color: black;
+  font: 14px;
+  background-color: transparent;
+  min-height: 28px;
 }
 
 #minBtn {
-    min-width: 30px;
-    border: none;
-    background-color: transparent;
+  min-width: 30px;
+  border: none;
+  background-color: transparent;
 }
 
 #minBtn:hover,
 #minBtn:pressed {
-    background-color: rgba(0, 0, 0, 15%);
+  background-color: rgba(0, 0, 0, 15%);
 }
 
 #closeBtn {
-    border: none;
-    min-width: 30px;
-    background-color: transparent;
+  border: none;
+  min-width: 30px;
+  background-color: transparent;
 }
 
 #closeBtn:hover,
 #closeBtn:pressed {
-    border: none;
-    background-color: #e81123;
+  border: none;
+  background-color: #e81123;
 }

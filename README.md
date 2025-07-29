@@ -2,17 +2,14 @@
 
 ## Requirement
 
-* PyQt6
+- PyQt6
 
 ## Build With VSCode
 
-* Ctrl + shift + p  
-* 创建虚拟环境
-* 选择requirement.txt
+- Ctrl + shift + p
+- 创建虚拟环境
+- 选择 requirement.txt
 
 ## Run
 
-* 找到App.py 按下F5.
-
-
-
+- 找到 App.py 按下 F5.

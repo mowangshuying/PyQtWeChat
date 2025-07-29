@@ -1,11 +1,11 @@
 SesPage {
-    background-color: rgb(243, 243, 243);
+  background-color: rgb(243, 243, 243);
 }
 
 QTextEdit {
-    color: rgb(0, 0, 0);
-    background-color: rgb(243, 243, 243);
-    border: 1px solid transparent;
+  color: rgb(0, 0, 0);
+  background-color: rgb(243, 243, 243);
+  border: 1px solid transparent;
 }
 
 /* QListWidget {

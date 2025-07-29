@@ -1,8 +1,8 @@
 QListWidget {
-    border: 1px solid transparent;
+  border: 1px solid transparent;
 }
 
 QPushButton {
-    background-color: transparent;
-    border: 1px solid transparent;
+  background-color: transparent;
+  border: 1px solid transparent;
 }

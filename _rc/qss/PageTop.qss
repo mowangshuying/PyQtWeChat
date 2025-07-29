@@ -1,8 +1,8 @@
 PageTop {
-    background-color: rgb(243, 243, 243);
+  background-color: rgb(243, 243, 243);
 }
 
 QPushButton {
-    background-color: transparent;
-    border: 1px solid transparent;
+  background-color: transparent;
+  border: 1px solid transparent;
 }

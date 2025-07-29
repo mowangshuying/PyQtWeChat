@@ -4,11 +4,15 @@ from PyQt6.QtGui import *
 from qfluentwidgets import *
 import sys
 
+from BusUtils import BusUtils
+
 from VSplit import VSplit
 
 class ContactInfoPage(QWidget):
     def __init__(self, parent = None):
         super().__init__(parent=parent)
+        
+        self.__busUtils = BusUtils()
         
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
@@ -75,19 +79,43 @@ class ContactInfoPage(QWidget):
         
         self.hLayout2 = QHBoxLayout()
         
-        self.sendMsgBtn = TransparentPushButton("发消息")
-        self.voiceBtn = TransparentPushButton("语音聊天")
-        self.videoBtn = TransparentPushButton("视频聊天")
+        self.chatMsgBtn = TransparentPushButton("发消息")
+        self.chatVoiceBtn = TransparentPushButton("语音聊天")
+        self.chatVidoBtn = TransparentPushButton("视频聊天")
         
-        self.hLayout2.addWidget(self.sendMsgBtn)
-        self.hLayout2.addWidget(self.voiceBtn)
-        self.hLayout2.addWidget(self.videoBtn)
+        self.hLayout2.addWidget(self.chatMsgBtn)
+        self.hLayout2.addWidget(self.chatVoiceBtn)
+        self.hLayout2.addWidget(self.chatVidoBtn)
         
         self.vWrapWidgetLayout.addSpacing(15)
         self.vWrapWidgetLayout.addLayout(self.hLayout2)
         
+        self.__connected()
         
-        self.resize(800, 600)
+        # self.resize(800, 600)
+    
+    def updateInfo(self, pixmap, username, userid):
+        self.imageLabel.setPixmap(pixmap)
+        self.imageLabel.setFixedSize(62, 62)
+        
+        self.userunameLabel.setText(username)
+        self.useridLabel.setText(str(userid))
+        
+    def __connected(self):
+        self.chatMsgBtn.clicked.connect(self.__clickedChatMsgBtn)
+        self.chatVoiceBtn.clicked.connect(self.__clickedChatVoiceBtn)
+        self.chatVidoBtn.clicked.connect(self.__clickedChatVidoBtn)
+        
+    def __clickedChatMsgBtn(self):
+        self.__busUtils.swithSesPage.emit(self.userunameLabel.text())
+    
+    def __clickedChatVoiceBtn(self):
+        pass
+    
+    def __clickedChatVidoBtn(self):
+        pass
+    
+        
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)

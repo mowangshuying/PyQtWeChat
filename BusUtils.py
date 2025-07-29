@@ -10,3 +10,4 @@ class BusUtils(QObject):
     statusBarTextChanged = pyqtSignal(str)
     agreeAddFriend = pyqtSignal(int)
     refuseAddFriend = pyqtSignal(int)
+    swithSesPage = pyqtSignal(str)

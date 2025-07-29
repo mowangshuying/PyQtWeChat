@@ -177,5 +177,5 @@ class ContactListPage(QWidget):
             friendname = item["friendusername"]
             headimg = item["friend"]["headimg"]
             self.addFriend(self.__base64Utils.base64StringToPixmap(headimg), friendname)
-            self.__users.addDetail(-1, item["friend"]["userid"], item["friend"]["username"], "", item["friend"]["headimg"], 0, 0, 0)
+            self.__users.addDetail(-1, item["friend"]["userid"], item["friend"]["username"], "", headimg, 0, 0, 0)
             

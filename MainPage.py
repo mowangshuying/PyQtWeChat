@@ -22,6 +22,7 @@ from qframelesswindow import TitleBar
 from NetClientUtils import *
 from Data import *
 from BusUtils import BusUtils
+from Base64Utils import Base64Utils
 
 # res
 from _rc.res import *
@@ -34,6 +35,7 @@ class MainPage(FramelessWindow):
         self.__netClientUtils = NetClientUtils()
         self.__users = Users()
         self.__busUtils = BusUtils()
+        self.__base64Utils = Base64Utils()
         
         # self.titleBar.raise_()
         self.vMainLayout = QVBoxLayout()
@@ -134,6 +136,7 @@ class MainPage(FramelessWindow):
         self.__busUtils.changeHeadImgSuc.connect(self.__onChangeHeadImgSuc)
         self.__busUtils.statusBarTextChanged.connect(self.__onStatusBarTextChanged)
         self.__busUtils.agreeAddFriend.connect(self.__onAgreeAddFriend)
+        self.__busUtils.swithSesPage.connect(self.__onSwithSesPage)
         
         
     def setStatusText(self, text):
@@ -154,13 +157,14 @@ class MainPage(FramelessWindow):
             self.titleBar.raise_()
             return
 
-        # 查找会话
-        if (not self.rightLayout.hasByKey(str)) and str !="" :
-            self.__makeSesPageByKey(str)
-
-        # 直接切换
-        self.rightLayout.setCurrentWidgetByKey(str)
+        username = str
+        userid = self.__users.getIdByName(username)
+        headimg = self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(userid))
+        
+        self.contactInfoPage.updateInfo(headimg, username, userid)
+        self.rightLayout.setCurrentWidgetByKey("ContactInfoPage")
         self.titleBar.raise_()
+
              
 
         
@@ -191,4 +195,15 @@ class MainPage(FramelessWindow):
             sesPage = self.rightLayout.getByKey(self.__users.getNameById(ownerid))
             
         sesPage.appendChatMsg(msg["data"])
+        
+    
+    def __onSwithSesPage(self, key):
+        
+        # # 查找会话
+        if (not self.rightLayout.hasByKey(key)) and key !="" :
+            self.__makeSesPageByKey(key)
+
+        # 直接切换
+        self.rightLayout.setCurrentWidgetByKey(key)
+        self.titleBar.raise_()
             

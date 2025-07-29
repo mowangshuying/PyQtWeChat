@@ -1,5 +1,5 @@
 <RCC>
-    <qresource prefix="/_rc">
+    <qresource prefix="/">
         <file alias="ToolPage.qss">qss/ToolPage.qss</file>
         <file alias="app.ico">img/app.ico</file>
     </qresource>

@@ -55,7 +55,9 @@ class FriendCard(QWidget):
         return self.usernameLabel.text()
 
     def setImg(self, img):
+        img = img.scaled(48, 48, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
         self.headImg.setPixmap(img)
+        self.headImg.setFixedSize(48, 48)
 
     def setNameAndImg(self, name, img):
         self.setUserName(name)

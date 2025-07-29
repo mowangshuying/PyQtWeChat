@@ -13,6 +13,7 @@ from Data import *
 
 from qfluentwidgets import *
 from FlowLayout import FlowLayout
+from Base64Utils import Base64Utils
 
 class AddFriendsPage(QWidget):
     
@@ -21,6 +22,7 @@ class AddFriendsPage(QWidget):
         super().__init__(parent)
     
         self.__users = Users()
+        self.__base64Utils = Base64Utils()
         
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
@@ -63,15 +65,18 @@ class AddFriendsPage(QWidget):
         # StyleSheetUtils.setQssByFileName("./_rc/qss/AddFriendsPage.qss", self)
 
     def addCard(self, item):
-        card = FriendCard()
-        card.setUserName(item["username"])
-        
+
         # 遍历flowLayout
         for i in range(self.flowLayout.count()):
             curWidget = self.flowLayout.itemAt(i)
-            if curWidget.widget().getUserName() == card.getUserName():
+            if curWidget.widget().getUserName() == item["username"]:
                 return
             
+        card = FriendCard()        
+        card.setUserName(item["username"])
+        card.setImg(self.__base64Utils.base64StringToPixmap(item["headimg"]))
+        
+                    
         self.flowLayout.addWidget(card)
         self.__users.addDetail(-1, item["userid"], item["username"], "", item["headimg"], 0, 0, 0)
     

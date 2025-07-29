@@ -122,15 +122,18 @@ class MainPage(FramelessWindow):
         self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
         
     def __connected(self):
+        self.toolPage.clickedMsgsBtn.connect(self.__onClickedMsgsBtn)
+        self.toolPage.clickedUserBtn.connect(self.__onClickedUserBtn)
+        self.toolPage.clickedChangeHeadImgBtn.connect(self.__onClickedChangedHeadImgBtn)
+        
         self.msgListPage.clickedAddBtn.connect(self.onClickedAddBtn)
         self.msgListPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
+        self.msgListPage.clickedListItem.connect(self.__onClickedMsgListItem)
         
         self.contactListPage.clickedAddBtn.connect(self.onClickedAddBtn)
         self.contactListPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
         
         self.contactListPage.clickedListItem.connect(self.__onClickedContactListItem)
-        self.toolPage.clickedChangeHeadImgBtn.connect(self.__onClickedChangedHeadImgBtn)
-        
         
         # bus utils
         self.__busUtils.changeHeadImgSuc.connect(self.__onChangeHeadImgSuc)
@@ -164,9 +167,12 @@ class MainPage(FramelessWindow):
         self.contactInfoPage.updateInfo(headimg, username, userid)
         self.rightLayout.setCurrentWidgetByKey("ContactInfoPage")
         self.titleBar.raise_()
-
-             
-
+        
+    
+    def __onClickedMsgListItem(self, key):
+        self.midLayout.setCurrentWidgetByKey("MsgListPage")
+        self.msgListPage.setCurrentItemByKey(key)
+        self.__onSwithSesPage(key)             
         
     def onClickedAddBtn(self):
         self.rightLayout.setCurrentWidgetByKey("AddFriendsPage")
@@ -174,6 +180,14 @@ class MainPage(FramelessWindow):
         
     def __onClickedChangedHeadImgBtn(self):
         self.rightLayout.setCurrentWidgetByKey("PictureToolPage")
+        self.titleBar.raise_()
+        
+    def __onClickedMsgsBtn(self):
+        self.midLayout.setCurrentWidgetByKey("MsgListPage")
+        self.titleBar.raise_()
+        
+    def __onClickedUserBtn(self):
+        self.midLayout.setCurrentWidgetByKey("ContactListPage")
         self.titleBar.raise_()
         
     def __onChangeHeadImgSuc(self):
@@ -202,8 +216,18 @@ class MainPage(FramelessWindow):
         # # 查找会话
         if (not self.rightLayout.hasByKey(key)) and key !="" :
             self.__makeSesPageByKey(key)
-
-        # 直接切换
+            
+            userid = self.__users.getIdByName(key)
+            headimg = self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(userid))
+            msg = ""
+            
+            
+            self.msgListPage.addMsg(headimg, key, msg)
+            
+        # 直接切换到会话
         self.rightLayout.setCurrentWidgetByKey(key)
+        # 切换到msgListPage
+        self.midLayout.setCurrentWidgetByKey("MsgListPage")
+        self.msgListPage.setCurrentItemByKey(key)             
         self.titleBar.raise_()
             

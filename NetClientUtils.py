@@ -69,7 +69,10 @@ class NetClientUtils(QObject):
 
     # @pyqtSlot()
     def onTextMessageReceived(self, message):
-        print("onTextMessageReceived:", message)
+        # print("onTextMessageReceived:", message)
+        if len(message) <= 512:
+            print("onTextMessageReceived:", message)
+        
         data = json.loads(message)
         
         rand = data["rand"]

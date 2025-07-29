@@ -10,6 +10,7 @@ import random
 import json
 import threading
 from sigleton import singleton
+from BusUtils import BusUtils
 
 
 class NetEventCaller:
@@ -28,6 +29,8 @@ class NetClientUtils(QObject):
 
         self.callers = []
         self.time = time.time()
+        self.__busUtils = BusUtils()
+        
         self.websock = QWebSocket()
         self.websock.connected.connect(self.onConnected)
         self.websock.disconnected.connect(self.onDisconnected)
@@ -35,6 +38,12 @@ class NetClientUtils(QObject):
 
         # 连接远端服务器
         self.websock.open(QUrl("ws://127.0.0.1:5000"))
+        
+        # 启动定时器每秒向远端发送心跳包
+        self.bConnected = False
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.__onTimerTimeout)
+        self.timer.start(1000)
 
     def register(self, msgType, cmd, call):
         caller = NetEventCaller()
@@ -49,11 +58,14 @@ class NetClientUtils(QObject):
     # 定义回调函数，websocket连接成功时调用
     # @pyqtSlot()
     def onConnected(self):
-        print("websocket connected")
+        # print("websocket connected")
+        self.bConnected = True
 
     # @pyqtSlot()
     def onDisconnected(self):
-        print("websocket disconnected")
+        # print("websocket disconnected")
+        self.bConnected = False
+        
 
     # @pyqtSlot()
     def onTextMessageReceived(self, message):
@@ -95,7 +107,7 @@ class NetClientUtils(QObject):
             nLen = self.websock.sendTextMessage(message)
             return nLen > 0
         else:
-            print("WebSocket is not connected.")
+            self.__busUtils.statusBarTextChanged.emit("WebSocket is not connected.")
             return False
 
 
@@ -131,5 +143,12 @@ class NetClientUtils(QObject):
             self.callers.append(caller)
             
         return suc
+    
+    def __onTimerTimeout(self):
+        if self.bConnected == False:
+            self.websock.open(QUrl("ws://127.0.0.1:5000"))
+            self.__busUtils.statusBarTextChanged.emit("WebSocket is not connected, trying to reconnect...")
+    
+        
     
 # __netClientUtils = NetClientUtils()

@@ -141,18 +141,18 @@ class MsgListPage(QWidget):
     
     def __responseGetSessionList(self, msg):
         for item in msg["data"]:
-            if item["type"] == MsgListItemType.Friend or item["type"] == MsgListItemType.Group:
+            # if item["type"] == MsgListItemType.Friend or item["type"] == MsgListItemType.Group:
                 if item["ownerid"] == self.__users.getId():
                     headimg = self.__base64Utils.base64StringToPixmap(item["friend"]["headimg"])
                     username = item["friend"]["username"]
-                    msgText = item["msg"]
+                    msgText = item["msgdata"]
                     self.addMsg(headimg, username, msgText)
                     continue
                 
                 if item["friendid"] == self.__users.getId():
                     headimg = self.__base64Utils.base64StringToPixmap(item["owner"]["headimg"])
                     username = item["owner"]["username"]
-                    msgText = item["msg"]
+                    msgText = item["msgdata"]
                     self.addMsg(headimg, username, msgText)
                     continue
         

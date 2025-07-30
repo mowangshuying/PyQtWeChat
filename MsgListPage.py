@@ -11,6 +11,8 @@ from NetClientUtils import NetClientUtils
 from MsgListItem import *
 from MsgListFriendItem import *
 from Data import *
+from Msg import *
+from Base64Utils import Base64Utils
 
 @singleton
 class MsgListPage(QWidget):
@@ -24,6 +26,7 @@ class MsgListPage(QWidget):
         
         self.__netClientUtils = NetClientUtils()
         self.__users = Users()
+        self.__base64Utils = Base64Utils()
         
         self.vMainLayout = QVBoxLayout()
         self.setLayout(self.vMainLayout)
@@ -132,10 +135,25 @@ class MsgListPage(QWidget):
         
         
         
-    def __requestSessionList(self):
-        pass
+    def requestSessionList(self):
+        data = {"ownerid": self.__users.getId()}
+        self.__netClientUtils.request(MsgCmd.getSessionList, data, self.__responseGetSessionList)
     
     def __responseGetSessionList(self, msg):
-        pass
+        for item in msg["data"]:
+            if item["type"] == MsgListItemType.Friend or item["type"] == MsgListItemType.Group:
+                if item["ownerid"] == self.__users.getId():
+                    headimg = self.__base64Utils.base64StringToPixmap(item["friend"]["headimg"])
+                    username = item["friend"]["username"]
+                    msgText = item["msg"]
+                    self.addMsg(headimg, username, msgText)
+                    continue
+                
+                if item["friendid"] == self.__users.getId():
+                    headimg = self.__base64Utils.base64StringToPixmap(item["owner"]["headimg"])
+                    username = item["owner"]["username"]
+                    msgText = item["msg"]
+                    self.addMsg(headimg, username, msgText)
+                    continue
         
         

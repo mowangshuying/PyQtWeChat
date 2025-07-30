@@ -89,6 +89,7 @@ class MainPage(FramelessWindow):
     def __initMidPage(self):
         # msgListPage
         self.msgListPage = MsgListPage()
+        self.msgListPage.requestSessionList()
         self.midLayout.addWidgetByKey("MsgListPage", self.msgListPage)
         
         # contactListPage;

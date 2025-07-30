@@ -62,6 +62,7 @@ class RegLoginPage(FramelessWindow):
         
         
         self.loginBtn.clicked.connect(self.onBtnClicked)
+        self.regOrLogin.clicked.connect(self.onRegOrLoginClicked)
        
         self.__netClientUtils = NetClientUtils()
         
@@ -96,5 +97,11 @@ class RegLoginPage(FramelessWindow):
             self.requesRegUser()
         else:
             self.requestLogin()
+            
+    def onRegOrLoginClicked(self):
+        if self.regOrLogin.isChecked():
+            self.regOrLogin.setText("注册")
+        else:
+            self.regOrLogin.setText("登录")
         
         

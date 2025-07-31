@@ -3,7 +3,7 @@ from MainPage import MainPage
 from PyQt6.QtGui import QIcon
 import sys
 from RegLoginPage import RegLoginPage
-from LogUtils import LogUtils
+from LogUtils import *
 
 # res
 from _rc.res import *

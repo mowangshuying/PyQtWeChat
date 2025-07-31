@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import *
 
 from sigleton import *
 
+@singleton
 class Base64Utils(QObject):
     @classmethod
     def pixmapToBase64String(self, pixmap: QPixmap) -> str:

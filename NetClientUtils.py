@@ -12,6 +12,7 @@ import threading
 from sigleton import singleton
 from BusUtils import BusUtils
 from ConfigUtils import ConfigUtils
+from LogUtils import *
 
 
 class NetEventCaller:
@@ -74,7 +75,8 @@ class NetClientUtils(QObject):
     def onTextMessageReceived(self, message):
         # print("onTextMessageReceived:", message)
         if len(message) <= 512:
-            print("onTextMessageReceived:", message)
+            # print("onTextMessageReceived:", message)
+            logging.debug("onTextMessageReceived: %s", message)
         
         data = json.loads(message)
         

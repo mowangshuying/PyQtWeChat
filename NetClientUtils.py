@@ -11,6 +11,7 @@ import json
 import threading
 from sigleton import singleton
 from BusUtils import BusUtils
+from ConfigUtils import ConfigUtils
 
 
 class NetEventCaller:
@@ -27,6 +28,8 @@ class NetClientUtils(QObject):
     def __init__(self, parent = None):
         super().__init__(parent)
 
+        self.__configUtils = ConfigUtils()
+
         self.callers = []
         self.time = time.time()
         self.__busUtils = BusUtils()
@@ -37,7 +40,7 @@ class NetClientUtils(QObject):
         self.websock.textMessageReceived.connect(self.onTextMessageReceived)
 
         # 连接远端服务器
-        self.websock.open(QUrl("ws://127.0.0.1:5000"))
+        self.websock.open(QUrl(self.__configUtils.getConfig("serverUrl", "ws://127.0.0.1:8080")))
         
         # 启动定时器每秒向远端发送心跳包
         self.bConnected = False
@@ -149,7 +152,7 @@ class NetClientUtils(QObject):
     
     def __onTimerTimeout(self):
         if self.bConnected == False:
-            self.websock.open(QUrl("ws://127.0.0.1:5000"))
+            self.websock.open(QUrl(self.__configUtils.getConfig("serverUrl", "ws://127.0.0.1:8080")))
             self.__busUtils.statusBarTextChanged.emit("WebSocket is not connected, trying to reconnect...")
     
         

@@ -100,8 +100,8 @@ class RegLoginPage(FramelessWindow):
             
     def onRegOrLoginClicked(self):
         if self.regOrLogin.isChecked():
-            self.regOrLogin.setText("注册")
+            self.loginBtn.setText("注册")
         else:
-            self.regOrLogin.setText("登录")
+            self.loginBtn.setText("登录")
         
         

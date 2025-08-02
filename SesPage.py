@@ -75,6 +75,9 @@ class SesPage(QWidget):
         self.vMainLayout.addLayout(self.hBottomLayout)
 
         self.sendBtn.clicked.connect(self.onClickedSendBtn)
+
+        # shirt + enter 触发onClickedSendBtn
+        self.edit.installEventFilter(self)
         StyleSheetUtils.setQssByFileName("./_rc/qss/SesPage.qss", self)
 
     def setTitle(self, str):
@@ -138,6 +141,13 @@ class SesPage(QWidget):
             # 清空eidt
             self.edit.clear()
             self.appendChatMsg(msg["data"])
+
+    def eventFilter(self, obj, event):
+        if obj == self.edit and event.type() == QEvent.Type.KeyPress:
+            if event.key() == Qt.Key.Key_Return and event.modifiers() == Qt.KeyboardModifier.ShiftModifier:
+                self.onClickedSendBtn()
+                return True
+        return super().eventFilter(obj, event)
 
     def paintEvent(self, event):
         opt = QStyleOption()

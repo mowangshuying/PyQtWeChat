@@ -140,6 +140,10 @@ class MsgListPage(QWidget):
         self.__netClientUtils.request(MsgCmd.getSessionList, data, self.__responseGetSessionList)
     
     def __responseGetSessionList(self, msg):
+        # 判读是否含有 "data"
+        if "data" not in msg:
+            return
+
         for item in msg["data"]:
             # if item["type"] == MsgListItemType.Friend or item["type"] == MsgListItemType.Group:
                 if item["ownerid"] == self.__users.getId():

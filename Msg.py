@@ -11,7 +11,7 @@ class MsgType:
 class MsgState:
     # def __init__(self):
         ok = "ok"
-        error = "error"
+        error = "err"
         timeout = "timeout"
         notFound = "notFound"
         serverBusy = "serverBusy"

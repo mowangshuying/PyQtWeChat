@@ -19,6 +19,7 @@ class RegLoginPage(FramelessWindow):
         super().__init__(parent)
         
         self.__users = Users()
+        self.__netClientUtils = NetClientUtils()
 
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setSpacing(0)
@@ -52,6 +53,11 @@ class RegLoginPage(FramelessWindow):
         self.loginBtn = PrimaryPushButton("登录")
         self.loginBtn.setObjectName("loginBtn")
         self.loginBtn.setFixedSize(256, 36)
+
+        self.statusLabel = QLabel()
+        self.statusLabel.setFixedHeight(20)
+        self.statusLabel.setStyleSheet("background-color: rgb(29,124,202); font-size: 12px; color: white;")
+        
         
         self.vBottomLayout.addWidget(self.accountEdit)
         self.vBottomLayout.addWidget(self.passwordEdit)
@@ -59,19 +65,19 @@ class RegLoginPage(FramelessWindow):
         self.vBottomLayout.addWidget(self.loginBtn)
         self.vMainLayout.addSpacing(36)
         self.vMainLayout.addWidget(self.bottom)
+        self.vMainLayout.addWidget(self.statusLabel)
         
         
         self.loginBtn.clicked.connect(self.onBtnClicked)
         self.regOrLogin.clicked.connect(self.onRegOrLoginClicked)
        
-        self.__netClientUtils = NetClientUtils()
         
 
         # self.pressed = False
         # self.pressedPos = None
         
         # self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
-        self.setFixedSize(274, 236)
+        self.setFixedSize(274, 256)
     
     def requesRegUser(self):
         data = {"username": self.accountEdit.text(),  "nickname" : self.accountEdit.text(), "password": self.passwordEdit.text(), "sex": 0}
@@ -90,6 +96,9 @@ class RegLoginPage(FramelessWindow):
             self.deleteLater()
             mainPage = MainPage()
             mainPage.show()
+        
+        if msg["state"] == MsgState.error:
+            self.statusLabel.setText(msg["data"]["info"])
             
         
     def onBtnClicked(self):

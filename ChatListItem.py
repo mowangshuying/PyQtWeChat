@@ -29,7 +29,7 @@ class ChatListItem(QWidget):
             self.vGridLayout.addWidget(self.nameLabel, 0, 1, 1, 1)
             self.vGridLayout.addWidget(self.iconLabel, 0, 2, 2, 1, Qt.AlignmentFlag.AlignTop)
             self.vGridLayout.addItem(self.spacer, 1, 0, 1, 1)
-            self.vGridLayout.addWidget(self.bubble, 1, 1, 1, 1)
+            self.vGridLayout.addWidget(self.bubble, 1, 1, 1, 1, Qt.AlignmentFlag.AlignRight)
             self.vGridLayout.setColumnStretch(0, 1)
             self.vGridLayout.setColumnStretch(1, 5)
             
@@ -38,7 +38,7 @@ class ChatListItem(QWidget):
             self.nameLabel.setAlignment(Qt.AlignmentFlag.AlignLeft)
             self.vGridLayout.addWidget(self.iconLabel, 0, 0, 2, 1, Qt.AlignmentFlag.AlignTop)
             self.vGridLayout.addWidget(self.nameLabel, 0, 1, 1, 1)
-            self.vGridLayout.addWidget(self.bubble, 1, 1, 1, 1)
+            self.vGridLayout.addWidget(self.bubble, 1, 1, 1, 1, Qt.AlignmentFlag.AlignLeft)
             self.vGridLayout.addItem(self.spacer, 2, 2, 1, 1)
             self.vGridLayout.setColumnStretch(1, 5)
             self.vGridLayout.setColumnStretch(2, 1)

@@ -113,11 +113,23 @@ class ContactListPage(QWidget):
         # 判断是否含有该用户
         for i in range(self.list.count()):
             widget = self.list.itemWidget(self.list.item(i))
-            # if item.getName() == username:
-                # return
             if widget.getItemType() == ContactListItemType.Friend:
                 if widget.getName() == username:
                     return
+                
+        names = []
+
+        # 遍历获取所有name
+        for i in range(self.list.count()):
+            widget = self.list.itemWidget(self.list.item(i))
+            if widget.getItemType() == ContactListItemType.Friend:
+                names.append(widget.getName())
+
+        names.append(username)
+
+        names.sort()
+
+        index = names.index(username)
 
         item = ContactListFriendItem()
         item.setHeadImg(headimg)
@@ -126,26 +138,25 @@ class ContactListPage(QWidget):
         listItem = QListWidgetItem()
         listItem.setSizeHint(QSize(200, 65))
         
-        # self.list.addItem(listItem)
-        self.list.insertItem(self.getFriendIndex(), listItem)
+        self.list.insertItem(2 + index, listItem)
         self.list.setItemWidget(listItem, item)
         
         
-    def getFriendIndex(self):
-        # index = 2
-        for i in range(self.list.count()):
-            item = self.list.item(i)
-            widget = self.list.itemWidget(item)
-            if widget == None:
-                continue
+    # def getFriendIndex(self):
+    #     # index = 2
+    #     for i in range(self.list.count()):
+    #         item = self.list.item(i)
+    #         widget = self.list.itemWidget(item)
+    #         if widget == None:
+    #             continue
             
-            # widget = self.list.itemWidget(item)
-            if widget.getItemType() == ContactListItemType.Friend:
-                index = i
-        if index < 2:
-            index = 2
+    #         # widget = self.list.itemWidget(item)
+    #         if widget.getItemType() == ContactListItemType.Friend:
+    #             index = i
+    #     if index < 2:
+    #         index = 2
             
-        return index
+    #     return index
         
     def onAddBtnClicked(self):
         geom = self.addBtn.geometry()

@@ -138,6 +138,12 @@ class SesPage(QWidget):
             # 清空eidt
             self.edit.clear()
             self.appendChatMsg(msg["data"])
+
+    def paintEvent(self, event):
+        opt = QStyleOption()
+        opt.initFrom(self)
+        painter = QPainter(self)
+        self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
         
         
         

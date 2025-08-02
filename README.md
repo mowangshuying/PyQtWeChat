@@ -1,5 +1,7 @@
 # .PyQtWeChat
 
+![App](./docs/App.png)
+
 ## Requirement
 
 - PyQt6

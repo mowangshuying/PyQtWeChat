@@ -6,6 +6,7 @@ from NetClientUtils import NetClientUtils
 from Data import *
 from Msg import *
 from qfluentwidgets import *
+from BusUtils import *
 
 class DoApplyFriendsListItem(QFrame):
     
@@ -17,6 +18,7 @@ class DoApplyFriendsListItem(QFrame):
         self.__netClientUtils = NetClientUtils()
         self.__users = Users()
         self.__friendApplys = FriendApplys()
+        self.__busUtils = BusUtils()
         
         self.id = -1
 
@@ -84,6 +86,7 @@ class DoApplyFriendsListItem(QFrame):
                 self.stateBtn.show()
                 if state == 1:
                     self.stateBtn.setText("已同意")
+                    self.__busUtils.agreeAddFriend.emit(apply.friendid)
                 elif state == 2:
                     self.stateBtn.setText("已拒绝")
         elif apply.friendid == self.__users.getId():
@@ -97,6 +100,7 @@ class DoApplyFriendsListItem(QFrame):
                 self.stateBtn.show()
                 if state == 1:
                     self.stateBtn.setText("已同意")
+                    self.__busUtils.agreeAddFriend.emit(apply.ownerid)
                 elif state == 2:
                     self.stateBtn.setText("已拒绝")
         

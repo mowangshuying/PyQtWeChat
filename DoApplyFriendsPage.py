@@ -66,9 +66,9 @@ class DoApplyFriendsPage(QWidget):
                 widget.setState(state) 
         
     def onClickedAgreeBtn(self, id):
-        apply = self.__friendApplys.getApplyById(id)
-        ownerid = apply.ownerid
-        friendid = apply.friendid
+        apply = self.__friendApplys.getApplyById(id) 
+        ownerid = apply.ownerid         # 是谁申请的
+        friendid = apply.friendid       # 添加的用户
         applystate = 1
         applymsg = apply.applymsg
         data = { "id":id, "ownerid": ownerid, "friendid": friendid, "applystate": applystate, "applymsg": applymsg}

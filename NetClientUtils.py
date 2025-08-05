@@ -63,11 +63,13 @@ class NetClientUtils(QObject):
     # @pyqtSlot()
     def onConnected(self):
         # print("websocket connected")
+        self.__busUtils.statusBarTextChanged.emit("WebSocket is connected.")
         self.bConnected = True
 
     # @pyqtSlot()
     def onDisconnected(self):
         # print("websocket disconnected")
+        self.__busUtils.statusBarTextChanged.emit("WebSocket is not connected.")
         self.bConnected = False
         
 
@@ -156,6 +158,8 @@ class NetClientUtils(QObject):
         if self.bConnected == False:
             self.websock.open(QUrl(self.__configUtils.getConfig("serverUrl", "ws://127.0.0.1:8080")))
             self.__busUtils.statusBarTextChanged.emit("WebSocket is not connected, trying to reconnect...")
+        # else:
+            # self.__busUtils.statusBarTextChanged.emit("WebSocket is connected.")
     
         
     

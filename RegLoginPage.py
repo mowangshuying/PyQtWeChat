@@ -13,6 +13,7 @@ from qfluentwidgets.components.widgets.frameless_window import FramelessWindow
 from qfluentwidgets.components.widgets.button import *
 from qfluentwidgets.components.widgets.line_edit import *
 from qfluentwidgets.components.widgets.check_box import *
+from BusUtils import BusUtils
 
 class RegLoginPage(FramelessWindow):
     def __init__(self, parent=None):
@@ -20,6 +21,7 @@ class RegLoginPage(FramelessWindow):
         
         self.__users = Users()
         self.__netClientUtils = NetClientUtils()
+        self.__busUtils = BusUtils()
 
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setSpacing(0)
@@ -70,6 +72,7 @@ class RegLoginPage(FramelessWindow):
         
         self.loginBtn.clicked.connect(self.onBtnClicked)
         self.regOrLogin.clicked.connect(self.onRegOrLoginClicked)
+        self.__busUtils.statusBarTextChanged.connect(self.__statusBarTextChanged)
        
         
 
@@ -112,5 +115,9 @@ class RegLoginPage(FramelessWindow):
             self.loginBtn.setText("注册")
         else:
             self.loginBtn.setText("登录")
+
+    def __statusBarTextChanged(self, text):
+        if self.statusLabel is not None:
+            self.statusLabel.setText(text)
         
         

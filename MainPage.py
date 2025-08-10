@@ -23,6 +23,7 @@ from NetClientUtils import *
 from Data import *
 from BusUtils import BusUtils
 from Base64Utils import Base64Utils
+from CreateGroupPage import CreateGroupPage
 
 # res
 from _rc.res import *
@@ -119,8 +120,11 @@ class MainPage(FramelessWindow):
         # ContactInfoPage
         self.contactInfoPage = ContactInfoPage()
         self.rightLayout.addWidgetByKey("ContactInfoPage", self.contactInfoPage)
-        
-        self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
+        # self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
+
+        # CreateGroupPage
+        self.createGroupPage = CreateGroupPage()
+        self.rightLayout.addWidgetByKey("CreateGroupPage", self.createGroupPage)
         
     def __connected(self):
         self.toolPage.clickedMsgsBtn.connect(self.__onClickedMsgsBtn)
@@ -128,11 +132,11 @@ class MainPage(FramelessWindow):
         self.toolPage.clickedChangeHeadImgBtn.connect(self.__onClickedChangedHeadImgBtn)
         
         self.msgListPage.clickedAddBtn.connect(self.onClickedAddBtn)
-        self.msgListPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
+        self.msgListPage.clickedCreateBtn.connect(self.__onClickedCreateBtn)
         self.msgListPage.clickedListItem.connect(self.__onClickedMsgListItem)
         
         self.contactListPage.clickedAddBtn.connect(self.onClickedAddBtn)
-        self.contactListPage.clickedCreateBtn.connect(lambda: print("clicked createBtn"))
+        self.contactListPage.clickedCreateBtn.connect(self.__onClickedCreateBtn)
         
         self.contactListPage.clickedListItem.connect(self.__onClickedContactListItem)
         
@@ -177,6 +181,11 @@ class MainPage(FramelessWindow):
         
     def onClickedAddBtn(self):
         self.rightLayout.setCurrentWidgetByKey("AddFriendsPage")
+        self.titleBar.raise_()
+
+    def __onClickedCreateBtn(self):
+        self.createGroupPage.clear()
+        self.rightLayout.setCurrentWidgetByKey("CreateGroupPage")
         self.titleBar.raise_()
         
     def __onClickedChangedHeadImgBtn(self):

@@ -27,6 +27,8 @@ class Users:
         self.userid = id
 
     def add(self, user):
+        if self.hasById(user.userid): 
+            return
         self.list.append(user)
 
     def addDetail(self, id, userid, username, nickname, headimg, sex, state, createdate):
@@ -41,21 +43,34 @@ class Users:
         user.createdate = createdate
         self.add(user)
 
+
+
     def getIdByName(self, name):
         for user in self.list:
             if user.username == name:
                 return user.userid
+            
+        return -1
             
             
     def getNameById(self, id):
         for user in self.list:
             if user.userid == id:
                 return user.username
+        return ""
             
     def getHeadImgById(self, id):
         for user in self.list:
             if user.userid == id:
                 return user.headimg
+            
+        return ""
+    
+    def hasById(self, id):
+        for user in self.list:
+            if user.userid == id:
+                return True
+        return False
             
     def updateHeadImgByUserid(self, userid, headimg):
         for user in self.list:

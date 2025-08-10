@@ -66,6 +66,13 @@ class Users:
             
         return ""
     
+    def getUser(self, id):
+        for user in self.list:
+            if user.userid == id:
+                return user
+            
+        return None
+    
     def hasById(self, id):
         for user in self.list:
             if user.userid == id:

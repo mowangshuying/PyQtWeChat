@@ -11,9 +11,12 @@ from CreateGroupListItem import CreateGroupListItem
 from Data import *
 from NetClientUtils import *
 from Base64Utils import *
+from Msg import *
 
 @singleton
 class CreateGroupPage(QWidget):
+
+    clickedRadioButton = pyqtSignal(int, bool)
     def __init__(self, parent=None):
         super().__init__(parent = parent)
 
@@ -96,17 +99,88 @@ class CreateGroupPage(QWidget):
         self.vMainLayout.addWidget(self.sp1)
         self.vMainLayout.addWidget(self.bottomWidget)
 
+        self.__connected()
+
+    def __connected(self):
+        # self.rawList.itemClicked.connect(self.__onClickedRawListItem)
+        self.confirmBtn.clicked.connect(self.__onClickedConfirmBtn)
+
+    # def __onClickedRawListItem(self, item):
+    #     widget = self.rawList.itemWidget(item)
+    #     if widget == None:
+    #         return
+        
+    #     # self.clickedRadioButton.emit(widget.getUerid(), widget.getRadioButtonState())
+    #     if widget.getRadioButtonState() == True:
+    #         user = self.__users.getUser(widget.getUserid())
+    #         self.add(user.userid, user.username, False)
+
+    #     if widget.getRadioButtonState() == False:
+    #         self._del(widget.getUserid(), False)
+
+    def __clickedRadioBtn(self, userid, state):
+
+        user = self.__users.getUser(userid)
+        if state == True:
+            self.add(user.userid, user.username, False)
+        else:
+            self._del(userid, False)
+
+
+    def __onClickedConfirmBtn(self):
+        # ha ha ha
+        # 
+        # 遍历raw list获取所有userid
+        groupids = []
+        groupids.append(self.__users.getId())
+        for i in range(self.destlist.count()):
+            widget = self.destlist.itemWidget(self.destlist.item(i))
+            groupids.append(widget.getUserid())
+
+        groupids.sort()
+
+        data = {}
+        data["createid"] = self.__users.getId()
+        data["groupname"] = self.groupNameEdit.text()
+        data["groupids"] = groupids
+
+        self.__netClientUtils.request(MsgCmd.createGroup, data, self.__responseCreateGroup)
+
+    def __responseCreateGroup(self, msg):
+        if "data" not in msg:
+            return
+
+
+        
+
+        
+        
 
     def add(self, userid, username, bRadio):
+
+        if self.has(userid, bRadio):
+            return
+        
+        # 如果是自己直接返回
+        if self.__users.getId() == userid:
+            return
+        
         item = CreateGroupListItem()
 
         pixmap = self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(userid))
         item.setInfo(pixmap, username, userid)
         item.setRadioButonVisiable(bRadio)
 
-        listitem = QListWidgetItem(self.rawList)
+        item.clickedRadioBtn.connect(self.__clickedRadioBtn)
+
+        if bRadio == True:
+            listitem = QListWidgetItem(self.rawList)
+        else:
+            listitem = QListWidgetItem(self.destlist)
+
         listitem.setSizeHint(QSize(200, 40))
 
+        
 
         if bRadio:
             self.rawList.addItem(listitem)
@@ -119,13 +193,13 @@ class CreateGroupPage(QWidget):
 
         if bRadio:
             for i in range(self.rawList.count()):
-                item = self.list.itemWidget(self.list.item(i))
+                item = self.rawList.itemWidget(self.rawList.item(i))
                 if item.getUserid() == userid:
                     return True
                 
         else:
             for i in range(self.destlist.count()):
-                item = self.list.itemWidget(self.list.item(i))
+                item = self.destlist.itemWidget(self.destlist.item(i))
                 if item.getUserid() == userid:
                     return True
 
@@ -154,5 +228,8 @@ class CreateGroupPage(QWidget):
         self.groupNameEdit.clear()
         
         # 所有联系人都要显示在rawlist中;
+        for user in self.__users.list:
+            self.add(user.userid, user.username, True)
+        
         for user in self.__users.list:
             self.add(user.userid, user.username, True)

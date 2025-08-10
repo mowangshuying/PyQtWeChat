@@ -5,6 +5,10 @@ from PyQt6.QtGui import *
 from qfluentwidgets import *
 
 class CreateGroupListItem(QFrame):
+
+    # userid, state
+    # clickedListItem = pyqtSignal(int, bool)
+    clickedRadioBtn = pyqtSignal(int, bool)
     def __init__(self, parent = None):
         super().__init__(parent = parent)
 
@@ -28,6 +32,14 @@ class CreateGroupListItem(QFrame):
         self.hMainLayout.addStretch()
         self.hMainLayout.addWidget(self.radiobutton)
 
+        self.__connected()
+
+    def __connected(self):
+        self.radiobutton.clicked.connect(self.__onClickedRadioButton)
+
+    def __onClickedRadioButton(self):
+        self.clickedRadioBtn.emit(self.userid, self.getRadioButtonState())
+
 
     def setInfo(self, headimg, username, userid):
 
@@ -50,6 +62,9 @@ class CreateGroupListItem(QFrame):
             self.radiobutton.show()
         else:
             self.radiobutton.hide()
+
+    def getRadioButtonState(self):
+        return self.radiobutton.isChecked()
     
     
 

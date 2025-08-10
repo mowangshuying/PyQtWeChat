@@ -19,3 +19,6 @@ class ContactListTipItem(ContactListItem):
         
     def setTip(self, str):
         self.label.setText(str)
+
+    def getTip(self):
+        return self.label.text()

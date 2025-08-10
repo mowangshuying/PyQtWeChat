@@ -131,25 +131,26 @@ class CreateGroupPage(QWidget):
         # ha ha ha
         # 
         # 遍历raw list获取所有userid
-        groupids = []
-        groupids.append(self.__users.getId())
+        groupfriends = []
+        groupfriends.append(self.__users.getId())
         for i in range(self.destlist.count()):
             widget = self.destlist.itemWidget(self.destlist.item(i))
-            groupids.append(widget.getUserid())
+            groupfriends.append(widget.getUserid())
 
-        groupids.sort()
+        groupfriends.sort()
 
         data = {}
         data["createid"] = self.__users.getId()
         data["groupname"] = self.groupNameEdit.text()
-        data["groupids"] = groupids
-
+        data["groupsetting"] = ""
+        data["groupfriends"] = groupfriends
         self.__netClientUtils.request(MsgCmd.createGroup, data, self.__responseCreateGroup)
 
     def __responseCreateGroup(self, msg):
         if "data" not in msg:
             return
-
+        
+        print("create group response")
 
         
 

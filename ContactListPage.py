@@ -12,6 +12,7 @@ from sigleton import *
 from ContactListItem import *
 from ContactListFriendItem import ContactListFriendItem
 from ContactListTipItem import ContactListTipItem
+from ContactListGroupItem import ContactListGroupItem
 from qfluentwidgets import *
 from SyncEvent import *
 from Base64Utils import Base64Utils
@@ -82,6 +83,7 @@ class ContactListPage(QWidget):
         self.addTip("联系人")
         self.addTip("群组")
         self.requestGetFriendList()
+        self.requestGetGroupList()
         
     def __connected(self):
         self.list.itemClicked.connect(self.__onClickedListItem)
@@ -141,22 +143,54 @@ class ContactListPage(QWidget):
         self.list.insertItem(2 + index, listItem)
         self.list.setItemWidget(listItem, item)
         
+    def addGroup(self, headimg, groupname):
+        for i in range(self.list.count()):
+            widget = self.list.itemWidget(self.list.item(i))
+            if widget.getItemType() != ContactListItemType.Group:
+                continue
+            
+            if widget.getName() == groupname:
+                return
+            
+        names = []
+        # 遍历获取所有群的消息
+        for i in range(self.list.count()):
+            widget = self.list.itemWidget(self.list.item(i))
+            if widget.getItemType() == ContactListItemType.Group:
+                names.append(widget.getName())
+
+        names.append(groupname)
+        names.sort()
+
+        # 如果没找到indwx = 0
+        # index = 0
+        # try:
+        index = names.index(groupname)
+        # except:
+            # index = 0
+
+        # index = names.index(groupname)
+
+        # 找到群组所在的index
+        firstIndex = -1
+        for i in range(self.list.count()):
+            widget = self.list.itemWidget(self.list.item(i))
+            if widget.getItemType() == ContactListItemType.Tip:
+                if widget.getTip() == "群组":
+                    firstIndex = i + 1
+                    break
+
+        index = firstIndex + index
+
+        item = ContactListGroupItem()
+        item.setName(groupname)
+        item.setHeadImg(headimg)
+
+        listItem = QListWidgetItem()
+        listItem.setSizeHint(QSize(200, 65))
+        self.list.insertItem(index, listItem)
+        self.list.setItemWidget(listItem, item)
         
-    # def getFriendIndex(self):
-    #     # index = 2
-    #     for i in range(self.list.count()):
-    #         item = self.list.item(i)
-    #         widget = self.list.itemWidget(item)
-    #         if widget == None:
-    #             continue
-            
-    #         # widget = self.list.itemWidget(item)
-    #         if widget.getItemType() == ContactListItemType.Friend:
-    #             index = i
-    #     if index < 2:
-    #         index = 2
-            
-    #     return index
         
     def onAddBtnClicked(self):
         geom = self.addBtn.geometry()
@@ -189,4 +223,17 @@ class ContactListPage(QWidget):
             headimg = item["friend"]["headimg"]
             self.addFriend(self.__base64Utils.base64StringToPixmap(headimg), friendname)
             self.__users.addDetail(-1, item["friend"]["userid"], item["friend"]["username"], "", headimg, 0, 0, 0)
+
+
+    def requestGetGroupList(self):
+        dataJson = {"ownerid" : self.__users.getId()}
+        self.__netClientUtils.request(MsgCmd.getGroupList, dataJson, self.responseGetGroupList)
+
+    def responseGetGroupList(self, msg):
+        if "data" not in msg:
+            return
+
+        for item in msg["data"]:
+            self.addGroup(QPixmap("./_rc/img/group.jpg"), item["groupname"])
+
             

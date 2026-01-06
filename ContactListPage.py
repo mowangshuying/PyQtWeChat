@@ -82,8 +82,8 @@ class ContactListPage(QWidget):
         self.addNewFriend(QPixmap("./_rc/img/add_friend.png"), "新的朋友")
         self.addTip("联系人")
         self.addTip("群组")
-        self.requestGetFriendList()
-        self.requestGetGroupList()
+        # self.requestGetFriendList()
+        # self.requestGetGroupList()
         
     def __connected(self):
         self.list.itemClicked.connect(self.__onClickedListItem)
@@ -212,28 +212,5 @@ class ContactListPage(QWidget):
             return
         
         self.clickedListItem.emit(widget.getName())
-        
-    def requestGetFriendList(self):
-        dataJson = {"ownerid": self.__users.getId()}
-        self.__netClientUtils.request(MsgCmd.getFriendList, dataJson, self.responseGetFriendList)
-        
-    def responseGetFriendList(self, msg):
-        for item in msg["data"]:
-            friendname = item["friendusername"]
-            headimg = item["friend"]["headimg"]
-            self.addFriend(self.__base64Utils.base64StringToPixmap(headimg), friendname)
-            self.__users.addDetail(-1, item["friend"]["userid"], item["friend"]["username"], "", headimg, 0, 0, 0)
-
-
-    def requestGetGroupList(self):
-        dataJson = {"ownerid" : self.__users.getId()}
-        self.__netClientUtils.request(MsgCmd.getGroupList, dataJson, self.responseGetGroupList)
-
-    def responseGetGroupList(self, msg):
-        if "data" not in msg:
-            return
-
-        for item in msg["data"]:
-            self.addGroup(QPixmap("./_rc/img/group.jpg"), item["groupname"])
 
             

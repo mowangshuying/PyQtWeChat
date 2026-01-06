@@ -3,6 +3,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 
 from StyleSheetUtils import StyleSheetUtils
+from Base64Utils import Base64Utils
 from ListWidgetEx import ListWidgetEx
 from SesPageToolBar import SesPageToolBar
 from VSplit import VSplit
@@ -22,6 +23,7 @@ class SesPage(QWidget):
 
         self.__user = Users()
         self.__netClientUtils = NetClientUtils()
+        self.__base64Utils = Base64Utils()
 
         self.setAcceptDrops(True)
         self.setMouseTracking(True)
@@ -93,35 +95,18 @@ class SesPage(QWidget):
         if ownerid == self.__user.getId():
             chatItem = ChatListItem(ChatRole.Self)
             chatItem.setUserName(self.__user.getNameById(ownerid))
-            chatItem.setUserIcon("./_rc/img/head_2.jpg")
-            
+            chatItem.setUserIcon(self.__base64Utils.base64StringToPixmap(self.__user.getHeadImgById(ownerid)))
             textBubble = TextBubble(ChatRole.Self, text)
             chatItem.setBubble(textBubble)
-
-            # listItem = QListWidgetItem()
-            # self.list.addItem(listItem)
-            
-            # chatItem.setProperty("listitem", listItem)   
-            # self.list.setItemWidget(listItem, chatItem)
             self.list.appendChatItem(chatItem)
             
         if friendid == self.__user.getId():
             chatItem = ChatListItem(ChatRole.Other)
             chatItem.setUserName(self.__user.getNameById(ownerid))
-            chatItem.setUserIcon("./_rc/img/head_2.jpg")
-            
+            chatItem.setUserIcon(self.__base64Utils.base64StringToPixmap(self.__user.getHeadImgById(ownerid)))
             textBubble = TextBubble(ChatRole.Other, text)
-            
-            height = textBubble.getTextHeight()
-            print(height)
-            
             chatItem.setBubble(textBubble)
             self.list.appendChatItem(chatItem)
-            
-            # listItem = QListWidgetItem()
-            # listItem.setSizeHint(chatItem.sizeHint()) 
-            # self.list.addItem(listItem)   
-            # self.list.setItemWidget(listItem, chatItem)
             
     def onClickedSendBtn(self):
         msgText = self.edit.toPlainText()

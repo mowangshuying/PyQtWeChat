@@ -135,29 +135,29 @@ class MsgListPage(QWidget):
         
         
         
-    def requestSessionList(self):
-        data = {"ownerid": self.__users.getId()}
-        self.__netClientUtils.request(MsgCmd.getSessionList, data, self.__responseGetSessionList)
+    # def requestSessionList(self):
+    #     data = {"ownerid": self.__users.getId()}
+    #     self.__netClientUtils.request(MsgCmd.getSessionList, data, self.responseGetSessionList)
     
-    def __responseGetSessionList(self, msg):
-        # 判读是否含有 "data"
-        if "data" not in msg:
-            return
+    # def responseGetSessionList(self, msg):
+    #     # 判读是否含有 "data"
+    #     if "data" not in msg:
+    #         return
 
-        for item in msg["data"]:
-            # if item["type"] == MsgListItemType.Friend or item["type"] == MsgListItemType.Group:
-                if item["ownerid"] == self.__users.getId():
-                    headimg = self.__base64Utils.base64StringToPixmap(item["friend"]["headimg"])
-                    username = item["friend"]["username"]
-                    msgText = item["msgdata"]
-                    self.addMsg(headimg, username, msgText)
-                    continue
+    #     for item in msg["data"]:
+    #         # if item["type"] == MsgListItemType.Friend or item["type"] == MsgListItemType.Group:
+    #             if item["ownerid"] == self.__users.getId():
+    #                 headimg = self.__base64Utils.base64StringToPixmap(item["friend"]["headimg"])
+    #                 username = item["friend"]["username"]
+    #                 msgText = item["msgdata"]
+    #                 self.addMsg(headimg, username, msgText)
+    #                 continue
                 
-                if item["friendid"] == self.__users.getId():
-                    headimg = self.__base64Utils.base64StringToPixmap(item["owner"]["headimg"])
-                    username = item["owner"]["username"]
-                    msgText = item["msgdata"]
-                    self.addMsg(headimg, username, msgText)
-                    continue
+    #             if item["friendid"] == self.__users.getId():
+    #                 headimg = self.__base64Utils.base64StringToPixmap(item["owner"]["headimg"])
+    #                 username = item["owner"]["username"]
+    #                 msgText = item["msgdata"]
+    #                 self.addMsg(headimg, username, msgText)
+    #                 continue
         
         

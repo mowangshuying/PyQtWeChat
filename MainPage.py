@@ -81,22 +81,26 @@ class MainPage(FramelessWindow):
         
         # connect;
         self.__connected()
+        
         self.setTitleBar(TitleBar(self))
         self.titleBar.raise_()
         
         # register msg
         self.__netClientUtils.register(MsgType.push, MsgCmd.sendMsg, self.__responseSendMsg)
+        self.__request()
 
     def __initMidPage(self):
-        # msgListPage
-        self.msgListPage = MsgListPage()
-        self.msgListPage.requestSessionList()
-        self.midLayout.addWidgetByKey("MsgListPage", self.msgListPage)
         
         # contactListPage;
         self.contactListPage = ContactListPage()
-        self.contactListPage.requestGetFriendList()
+        # self.contactListPage.requestGetFriendList()
         self.midLayout.addWidgetByKey("ContactListPage", self.contactListPage)
+        
+        # msgListPage
+        self.msgListPage = MsgListPage()
+        # self.msgListPage.requestSessionList()
+        self.midLayout.addWidgetByKey("MsgListPage", self.msgListPage)
+    
         
         self.midLayout.setCurrentWidgetByKey("ContactListPage")
         
@@ -131,11 +135,11 @@ class MainPage(FramelessWindow):
         self.toolPage.clickedUserBtn.connect(self.__onClickedUserBtn)
         self.toolPage.clickedChangeHeadImgBtn.connect(self.__onClickedChangedHeadImgBtn)
         
-        self.msgListPage.clickedAddBtn.connect(self.onClickedAddBtn)
+        self.msgListPage.clickedAddBtn.connect(self.__onClickedAddBtn)
         self.msgListPage.clickedCreateBtn.connect(self.__onClickedCreateBtn)
         self.msgListPage.clickedListItem.connect(self.__onClickedMsgListItem)
         
-        self.contactListPage.clickedAddBtn.connect(self.onClickedAddBtn)
+        self.contactListPage.clickedAddBtn.connect(self.__onClickedAddBtn)
         self.contactListPage.clickedCreateBtn.connect(self.__onClickedCreateBtn)
         
         self.contactListPage.clickedListItem.connect(self.__onClickedContactListItem)
@@ -146,6 +150,47 @@ class MainPage(FramelessWindow):
         self.__busUtils.agreeAddFriend.connect(self.__onAgreeAddFriend)
         self.__busUtils.swithSesPage.connect(self.__onSwithSesPage)
         
+    
+    def __request(self):
+        self.requestGetFriendList()
+        self.requestGetSessionList()
+    
+    # request
+    def requestGetFriendList(self):
+        dataJson = {"ownerid": self.__users.getId()}
+        self.__netClientUtils.request(MsgCmd.getFriendList, dataJson, self.responseGetFriendList)
+    def requestGetSessionList(self):
+        data = {"ownerid": self.__users.getId()}
+        self.__netClientUtils.request(MsgCmd.getSessionList, data, self.responseGetSessionList)
+        
+    #response
+    def responseGetFriendList(self, msg):
+        # 不含数据直接返回.
+        if "data" not in msg:
+            return
+        
+        for item in msg["data"]:
+            friendname = item["friendusername"]
+            headimg = item["friend"]["headimg"]
+            self.contactListPage.addFriend(self.__base64Utils.base64StringToPixmap(headimg), friendname)
+            self.__users.addDetail(-1, item["friend"]["userid"], item["friend"]["username"], "", headimg, 0, 0, 0)
+    
+    
+    def responseGetSessionList(self, msg):
+        if "data" not in msg:
+            return
+        
+        for ses in msg["data"]:
+            id = ses["id"]
+            friendname = self.__users.getNameById(id)
+            headimg = self.__users.getHeadImgById(id)
+            
+            # 添加至消息列表中
+            self.msgListPage.addMsg(self.__base64Utils.base64StringToPixmap(headimg), friendname, "")
+            # 添加至消息会话中
+            for msg in ses["msgs"]:
+                self.__addMsgToSes(id, msg)
+    
         
     def setStatusText(self, text):
         self.statusLabel.setText(text)
@@ -155,6 +200,15 @@ class MainPage(FramelessWindow):
         self.sesPage = SesPage(self)
         self.sesPage.setTitle(key)
         self.rightLayout.addWidgetByKey(key, self.sesPage)        
+        
+    def __addMsgToSes(self, id, msg):
+        sesPage =  self.rightLayout.getByKey(self.__users.getNameById(id))
+        if sesPage == None: 
+            self.__makeSesPageByKey(self.__users.getNameById(id))
+            sesPage = self.rightLayout.getByKey(self.__users.getNameById(id))
+            
+        sesPage.appendChatMsg(msg)
+        
 
     def __onClickedContactListItem(self, str):
         
@@ -179,7 +233,7 @@ class MainPage(FramelessWindow):
         self.msgListPage.setCurrentItemByKey(key)
         self.__onSwithSesPage(key)             
         
-    def onClickedAddBtn(self):
+    def __onClickedAddBtn(self):
         self.rightLayout.setCurrentWidgetByKey("AddFriendsPage")
         self.titleBar.raise_()
 
@@ -209,18 +263,12 @@ class MainPage(FramelessWindow):
         QTimer.singleShot(3000, lambda: self.statusLabel.setText(""))
         
     def __onAgreeAddFriend(self, msg):
-        self.contactListPage.requestGetFriendList()
+        # self.contactListPage.requestGetFriendList()
+        self.requestGetFriendList()
         
     def __responseSendMsg(self, msg):
         ownerid = msg["data"]["ownerid"]
-        sesPage =  self.rightLayout.getByKey(self.__users.getNameById(ownerid))
-        if sesPage == None: 
-            self.__makeSesPageByKey(self.__users.getNameById(ownerid))
-            sesPage = self.rightLayout.getByKey(self.__users.getNameById(ownerid))
-            
-        sesPage.appendChatMsg(msg["data"])
-        
-    
+        self.__addMsgToSes(ownerid, msg["data"])
     def __onSwithSesPage(self, key):
         
         # # 查找会话

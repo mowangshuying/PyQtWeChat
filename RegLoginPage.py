@@ -28,20 +28,24 @@ class RegLoginPage(FramelessWindow):
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.vMainLayout)
         
+        # self.titleBar.setFixedHeight(36)
         self.titleBar.maxBtn.hide()
+        
         
         self.bottom = QWidget()
         self.bottom.setFixedHeight(200)
         self.vBottomLayout =  QVBoxLayout()
+        self.vBottomLayout.setSpacing(0)
+        self.vBottomLayout.setContentsMargins(5, 0, 5, 5)
         self.bottom.setLayout(self.vBottomLayout)
         
         self.accountEdit = LineEdit()
-        self.accountEdit.setFixedSize(256, 36)
+        self.accountEdit.setFixedSize(256, 30)
         self.accountEdit.setPlaceholderText("请输入用户名")
         self.accountEdit.setText("")
         
         self.passwordEdit = LineEdit()
-        self.passwordEdit.setFixedSize(256, 36)
+        self.passwordEdit.setFixedSize(256, 30)
         self.passwordEdit.setPlaceholderText("请输入密码")
         self.passwordEdit.setText("")
         
@@ -54,25 +58,25 @@ class RegLoginPage(FramelessWindow):
         
         self.loginBtn = PrimaryPushButton("登录")
         self.loginBtn.setObjectName("loginBtn")
-        self.loginBtn.setFixedSize(256, 36)
+        self.loginBtn.setFixedSize(256, 30)
 
-        self.statusLabel = QLabel()
-        self.statusLabel.setFixedHeight(20)
-        self.statusLabel.setStyleSheet("background-color: rgb(29,124,202); font-size: 12px; color: white;")
+        # self.statusLabel = QLabel()
+        # self.statusLabel.setFixedHeight(20)
+        # self.statusLabel.setStyleSheet("background-color: rgb(29,124,202); font-size: 12px; color: white;")
         
         
         self.vBottomLayout.addWidget(self.accountEdit)
         self.vBottomLayout.addWidget(self.passwordEdit)
         self.vBottomLayout.addLayout(self.hBtnLayout)
         self.vBottomLayout.addWidget(self.loginBtn)
-        self.vMainLayout.addSpacing(36)
+        self.vMainLayout.addSpacing(self.titleBar.height())
         self.vMainLayout.addWidget(self.bottom)
-        self.vMainLayout.addWidget(self.statusLabel)
+        # self.vMainLayout.addWidget(self.statusLabel)
         
         
         self.loginBtn.clicked.connect(self.onBtnClicked)
         self.regOrLogin.clicked.connect(self.onRegOrLoginClicked)
-        self.__busUtils.statusBarTextChanged.connect(self.__statusBarTextChanged)
+        # self.__busUtils.statusBarTextChanged.connect(self.__statusBarTextChanged)
        
         
 
@@ -80,7 +84,7 @@ class RegLoginPage(FramelessWindow):
         # self.pressedPos = None
         
         # self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
-        self.setFixedSize(274, 256)
+        self.setFixedSize(274, 215)
     
     def requesRegUser(self):
         data = {"username": self.accountEdit.text(),  "nickname" : self.accountEdit.text(), "password": self.passwordEdit.text(), "sex": 0}
@@ -100,8 +104,8 @@ class RegLoginPage(FramelessWindow):
             mainPage = MainPage()
             mainPage.show()
         
-        if msg["state"] == MsgState.error:
-            self.statusLabel.setText(msg["data"]["info"])
+        # if msg["state"] == MsgState.error:
+        #     self.statusLabel.setText(msg["data"]["info"])
             
         
     def onBtnClicked(self):
@@ -116,8 +120,8 @@ class RegLoginPage(FramelessWindow):
         else:
             self.loginBtn.setText("登录")
 
-    def __statusBarTextChanged(self, text):
-        if self.statusLabel is not None:
-            self.statusLabel.setText(text)
+    # def __statusBarTextChanged(self, text):
+    #     if self.statusLabel is not None:
+    #         self.statusLabel.setText(text)
         
         

@@ -16,15 +16,18 @@ from Msg import *
 
 from qfluentwidgets import *
 from StyleSheetUtils import StyleSheetUtils
+from Base64Utils import Base64Utils
 
 @singleton
 class DoApplyFriendsPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        
+        # static
         self.__friendApplys = FriendApplys()
-
         self.__netClientUtils = NetClientUtils()
         self.__users = Users()
+        self.__base64Utils = Base64Utils()
 
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
@@ -42,7 +45,7 @@ class DoApplyFriendsPage(QWidget):
 
     def add(self, id, headimg, username, msg, state):
         item = DoApplyFriendsListItem()
-        item.setHeadImg(QPixmap("./_rc/img/head_2.jpg"))
+        item.setHeadImg(headimg)
         item.setName(username)
         item.setMsg(msg)
         item.setId(id)
@@ -112,8 +115,10 @@ class DoApplyFriendsPage(QWidget):
             
             self.__friendApplys.addDetail(id, ownerid, friendid, appplystate, applymsg)
             if ownerid == self.__users.getId():
-                self.add(id, "", friendname, applymsg, appplystate)
+                headimg = self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(friendid))
+                self.add(id, headimg, friendname, applymsg, appplystate)
             elif friendid == self.__users.getId():
-                self.add(id, "", ownername, applymsg, appplystate)
+                headimg = self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(ownerid))
+                self.add(id, headimg, ownername, applymsg, appplystate)
         
         

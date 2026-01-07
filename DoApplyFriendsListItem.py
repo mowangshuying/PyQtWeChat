@@ -45,8 +45,16 @@ class DoApplyFriendsListItem(QFrame):
         self.vInfoLayout.addWidget(self.msgLabel)
 
         self.stateBtn = PushButton("状态")
+        self.stateBtn.setFixedHeight(25)
+        setFont(self.stateBtn, 12)
+        
         self.agreeBtn = PushButton("同意")
+        self.agreeBtn.setFixedHeight(25)
+        setFont(self.agreeBtn, 12)
+        
         self.refuseBtn = PushButton("拒绝")
+        self.refuseBtn.setFixedHeight(25)
+        setFont(self.refuseBtn, 12)
 
         self.hMainLayout.addWidget(self.headImgLabel)
         self.hMainLayout.addSpacing(15)

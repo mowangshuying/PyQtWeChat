@@ -43,7 +43,7 @@ class FindFriendsListItem(QFrame):
 
         self.setFixedHeight(40)
         self.addFriendbtn.clicked.connect(self.onClickedAddFriendbtn)
-        StyleSheetUtils.setQssByFileName("./_rc/qss/friendCard.qss", self)
+        # StyleSheetUtils.setQssByFileName("./_rc/qss/FindFriendsListItem.qss", self)
 
     def setUserName(self, name):
         self.usernameLabel.setText(name)

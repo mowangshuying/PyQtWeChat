@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import *
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
+from qfluentwidgets import *
 
 from MsgListItem import MsgListItem
 from StyleSheetUtils import StyleSheetUtils
@@ -37,6 +38,18 @@ class MsgListFriendItem(MsgListItem):
         self.hMainLayout.addLayout(self.vLayout)
         self.setFixedHeight(65)
         
+        self.unreadLabel = QLabel(self)
+        self.unreadLabel.setWordWrap(True)
+        self.unreadLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.unreadLabel.setFixedSize(25, 15)
+        self.unreadLabel.setObjectName("unreadLabel")
+        
+        
+        # self.setUnReadLabel(100)
+        # self.setUnReadLabel(1)
+        StyleSheetUtils.setQssByFileName("./_rc/qss/MsgListFriendItem.qss", self)
+        
+        
         
     def setHeadImg(self, headimg: QPixmap):
         self.headImgLabel.setPixmap(headimg)
@@ -60,3 +73,15 @@ class MsgListFriendItem(MsgListItem):
         
     def getTime(self):
         return self.timeLabel.text()
+    
+    def setUnReadLabel(self, unread: int):
+        self.unReadCount = unread
+        self.unreadLabel.setText(str(unread))
+        if (unread > 99):
+            self.unreadLabel.setText("99+")
+        
+        self.unreadLabel.setVisible(unread > 0)
+        
+    # resize event: 大小调整时候
+    def resizeEvent(self, event: QResizeEvent) -> None:
+        self.unreadLabel.move(self.width() - 40, 33)

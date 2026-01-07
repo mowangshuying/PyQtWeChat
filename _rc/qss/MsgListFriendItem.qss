@@ -1,0 +1,7 @@
+#unreadLabel {
+    background-color: #FF0000;
+    color: white;
+    font-size: 10px;
+    border-radius: 7px;
+    border:1px solid #FF0000;
+}

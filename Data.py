@@ -12,6 +12,7 @@ class _User:
         self.sex = -1
         self.state = -1
         self.createdate = -1
+        self.logindate = -1
 
 # 问题:前面加下滑线就识别不到了?，后面加才可以?
 @singleton

@@ -169,11 +169,10 @@ class MainPage(FramelessWindow):
         if "data" not in msg:
             return
         
-        for item in msg["data"]:
-            friendname = item["friendusername"]
-            headimg = item["friend"]["headimg"]
-            self.contactListPage.addFriend(self.__base64Utils.base64StringToPixmap(headimg), friendname)
-            self.__users.addDetail(-1, item["friend"]["userid"], item["friend"]["username"], "", headimg, 0, 0, 0)
+        for friend in msg["data"]:
+            self.contactListPage.addFriend(self.__base64Utils.base64StringToPixmap(friend["headimg"]), friend["username"])
+            self.__users.addDetail(friend["id"], friend["userid"], friend["username"], 
+                                   friend["nickname"], friend["headimg"], friend["sex"], friend["state"], friend["create_date"])
     
     
     def responseGetSessionList(self, msg):

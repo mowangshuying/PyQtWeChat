@@ -17,13 +17,21 @@ class MsgListFriendItem(MsgListItem):
         self.setHeadImg(QPixmap("./_rc/img/head_2.jpg"))
         
         self.nameLabel = StrongBodyLabel()
-        self.msgTextLabel = BodyLabel()
+        self.timeLabel = CaptionLabel()
+        self.msgTextLabel = CaptionLabel()
         
         self.hMainLayout.addWidget(self.headImgLabel)
         self.hMainLayout.addSpacing(15)
         
         self.vLayout = QVBoxLayout()
-        self.vLayout.addWidget(self.nameLabel)
+        # self.vLayout.addWidget(self.nameLabel)
+        # self.vLayout.addWidget(self.msgTextLabel)
+        
+        self.hNTLayout = QHBoxLayout()
+        self.hNTLayout.addWidget(self.nameLabel)
+        self.hNTLayout.addStretch()
+        self.hNTLayout.addWidget(self.timeLabel)
+        self.vLayout.addLayout(self.hNTLayout)
         self.vLayout.addWidget(self.msgTextLabel)
         
         self.hMainLayout.addLayout(self.vLayout)
@@ -46,3 +54,9 @@ class MsgListFriendItem(MsgListItem):
     
     def setMsgText(self, text: str):
         return self.msgTextLabel.setText(text)
+    
+    def setTime(self, time: str):
+        self.timeLabel.setText(time)
+        
+    def getTime(self):
+        return self.timeLabel.text()

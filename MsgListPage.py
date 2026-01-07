@@ -13,6 +13,7 @@ from MsgListFriendItem import *
 from Data import *
 from Msg import *
 from Base64Utils import Base64Utils
+from BusUtils import BusUtils
 
 @singleton
 class MsgListPage(QWidget):
@@ -27,6 +28,7 @@ class MsgListPage(QWidget):
         self.__netClientUtils = NetClientUtils()
         self.__users = Users()
         self.__base64Utils = Base64Utils()
+        self.__busUtils = BusUtils()
         
         self.vMainLayout = QVBoxLayout()
         self.setLayout(self.vMainLayout)
@@ -72,6 +74,7 @@ class MsgListPage(QWidget):
     
     def __connected(self):
         self.list.itemClicked.connect(self.__onClickedListItem)
+        self.__busUtils.updateSesLastMsg.connect(self.__onUpdateSesLastMsg)
     
     def onAddBtnClicked(self):
         geom = self.addBtn.geometry()
@@ -86,7 +89,7 @@ class MsgListPage(QWidget):
     def addMsg(self, headimg, name, msg):
         for i in range(self.list.count()):
             widget = self.list.itemWidget(self.list.item(i))
-            if widget.getItemType() == MsgListItemType.Friend or widget.getItemType() == MsgListItemType.Group:
+            if widget.getItemType() == MsgListItemType.Friend:
                 if widget.getName() == name:
                     return
         
@@ -114,9 +117,6 @@ class MsgListPage(QWidget):
         self.list.insertItem(index, listItem)
         self.list.setItemWidget(listItem, item)
         
-        
-        
-    
     def setCurrentItemByKey(self, key):
         # 遍历查找到name == key的item
         for i in range(self.list.count()):
@@ -132,5 +132,11 @@ class MsgListPage(QWidget):
             return
         
         self.clickedListItem.emit(widget.getName())
-        
-        
+    
+    def __onUpdateSesLastMsg(self, username, msg, time):
+        for i in range(self.list.count()):
+            widget = self.list.itemWidget(self.list.item(i))
+            if widget.getItemType() == MsgListItemType.Friend:
+                if widget.getName() == username:
+                    widget.setMsgText(msg)
+                    widget.setTime(time)

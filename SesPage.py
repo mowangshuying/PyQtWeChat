@@ -4,6 +4,7 @@ from PyQt6.QtGui import *
 
 from StyleSheetUtils import StyleSheetUtils
 from Base64Utils import Base64Utils
+from BusUtils import BusUtils
 from ListWidgetEx import ListWidgetEx
 from SesPageToolBar import SesPageToolBar
 from VSplit import VSplit
@@ -17,6 +18,8 @@ from Msg import *
 from NetClientUtils import *
 from ChatView import *
 
+import time
+
 class SesPage(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -24,6 +27,8 @@ class SesPage(QWidget):
         self.__user = Users()
         self.__netClientUtils = NetClientUtils()
         self.__base64Utils = Base64Utils()
+        self.__busUtils = BusUtils()
+        
 
         self.setAcceptDrops(True)
         self.setMouseTracking(True)
@@ -91,6 +96,19 @@ class SesPage(QWidget):
         friendid = msg["friendid"]
         msgtype = msg["msgtype"]
         text = msg["msgdata"]
+        timestamp = msg["time"]
+        
+        #时间戳转为日期格式
+        # curDate = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp / 1000))
+        timesDate = time.strftime("%Y-%m-%d", time.localtime(timestamp / 1000))
+        
+        
+        # 判断是否是今天
+        if timesDate == time.strftime("%Y-%m-%d", time.localtime()):
+            times = time.strftime("%H:%M:%S", time.localtime(timestamp / 1000))
+        else:
+            times = timesDate
+        
         
         if ownerid == self.__user.getId():
             chatItem = ChatListItem(ChatRole.Self)
@@ -99,6 +117,9 @@ class SesPage(QWidget):
             textBubble = TextBubble(ChatRole.Self, text)
             chatItem.setBubble(textBubble)
             self.list.appendChatItem(chatItem)
+            self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(friendid), text, times)
+            
+            
             
         if friendid == self.__user.getId():
             chatItem = ChatListItem(ChatRole.Other)
@@ -107,6 +128,7 @@ class SesPage(QWidget):
             textBubble = TextBubble(ChatRole.Other, text)
             chatItem.setBubble(textBubble)
             self.list.appendChatItem(chatItem)
+            self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(ownerid), text, times)
             
     def onClickedSendBtn(self):
         msgText = self.edit.toPlainText()
@@ -129,7 +151,7 @@ class SesPage(QWidget):
 
     def eventFilter(self, obj, event):
         if obj == self.edit and event.type() == QEvent.Type.KeyPress:
-            if event.key() == Qt.Key.Key_Return and event.modifiers() == Qt.KeyboardModifier.ShiftModifier:
+            if event.key() == Qt.Key.Key_Return:
                 self.onClickedSendBtn()
                 return True
         return super().eventFilter(obj, event)

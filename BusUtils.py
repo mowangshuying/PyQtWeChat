@@ -11,3 +11,4 @@ class BusUtils(QObject):
     agreeAddFriend = pyqtSignal(int)
     refuseAddFriend = pyqtSignal(int)
     swithSesPage = pyqtSignal(str)
+    updateSesLastMsg = pyqtSignal(str, str, str) # key msg time

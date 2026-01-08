@@ -7,11 +7,10 @@ from MsgListItem import *
 from StyleSheetUtils import StyleSheetUtils
 from qfluentwidgets import *
 
-class MsgListFriendItem(MsgListItem):
+class MsgListGroupItem(MsgListItem):
     def __init__(self, parent=None):
         super().__init__(parent = parent)
-        self.setItemType(MsgListItemType.Friend)
-        
+        self.setItemType(MsgListItemType.Group)
         self.hMainLayout = QHBoxLayout()
         self.hMainLayout.setSpacing(0)
         self.setLayout(self.hMainLayout)
@@ -47,7 +46,10 @@ class MsgListFriendItem(MsgListItem):
         self.unreadLabel.setObjectName("unreadLabel")
         self.setUnReadLabel(0)
         
-        StyleSheetUtils.setQssByFileName("./_rc/qss/MsgListFriendItem.qss", self)
+        
+        # self.setUnReadLabel(100)
+        # self.setUnReadLabel(1)
+        StyleSheetUtils.setQssByFileName("./_rc/qss/MsgListGroupItem.qss", self)
         
         
         

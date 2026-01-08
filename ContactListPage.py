@@ -162,16 +162,7 @@ class ContactListPage(QWidget):
         names.append(groupname)
         names.sort()
 
-        # 如果没找到indwx = 0
-        # index = 0
-        # try:
         index = names.index(groupname)
-        # except:
-            # index = 0
-
-        # index = names.index(groupname)
-
-        # 找到群组所在的index
         firstIndex = -1
         for i in range(self.list.count()):
             widget = self.list.itemWidget(self.list.item(i))

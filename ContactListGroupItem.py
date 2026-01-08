@@ -18,8 +18,6 @@ class ContactListGroupItem(ContactListItem):
         
         self.headImgLabel = ImageLabel()
         self.setHeadImg(QPixmap("./_rc/img/head_2.jpg"))
-        # self.headImgLabel.setImage("./_rc/img/head_2.jpg")
-        
         self.nameLabel = StrongBodyLabel()
         self.hMainLayout.addWidget(self.headImgLabel)
         self.hMainLayout.addSpacing(15)

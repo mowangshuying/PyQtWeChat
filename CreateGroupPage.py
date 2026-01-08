@@ -104,20 +104,6 @@ class CreateGroupPage(QWidget):
     def __connected(self):
         # self.rawList.itemClicked.connect(self.__onClickedRawListItem)
         self.confirmBtn.clicked.connect(self.__onClickedConfirmBtn)
-
-    # def __onClickedRawListItem(self, item):
-    #     widget = self.rawList.itemWidget(item)
-    #     if widget == None:
-    #         return
-        
-    #     # self.clickedRadioButton.emit(widget.getUerid(), widget.getRadioButtonState())
-    #     if widget.getRadioButtonState() == True:
-    #         user = self.__users.getUser(widget.getUserid())
-    #         self.add(user.userid, user.username, False)
-
-    #     if widget.getRadioButtonState() == False:
-    #         self._del(widget.getUserid(), False)
-
     def __clickedRadioBtn(self, userid, state):
 
         user = self.__users.getUser(userid)
@@ -128,8 +114,6 @@ class CreateGroupPage(QWidget):
 
 
     def __onClickedConfirmBtn(self):
-        # ha ha ha
-        # 
         # 遍历raw list获取所有userid
         groupfriends = []
         groupfriends.append(self.__users.getId())
@@ -150,13 +134,7 @@ class CreateGroupPage(QWidget):
         if "data" not in msg:
             return
         
-        print("create group response")
-
-        
-
-        
-        
-
+        # print("create group response")
     def add(self, userid, username, bRadio):
 
         if self.has(userid, bRadio):

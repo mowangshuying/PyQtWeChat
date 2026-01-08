@@ -186,11 +186,10 @@ class MainPage(FramelessWindow):
         if "data" not in msg:
             return
         
-        # for group in msg["data"]:
-        #     self.contactListPage.addGroup(self.__base64Utils.base64StringToPixmap(group["headimg"]), group["groupname"])
-        #     self.__users.addDetail()
         for groupInfo in msg["data"]:
             self.contactListPage.addGroup(self.__base64Utils.base64StringToPixmap(groupInfo["headimg"]), groupInfo["groupname"])
+            self.__groupInfos.addDetail(groupInfo["id"], groupInfo["groupid"], groupInfo["createid"], 
+                                        groupInfo["groupname"], groupInfo["headimg"] ,groupInfo["createtime"], groupInfo["groupsetting"])
     
     
     def responseGetSessionList(self, msg):
@@ -291,7 +290,6 @@ class MainPage(FramelessWindow):
         QTimer.singleShot(3000, lambda: self.statusLabel.setText(""))
         
     def __onAgreeAddFriend(self, msg):
-        # self.contactListPage.requestGetFriendList()
         self.requestGetFriendList()
         
     def __responseSendMsg(self, msg):

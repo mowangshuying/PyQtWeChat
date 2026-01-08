@@ -14,6 +14,7 @@ from qfluentwidgets.components.widgets.button import *
 from qfluentwidgets.components.widgets.line_edit import *
 from qfluentwidgets.components.widgets.check_box import *
 from BusUtils import BusUtils
+import time
 
 class RegLoginPage(FramelessWindow):
     def __init__(self, parent=None):
@@ -105,6 +106,9 @@ class RegLoginPage(FramelessWindow):
             user = msg["data"]
             
             self.__users.setId(user["userid"])
+            # 获取当前时间, 当前登录时间毫秒数
+            self.__users.setLoginDate(time.time())
+            
             self.__users.addDetail(user["id"], user["userid"], user["username"], user["nickname"], user["headimg"], user["sex"], user["state"], user["create_date"])
             self.deleteLater()
             mainPage = MainPage()

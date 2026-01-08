@@ -12,13 +12,14 @@ class _User:
         self.sex = -1
         self.state = -1
         self.createdate = -1
-        self.logindate = -1
+        # self.logindate = -1
 
 # 问题:前面加下滑线就识别不到了?，后面加才可以?
 @singleton
 class Users:
     def __init__(self):
         self.userid = -1
+        self.loginDate = -1 #记录登录的时间
         self.list = []
 
     def getId(self):
@@ -26,6 +27,12 @@ class Users:
     
     def setId(self, id):
         self.userid = id
+        
+    def setLoginDate(self, loginDate):
+        self.loginDate = loginDate
+        
+    def getLoginDate(self):
+        return self.loginDate
 
     def add(self, user):
         if self.hasById(user.userid): 

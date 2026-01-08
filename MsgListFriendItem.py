@@ -43,6 +43,7 @@ class MsgListFriendItem(MsgListItem):
         self.unreadLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.unreadLabel.setFixedSize(25, 15)
         self.unreadLabel.setObjectName("unreadLabel")
+        self.setUnReadLabel(0)
         
         
         # self.setUnReadLabel(100)
@@ -81,6 +82,10 @@ class MsgListFriendItem(MsgListItem):
             self.unreadLabel.setText("99+")
         
         self.unreadLabel.setVisible(unread > 0)
+        
+    def updateUnReadLabel(self):
+        self.unReadCount += 1
+        self.setUnReadLabel(self.unReadCount)
         
     # resize event: 大小调整时候
     def resizeEvent(self, event: QResizeEvent) -> None:

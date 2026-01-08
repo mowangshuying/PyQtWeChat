@@ -108,6 +108,10 @@ class SesPage(QWidget):
             times = time.strftime("%H:%M:%S", time.localtime(timestamp / 1000))
         else:
             times = timesDate
+            
+        bNewMsg = False
+        if self.__user.getLoginDate() < (timestamp / 1000):
+            bNewMsg = True
         
         
         if ownerid == self.__user.getId():
@@ -117,7 +121,7 @@ class SesPage(QWidget):
             textBubble = TextBubble(ChatRole.Self, text)
             chatItem.setBubble(textBubble)
             self.list.appendChatItem(chatItem)
-            self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(friendid), text, times)
+            self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(friendid), text, times, bNewMsg)
             
             
             
@@ -128,7 +132,7 @@ class SesPage(QWidget):
             textBubble = TextBubble(ChatRole.Other, text)
             chatItem.setBubble(textBubble)
             self.list.appendChatItem(chatItem)
-            self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(ownerid), text, times)
+            self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(ownerid), text, times, bNewMsg)
             
     def onClickedSendBtn(self):
         msgText = self.edit.toPlainText()

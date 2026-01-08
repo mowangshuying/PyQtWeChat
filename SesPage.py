@@ -90,7 +90,7 @@ class SesPage(QWidget):
     def setTitle(self, str):
         self.titleLabel.setText(str)
         
-    def appendChatMsg(self, msg):
+    def appendChatMsg(self, msg, bLastMsg):
         # id = msg["id"]
         ownerid = msg["ownerid"]
         friendid = msg["friendid"]
@@ -121,7 +121,9 @@ class SesPage(QWidget):
             textBubble = TextBubble(ChatRole.Self, text)
             chatItem.setBubble(textBubble)
             self.list.appendChatItem(chatItem)
-            self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(friendid), text, times, bNewMsg)
+            
+            if bLastMsg:
+                self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(friendid), text, times, bNewMsg)
             
             
             
@@ -132,7 +134,8 @@ class SesPage(QWidget):
             textBubble = TextBubble(ChatRole.Other, text)
             chatItem.setBubble(textBubble)
             self.list.appendChatItem(chatItem)
-            self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(ownerid), text, times, bNewMsg)
+            if bLastMsg:
+                self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(ownerid), text, times, bNewMsg)
             
     def onClickedSendBtn(self):
         msgText = self.edit.toPlainText()
@@ -151,7 +154,7 @@ class SesPage(QWidget):
         if msg["state"] == "ok":
             # 清空eidt
             self.edit.clear()
-            self.appendChatMsg(msg["data"])
+            self.appendChatMsg(msg["data"], True)
 
     def eventFilter(self, obj, event):
         if obj == self.edit and event.type() == QEvent.Type.KeyPress:

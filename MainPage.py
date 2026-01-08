@@ -186,9 +186,20 @@ class MainPage(FramelessWindow):
             
             # 添加至消息列表中
             self.msgListPage.addMsg(self.__base64Utils.base64StringToPixmap(headimg), friendname, "")
+            
+            # logging.debug("responseGetSessionList  ses = %d", id)
             # 添加至消息会话中
             for msg in ses["msgs"]:
-                self.__addMsgToSes(id, msg)
+                
+                ### 打印msg
+                # logging.debug("responseGetSessionList  msg = %s", msg.__str__())
+                
+                # 是否是最后一条
+                bLastMsg = False
+                if msg == ses["msgs"][-1]:
+                    bLastMsg = True
+                
+                self.__addMsgToSes(id, msg, bLastMsg)
     
         
     def setStatusText(self, text):
@@ -200,13 +211,13 @@ class MainPage(FramelessWindow):
         self.sesPage.setTitle(key)
         self.rightLayout.addWidgetByKey(key, self.sesPage)        
         
-    def __addMsgToSes(self, id, msg):
+    def __addMsgToSes(self, id, msg, bLastMsg):
         sesPage =  self.rightLayout.getByKey(self.__users.getNameById(id))
         if sesPage == None: 
             self.__makeSesPageByKey(self.__users.getNameById(id))
             sesPage = self.rightLayout.getByKey(self.__users.getNameById(id))
             
-        sesPage.appendChatMsg(msg)
+        sesPage.appendChatMsg(msg, bLastMsg)
         
 
     def __onClickedContactListItem(self, str):
@@ -267,7 +278,7 @@ class MainPage(FramelessWindow):
         
     def __responseSendMsg(self, msg):
         ownerid = msg["data"]["ownerid"]
-        self.__addMsgToSes(ownerid, msg["data"])
+        self.__addMsgToSes(ownerid, msg["data"], True)
     def __onSwithSesPage(self, key):
         
         # # 查找会话

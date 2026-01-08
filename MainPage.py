@@ -150,6 +150,7 @@ class MainPage(FramelessWindow):
         self.__busUtils.statusBarTextChanged.connect(self.__onStatusBarTextChanged)
         self.__busUtils.agreeAddFriend.connect(self.__onAgreeAddFriend)
         self.__busUtils.swithSesPage.connect(self.__onSwithSesPage)
+        self.__busUtils.createGroup.connect(self.__onCreateGroup)
         
     
     def __request(self):
@@ -315,4 +316,16 @@ class MainPage(FramelessWindow):
         self.midLayout.setCurrentWidgetByKey("MsgListPage")
         self.msgListPage.setCurrentItemByKey(key)             
         self.titleBar.raise_()
+        
+    def __onCreateGroup(self, groupInfo):
+        # 判断__groupInfos中是否已经存在
+        if self.__groupInfos.has(groupInfo["id"]):
+            return
+        
+        self.contactListPage.addGroup(self.__base64Utils.base64StringToPixmap(groupInfo["headimg"]), groupInfo["groupname"])
+        self.__groupInfos.addDetail(groupInfo["id"], groupInfo["groupid"], groupInfo["createid"], 
+                                        groupInfo["groupname"], groupInfo["headimg"] ,groupInfo["createtime"], groupInfo["groupsetting"])
+        
+        # 创建会话并直接跳转       
+        
             

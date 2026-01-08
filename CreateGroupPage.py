@@ -11,6 +11,7 @@ from CreateGroupListItem import CreateGroupListItem
 from Data import *
 from NetClientUtils import *
 from Base64Utils import *
+from BusUtils import *
 from PictureUtils import *
 from Msg import *
 
@@ -24,6 +25,8 @@ class CreateGroupPage(QWidget):
         self.__netClientUtils = NetClientUtils()
         self.__users = Users()
         self.__base64Utils = Base64Utils()
+        self.__busUtils = BusUtils()
+        self.__doRequesting = False
 
         self.vMainLayout = QVBoxLayout()
         self.vMainLayout.setContentsMargins(0, 0, 0, 0)
@@ -115,6 +118,11 @@ class CreateGroupPage(QWidget):
 
 
     def __onClickedConfirmBtn(self):
+        
+        # if self.__doRequesting == False:
+            # return
+        
+        # self.__doRequesting = True
         # 遍历raw list获取所有userid
         groupfriends = []
         groupfriends.append(self.__users.getId())
@@ -146,7 +154,11 @@ class CreateGroupPage(QWidget):
         if "data" not in msg:
             return
         
-        # print("create group response")
+        grounpInfo = msg["data"]
+        self.__busUtils.createGroup.emit(grounpInfo)
+        
+        
+        
     def add(self, userid, username, bRadio):
 
         if self.has(userid, bRadio):

@@ -1,6 +1,7 @@
 from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
+# from Data import *
 
 from sigleton import singleton
 
@@ -12,3 +13,4 @@ class BusUtils(QObject):
     refuseAddFriend = pyqtSignal(int)
     swithSesPage = pyqtSignal(str)
     updateSesLastMsg = pyqtSignal(str, str, str, bool) # key msg time
+    createGroup = pyqtSignal(dict)

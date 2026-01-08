@@ -162,6 +162,12 @@ class GroupInfos:
     def add(self, groupInfo):
         self.list.append(groupInfo)
         
+    def has(self, groupid):
+        for groupInfo in self.list:
+            if groupInfo.groupid == groupid:
+                return True
+        return False
+        
     def addDetail(self, id, groupid, createid, groupname, headimg, createtime, groupsetting):
         groupInfo = _GroupInfo()
         groupInfo.id = id
@@ -172,6 +178,7 @@ class GroupInfos:
         groupInfo.createtime = createtime
         groupInfo.groupsetting = groupsetting
         self.add(groupInfo)
+        
 
 class _Friend:
     def __init__(self):

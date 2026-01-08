@@ -145,6 +145,33 @@ class GroupFriends:
         groupFriend.identify = groupFriend.identify
         self.add(groupFriend)
         
+class _GroupInfo:
+    def __init__(self):
+        self.id = -1
+        self.groupid = -1
+        self.createid = -1
+        self.groupname = ""
+        self.createtime = -1
+        self.groupsetting = ""
+
+@singleton
+class GroupInfos:
+    def __init__(self):
+        self.list = []
+        
+    def add(self, groupInfo):
+        self.list.append(groupInfo)
+        
+    def addDetail(self, id, groupid, createid, groupname, headimg, createtime, groupsetting):
+        groupInfo = _GroupInfo()
+        groupInfo.id = id
+        groupInfo.groupid = groupid
+        groupInfo.createid = createid
+        groupInfo.groupname = groupname
+        groupInfo.headimg = headimg
+        groupInfo.createtime = createtime
+        groupInfo.groupsetting = groupsetting
+        self.add(groupInfo)
 
 class _Friend:
     def __init__(self):

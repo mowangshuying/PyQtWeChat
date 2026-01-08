@@ -35,6 +35,7 @@ class MainPage(FramelessWindow):
         
         self.__netClientUtils = NetClientUtils()
         self.__users = Users()
+        self.__groupInfos = GroupInfos()
         self.__busUtils = BusUtils()
         self.__base64Utils = Base64Utils()
         
@@ -159,6 +160,12 @@ class MainPage(FramelessWindow):
     def requestGetFriendList(self):
         dataJson = {"ownerid": self.__users.getId()}
         self.__netClientUtils.request(MsgCmd.getFriendList, dataJson, self.responseGetFriendList)
+        
+    def requestGetGroupList(self):
+        data = {"ownerid": self.__users.getId()}
+        self.__netClientUtils.request(MsgCmd.getGroupList, data, self.responseGetGroupList)
+        
+    # response
     def requestGetSessionList(self):
         data = {"ownerid": self.__users.getId()}
         self.__netClientUtils.request(MsgCmd.getSessionList, data, self.responseGetSessionList)
@@ -173,6 +180,17 @@ class MainPage(FramelessWindow):
             self.contactListPage.addFriend(self.__base64Utils.base64StringToPixmap(friend["headimg"]), friend["username"])
             self.__users.addDetail(friend["id"], friend["userid"], friend["username"], 
                                    friend["nickname"], friend["headimg"], friend["sex"], friend["state"], friend["create_date"])
+    
+    def responseGetGroupList(self, msg):
+        # 不含数据直接返回.
+        if "data" not in msg:
+            return
+        
+        # for group in msg["data"]:
+        #     self.contactListPage.addGroup(self.__base64Utils.base64StringToPixmap(group["headimg"]), group["groupname"])
+        #     self.__users.addDetail()
+        for groupInfo in msg["data"]:
+            self.contactListPage.addGroup(self.__base64Utils.base64StringToPixmap(groupInfo["headimg"]), groupInfo["groupname"])
     
     
     def responseGetSessionList(self, msg):

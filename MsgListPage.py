@@ -109,7 +109,7 @@ class MsgListPage(QWidget):
         item.setHeadImg(headimg)
         item.setName(name)
         item.setMsgText(msg)
-        item.setItemType(MsgListItemType.Friend)
+        # item.setItemType(MsgListItemType.Friend)
         
         
         listItem = QListWidgetItem()

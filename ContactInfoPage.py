@@ -5,6 +5,7 @@ from qfluentwidgets import *
 import sys
 
 from BusUtils import BusUtils
+from StyleSheetUtils import StyleSheetUtils
 
 from VSplit import VSplit
 
@@ -41,13 +42,14 @@ class ContactInfoPage(QWidget):
         
         #  wrap widget
         self.wrapWidget = QWidget()
+        self.wrapWidget.setObjectName("wrapWidget")
         # self.wrapWidget.setStyleSheet("background-color: pink;")
-        self.wrapWidget.setFixedSize(380, 115)
+        self.wrapWidget.setFixedSize(410, 145)
         # self.vMainLayout.addWidget(self.wrapWidget, 1)
         self.vBottomLayout.addWidget(self.wrapWidget)
         
         self.vWrapWidgetLayout = QVBoxLayout()
-        self.vWrapWidgetLayout.setContentsMargins(0, 0, 0, 0)
+        self.vWrapWidgetLayout.setContentsMargins(15, 15, 15, 15)
         self.vWrapWidgetLayout.setSpacing(0)
         self.wrapWidget.setLayout(self.vWrapWidgetLayout)
         
@@ -93,6 +95,7 @@ class ContactInfoPage(QWidget):
         self.__connected()
         
         # self.resize(800, 600)
+        StyleSheetUtils.setQssByFileName("./_rc/qss/ContactInfoPage.qss", self)
     
     def updateInfo(self, pixmap, username, userid):
         self.imageLabel.setPixmap(pixmap)
@@ -114,6 +117,12 @@ class ContactInfoPage(QWidget):
     
     def __clickedChatVidoBtn(self):
         pass
+    
+    def paintEvent(self, a0):
+        opt = QStyleOption()   
+        opt.initFrom(self)
+        painter = QPainter(self)
+        self.style().drawPrimitive(QStyle.PrimitiveElement.PE_Widget, opt, painter, self)
     
         
         

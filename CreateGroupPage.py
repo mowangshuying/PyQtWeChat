@@ -11,6 +11,7 @@ from CreateGroupListItem import CreateGroupListItem
 from Data import *
 from NetClientUtils import *
 from Base64Utils import *
+from PictureUtils import *
 from Msg import *
 
 @singleton
@@ -122,12 +123,23 @@ class CreateGroupPage(QWidget):
             groupfriends.append(widget.getUserid())
 
         groupfriends.sort()
+        
+        pixmaps = []
+        for groupfriend in groupfriends:
+            if len(pixmaps) > 9:
+                break
+            
+            pixmap = self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(groupfriend))
+            pixmaps.append(pixmap)
+            
+        headimg = PictureUtils.mergePictures(pixmaps)
 
         data = {}
         data["createid"] = self.__users.getId()
         data["groupname"] = self.groupNameEdit.text()
         data["groupsetting"] = ""
         data["groupfriends"] = groupfriends
+        data["headimg"] = self.__base64Utils.pixmapToBase64String(headimg)
         self.__netClientUtils.request(MsgCmd.createGroup, data, self.__responseCreateGroup)
 
     def __responseCreateGroup(self, msg):

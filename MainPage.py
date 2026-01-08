@@ -154,6 +154,7 @@ class MainPage(FramelessWindow):
     
     def __request(self):
         self.requestGetFriendList()
+        self.requestGetGroupList()
         self.requestGetSessionList()
     
     # request

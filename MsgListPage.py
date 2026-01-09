@@ -136,12 +136,11 @@ class MsgListPage(QWidget):
         
         self.clickedListItem.emit(widget.getKey())
     
-    def __onUpdateSesLastMsg(self, username, msg, time, bMsg):
+    def __onUpdateSesLastMsg(self, key, msg, time, bMsg):
         for i in range(self.list.count()):
             widget = self.list.itemWidget(self.list.item(i))
-            if widget.getItemType() == MsgListItemType.Friend:
-                if widget.getName() == username:
-                    widget.setMsgText(msg)
-                    widget.setTime(time)
-                    if bMsg and self.list.item(i) != self.list.currentItem():
-                        widget.updateUnReadLabel()
+            if widget.getKey() == key:
+                widget.setMsgText(msg)
+                widget.setTime(time)
+                if bMsg and self.list.item(i) != self.list.currentItem():
+                    widget.updateUnReadLabel()

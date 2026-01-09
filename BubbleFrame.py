@@ -8,7 +8,6 @@ class BubbleFrame(QFrame):
     def __init__(self, role:ChatRole, parent=None):
         super().__init__(parent)
         self.hMainLayout = QHBoxLayout()
-        # self.setLayout(self.hMainLayout)
         self.role = role
         self.margin = 3
         self.sanjiaoWidth = 8
@@ -20,7 +19,6 @@ class BubbleFrame(QFrame):
             self.hMainLayout.setContentsMargins(self.margin + self.sanjiaoWidth, self.margin, self.margin, self.margin)
             
         self.setLayout(self.hMainLayout)
-        # self.setStyleSheet("QFrame{background:pink;border:none}")
         
     def setWidget(self, widget):
         if self.hMainLayout.count() > 0:

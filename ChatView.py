@@ -62,13 +62,6 @@ class ChatView(QWidget):
     def onTimer(self):
         self._isAppended = False
         
-    # def eventFilter(self, a0, a1):
-    #     if a1.type() == QEvent.Type.Enter and a0 == self.scrollArea:
-    #         self.scrollArea.verticalScrollBar().setHidden(self.scrollArea.verticalScrollBar().maximum() == 0)
-    #     elif a1.type() == QEvent.Type.Leave and a0 == self.scrollArea: 
-    #         self.scrollArea.verticalScrollBar().setHidden(True)
-               
-    #     return super().eventFilter(a0, a1)
     def paintEvent(self, a0):
         opt = QStyleOption()   
         opt.initFrom(self)

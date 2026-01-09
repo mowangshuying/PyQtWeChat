@@ -65,11 +65,6 @@ class TextBubble(BubbleFrame):
     def eventFilter(self, a0, a1):
         if self.textEdit == a0 and a1.type() == QEvent.Type.Paint:
             self.adjustTextHeight()
-            # 
-            # listitem = self.property("listitem")
-            # height = self.getTextHeight()
-            # listitem.setSizeHint(QSize(listitem.sizeHint().width(), height + 20))
-            
         return super().eventFilter(a0, a1)
     
     

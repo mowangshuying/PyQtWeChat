@@ -36,12 +36,10 @@ class AddFriendsPage(QFrame):
         self.vMainLayout.addWidget(self.sp)
 
         self.searchEdit = LineEdit()
-        # self.searchEdit.setObjectName("searchEdit")
         self.searchEdit.setFixedSize(360, 30)
         self.searchEdit.setPlaceholderText("搜索")
 
         self.searchBtn = PushButton()
-        # self.searchBtn.setObjectName("searchBtn")
         self.searchBtn.setText("搜索")
         self.searchBtn.setFixedSize(80, 30)
 
@@ -64,8 +62,6 @@ class AddFriendsPage(QFrame):
     def add(self, friend):
         # 遍历list
         for i in range(self.list.count()):
-            # curWidget = self.list.item(i).widget()
-            # 获取到item i的widget
             curWidget = self.list.itemWidget(self.list.item(i))
             if curWidget.getUserName() == friend["username"]:
                 return
@@ -78,7 +74,8 @@ class AddFriendsPage(QFrame):
         self.list.addItem(listItem)
         self.list.setItemWidget(listItem, item)
         
-        self.__users.addDetail(friend["id"], friend["userid"], friend["username"], "", friend["headimg"], friend["sex"], friend["state"], friend["create_date"])
+        self.__users.addDetail(friend["id"], friend["userid"], friend["username"], friend["nickname"], 
+                    friend["headimg"], friend["sex"], friend["state"], friend["create_date"])
 
     
     def onClicedSearchBtn(self):
@@ -97,13 +94,11 @@ class AddFriendsPage(QFrame):
             self.list = ListWidgetEx()
             self.vMainLayout.addWidget(self.list)
             
-            
-            # 返回回来的data是一个数组
-            # 判断是否含有data字段
+            # 返回回来的data是一个数组, 判断是否含有data字段
             if "data" not in msg:
                 return
             
             data = msg["data"]
             # 遍历数组添加元素
-            for item in data:
-                self.add(item)
+            for friend in data:
+                self.add(friend)

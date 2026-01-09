@@ -221,6 +221,7 @@ class MainPage(FramelessWindow):
     def __makeSesPageByKey(self, key):
         self.sesPage = SesPage(self)
         self.sesPage.setTitle(key)
+        self.sesPage.setKey(key)
         self.rightLayout.addWidgetByKey(key, self.sesPage)        
         
     def __addMsgToSes(self, userid, msg, bLastMsg):

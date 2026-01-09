@@ -28,6 +28,7 @@ class SesPage(QWidget):
         self.__netClientUtils = NetClientUtils()
         self.__base64Utils = Base64Utils()
         self.__busUtils = BusUtils()
+        self.key = ""
         
 
         self.setAcceptDrops(True)
@@ -87,6 +88,12 @@ class SesPage(QWidget):
         self.edit.installEventFilter(self)
         StyleSheetUtils.setQssByFileName("./_rc/qss/SesPage.qss", self)
 
+    def getKey(self):
+        return self.__key
+    
+    def setKey(self, key):
+        self.key = key    
+
     def setTitle(self, str):
         self.titleLabel.setText(str)
         
@@ -99,7 +106,6 @@ class SesPage(QWidget):
         timestamp = msg["time"]
         
         #时间戳转为日期格式
-        # curDate = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp / 1000))
         timesDate = time.strftime("%Y-%m-%d", time.localtime(timestamp / 1000))
         
         
@@ -123,7 +129,8 @@ class SesPage(QWidget):
             self.list.appendChatItem(chatItem)
             
             if bLastMsg:
-                self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(friendid), text, times, bNewMsg)
+                key = self.__user.makeKey(friendid, self.__user.getNameById(friendid))
+                self.__busUtils.updateSesLastMsg.emit(key, text, times, bNewMsg)
             
             
             
@@ -135,15 +142,19 @@ class SesPage(QWidget):
             chatItem.setBubble(textBubble)
             self.list.appendChatItem(chatItem)
             if bLastMsg:
-                self.__busUtils.updateSesLastMsg.emit(self.__user.getNameById(ownerid), text, times, bNewMsg)
+                key = self.__user.makeKey(ownerid, self.__user.getNameById(ownerid))
+                self.__busUtils.updateSesLastMsg.emit(key, text, times, bNewMsg)
             
     def onClickedSendBtn(self):
         msgText = self.edit.toPlainText()
         if msgText == "":
             return
         
+        strs = self.key.split(":")
+        friendid = int(strs[1])
+        
         data = {"ownerid":self.__user.getId(), 
-                "friendid":self.__user.getIdByName(self.titleLabel.text()),
+                "friendid":friendid,
                 "msgtype": 0,
                 "msgdata":msgText
                 }

@@ -124,7 +124,7 @@ class MsgListPage(QWidget):
         for i in range(self.list.count()):
             listItem = self.list.item(i)
             widget = self.list.itemWidget(listItem)
-            if widget.getName() == key:
+            if widget.getKey() == key:
                 self.list.setCurrentItem(listItem)
                 widget.setUnReadLabel(0)
                 return

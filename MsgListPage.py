@@ -119,6 +119,19 @@ class MsgListPage(QWidget):
         self.list.insertItem(index, listItem)
         self.list.setItemWidget(listItem, item)
         
+    def addGroupMsg(self, headimg, name, msg):
+        # user = self.__users.getUserByName(name)
+        # if user == None:
+        #     return
+        
+        # key = self.__users.makeKey(user.groupid, user.groupname)
+         
+        # for i in range(self.list.count()):
+        #     widget = self.list.itemWidget(self.list.item(i))
+        #     if widget.getKey() == key:
+        pass
+
+        
     def setCurrentItemByKey(self, key):
         # 遍历查找到name == key的item
         for i in range(self.list.count()):

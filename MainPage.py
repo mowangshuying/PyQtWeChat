@@ -313,25 +313,50 @@ class MainPage(FramelessWindow):
         self.__addMsgToSes(ownerid, msg["data"], True)
     def __onSwithSesPage(self, key):
         
-        # # 查找会话
-        if (not self.rightLayout.hasByKey(key)) and key !="" :
-            self.__makeSesPageByKey(key)
-        
-            strs = key.split(":")
-            userid = int(strs[1])
-            username = self.__users.getNameById(userid)
-            headimg = self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(userid))
-            msg=""
+        strs = key.split(":")
+        if strs[0] == "user":
+            # # 查找会话
+            if (not self.rightLayout.hasByKey(key)) and key !="" :
+                self.__makeSesPageByKey(key)
             
+                strs = key.split(":")
+                userid = int(strs[1])
+                username = self.__users.getNameById(userid)
+                headimg = self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(userid))
+                msg=""
+                
+                
+                self.msgListPage.addMsg(headimg, username, msg)
+                
+            # 直接切换到会话
+            self.rightLayout.setCurrentWidgetByKey(key)
+            # 切换到msgListPage
+            self.midLayout.setCurrentWidgetByKey("MsgListPage")
+            self.msgListPage.setCurrentItemByKey(key)             
+            self.titleBar.raise_()
             
-            self.msgListPage.addMsg(headimg, username, msg)
+        if strs[0] == "group":
+            # # 查找会话
+            if (not self.rightLayout.hasByKey(key)) and key !="" :
+                self.__makeSesPageByKey(key)
             
-        # 直接切换到会话
-        self.rightLayout.setCurrentWidgetByKey(key)
-        # 切换到msgListPage
-        self.midLayout.setCurrentWidgetByKey("MsgListPage")
-        self.msgListPage.setCurrentItemByKey(key)             
-        self.titleBar.raise_()
+                strs = key.split(":")
+                groupid = int(strs[1])
+                
+                groupInfo = self.__groupInfos.getGroupInfo(groupid)
+                
+                groupname = groupInfo.groupname
+                headimg = self.__base64Utils.base64StringToPixmap(groupInfo.headimg)
+                msg=""
+            
+                self.msgListPage.addMsg(headimg, groupname, msg)
+                
+            # 直接切换到会话
+            self.rightLayout.setCurrentWidgetByKey(key)
+            # 切换到msgListPage
+            self.midLayout.setCurrentWidgetByKey("MsgListPage")
+            self.msgListPage.setCurrentItemByKey(key)             
+            self.titleBar.raise_()            
         
     def __onCreateGroup(self, groupInfo):
         # 判断__groupInfos中是否已经存在
@@ -340,8 +365,6 @@ class MainPage(FramelessWindow):
         
         self.contactListPage.addGroup(self.__base64Utils.base64StringToPixmap(groupInfo["headimg"]), groupInfo["groupname"])
         self.__groupInfos.addDetail(groupInfo["id"], groupInfo["groupid"], groupInfo["createid"], 
-                                        groupInfo["groupname"], groupInfo["headimg"] ,groupInfo["createtime"], groupInfo["groupsetting"])
-        
-        # 创建会话并直接跳转       
+                                        groupInfo["groupname"], groupInfo["headimg"] ,groupInfo["createtime"], groupInfo["groupsetting"])      
         
             

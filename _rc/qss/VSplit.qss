@@ -1,4 +1,4 @@
 VSplit {
-  background-color: #828790;
+  background-color: rgb(224, 224, 224);
   border: 0px;
 }

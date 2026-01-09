@@ -125,7 +125,6 @@ class MainPage(FramelessWindow):
         # ContactInfoPage
         self.contactInfoPage = ContactInfoPage()
         self.rightLayout.addWidgetByKey("ContactInfoPage", self.contactInfoPage)
-        # self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
 
         # CreateGroupPage
         self.createGroupPage = CreateGroupPage()
@@ -179,7 +178,7 @@ class MainPage(FramelessWindow):
             return
         
         for friend in msg["data"]:
-            self.contactListPage.addFriend(self.__base64Utils.base64StringToPixmap(friend["headimg"]), friend["username"])
+            self.contactListPage.addFriend(friend)
             self.__users.addDetail(friend["id"], friend["userid"], friend["username"], 
                                    friend["nickname"], friend["headimg"], friend["sex"], friend["state"], friend["create_date"])
     
@@ -189,7 +188,7 @@ class MainPage(FramelessWindow):
             return
         
         for groupInfo in msg["data"]:
-            self.contactListPage.addGroup(self.__base64Utils.base64StringToPixmap(groupInfo["headimg"]), groupInfo["groupname"])
+            self.contactListPage.addGroup(groupInfo)
             self.__groupInfos.addDetail(groupInfo["id"], groupInfo["groupid"], groupInfo["createid"], 
                                         groupInfo["groupname"], groupInfo["headimg"] ,groupInfo["createtime"], groupInfo["groupsetting"])
     
@@ -199,26 +198,20 @@ class MainPage(FramelessWindow):
             return
         
         for ses in msg["data"]:
-            id = ses["id"]
-            friendname = self.__users.getNameById(id)
-            headimg = self.__users.getHeadImgById(id)
+            userid = ses["id"]
+            friendname = self.__users.getNameById(userid)
+            headimg = self.__users.getHeadImgById(userid)
             
             # 添加至消息列表中
             self.msgListPage.addMsg(self.__base64Utils.base64StringToPixmap(headimg), friendname, "")
             
-            # logging.debug("responseGetSessionList  ses = %d", id)
-            # 添加至消息会话中
-            for msg in ses["msgs"]:
-                
-                ### 打印msg
-                # logging.debug("responseGetSessionList  msg = %s", msg.__str__())
-                
+            for msg in ses["msgs"]:        
                 # 是否是最后一条
                 bLastMsg = False
                 if msg == ses["msgs"][-1]:
                     bLastMsg = True
                 
-                self.__addMsgToSes(id, msg, bLastMsg)
+                self.__addMsgToSes(userid, msg, bLastMsg)
     
         
     def setStatusText(self, text):
@@ -230,11 +223,12 @@ class MainPage(FramelessWindow):
         self.sesPage.setTitle(key)
         self.rightLayout.addWidgetByKey(key, self.sesPage)        
         
-    def __addMsgToSes(self, id, msg, bLastMsg):
-        sesPage =  self.rightLayout.getByKey(self.__users.getNameById(id))
+    def __addMsgToSes(self, userid, msg, bLastMsg):
+        key = self.__users.makeKey(userid, self.__users.getNameById(userid))
+        sesPage =  self.rightLayout.getByKey(key)
         if sesPage == None: 
-            self.__makeSesPageByKey(self.__users.getNameById(id))
-            sesPage = self.rightLayout.getByKey(self.__users.getNameById(id))
+            self.__makeSesPageByKey(key)
+            sesPage = self.rightLayout.getByKey(key)
             
         sesPage.appendChatMsg(msg, bLastMsg)
         
@@ -242,17 +236,36 @@ class MainPage(FramelessWindow):
     def __onClickedContactListItem(self, str):
         
         # 切换到申请
-        if str == "新的朋友":
+        if str == "user:0:newfriend":
             self.rightLayout.setCurrentWidgetByKey("DoApplyFriendsPage")
             self.doApplyFriendsPage.requestGetApplyList()
             self.titleBar.raise_()
             return
-
-        username = str
-        userid = self.__users.getIdByName(username)
-        headimg = self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(userid))
         
-        self.contactInfoPage.updateInfo(headimg, username, userid)
+        # 按照":"进行截取
+        strs = str.split(":")
+        
+        
+        name = ""
+        currentid = -1
+        headimg = ""
+        
+        if strs[0] == "user":
+            userid = int(strs[1])
+            user = self.__users.getUser(userid)
+            name = user.username
+            currentid = user.userid
+            headimg = self.__base64Utils.base64StringToPixmap(user.headimg)
+        
+        if strs[0] == "group":
+            groupid = int(strs[1])
+            groupInfo = self.__groupInfos.getGroupInfo(groupid)
+            name = groupInfo.groupname
+            currentid = groupInfo.groupid
+            headimg = self.__base64Utils.base64StringToPixmap(groupInfo.headimg)
+            
+        self.contactInfoPage.updateInfo(headimg, name, currentid)
+        self.contactInfoPage.setKey(str)
         self.rightLayout.setCurrentWidgetByKey("ContactInfoPage")
         self.titleBar.raise_()
         
@@ -302,13 +315,15 @@ class MainPage(FramelessWindow):
         # # 查找会话
         if (not self.rightLayout.hasByKey(key)) and key !="" :
             self.__makeSesPageByKey(key)
-            
-            userid = self.__users.getIdByName(key)
+        
+            strs = key.split(":")
+            userid = int(strs[1])
+            username = self.__users.getNameById(userid)
             headimg = self.__base64Utils.base64StringToPixmap(self.__users.getHeadImgById(userid))
-            msg = ""
+            msg=""
             
             
-            self.msgListPage.addMsg(headimg, key, msg)
+            self.msgListPage.addMsg(headimg, username, msg)
             
         # 直接切换到会话
         self.rightLayout.setCurrentWidgetByKey(key)

@@ -13,6 +13,7 @@ class ContactInfoPage(QWidget):
     def __init__(self, parent = None):
         super().__init__(parent=parent)
         
+        self.key = ""
         self.__busUtils = BusUtils()
         
         self.vMainLayout = QVBoxLayout()
@@ -97,6 +98,12 @@ class ContactInfoPage(QWidget):
         # self.resize(800, 600)
         StyleSheetUtils.setQssByFileName("./_rc/qss/ContactInfoPage.qss", self)
     
+    def setKey(self, key):
+        self.key = key
+        
+    def getKey(self):
+        return self.key
+    
     def updateInfo(self, pixmap, username, userid):
         self.imageLabel.setPixmap(pixmap)
         self.imageLabel.setFixedSize(62, 62)
@@ -110,7 +117,7 @@ class ContactInfoPage(QWidget):
         self.chatVidoBtn.clicked.connect(self.__clickedChatVidoBtn)
         
     def __clickedChatMsgBtn(self):
-        self.__busUtils.swithSesPage.emit(self.userunameLabel.text())
+        self.__busUtils.swithSesPage.emit(self.getKey())
     
     def __clickedChatVoiceBtn(self):
         pass

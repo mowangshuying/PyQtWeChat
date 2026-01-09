@@ -6,8 +6,6 @@ from qfluentwidgets import *
 
 class CreateGroupListItem(QFrame):
 
-    # userid, state
-    # clickedListItem = pyqtSignal(int, bool)
     clickedRadioBtn = pyqtSignal(int, bool)
     def __init__(self, parent = None):
         super().__init__(parent = parent)

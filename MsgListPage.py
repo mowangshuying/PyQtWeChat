@@ -87,30 +87,32 @@ class MsgListPage(QWidget):
         menu.exec(gp)
         
     def addMsg(self, headimg, name, msg):
-        for i in range(self.list.count()):
-            widget = self.list.itemWidget(self.list.item(i))
-            if widget.getItemType() == MsgListItemType.Friend:
-                if widget.getName() == name:
-                    return
+        user = self.__users.getUserByName(name)
+        if user == None:
+            return
         
-        names = []
-        # 遍历获取所有name
+        key = self.__users.makeKey(user.userid, user.username)
+         
         for i in range(self.list.count()):
             widget = self.list.itemWidget(self.list.item(i))
-            names.append(widget.getName())
+            if widget.getKey() == key:
+                return
+        
+        keys = []
+        for i in range(self.list.count()):
+            widget = self.list.itemWidget(self.list.item(i))
+            keys.append(widget.getKey())
             
-        names.append(name)
+        keys.append(key)
+        keys.sort()
         
-        names.sort()
-        
-        index = names.index(name)
+        index = keys.index(key)
             
         item = MsgListFriendItem()
         item.setHeadImg(headimg)
         item.setName(name)
         item.setMsgText(msg)
-        # item.setItemType(MsgListItemType.Friend)
-        
+        item.setKey(key)
         
         listItem = QListWidgetItem()
         listItem.setSizeHint(QSize(200, 65))
@@ -132,7 +134,7 @@ class MsgListPage(QWidget):
         if widget == None:
             return
         
-        self.clickedListItem.emit(widget.getName())
+        self.clickedListItem.emit(widget.getKey())
     
     def __onUpdateSesLastMsg(self, username, msg, time, bMsg):
         for i in range(self.list.count()):

@@ -29,6 +29,7 @@ class ContactListPage(QWidget):
         
         self.__netClientUtils = NetClientUtils()
         self.__users = Users()
+        self.__groupInfos = GroupInfos()
         self.__syncEvent = SyncEvent()
         self.__base64Utils = Base64Utils()
         
@@ -103,6 +104,7 @@ class ContactListPage(QWidget):
         item = ContactListFriendItem()
         item.setHeadImg(headimg)
         item.setName(username)
+        item.setKey("user:0:newfriend")
         
         listItem = QListWidgetItem(self.list)
         listItem.setSizeHint(QSize(200, 65))
@@ -110,32 +112,28 @@ class ContactListPage(QWidget):
         self.list.insertItem(0, listItem)
         self.list.setItemWidget(listItem, item)        
     
-    def addFriend(self, headimg, username):
 
-        # 判断是否含有该用户
+    def addFriend(self, friend):
+        key = self.__users.makeKey(friend["userid"], friend["username"])
         for i in range(self.list.count()):
             widget = self.list.itemWidget(self.list.item(i))
-            if widget.getItemType() == ContactListItemType.Friend:
-                if widget.getName() == username:
-                    return
+            if widget.getKey() == key:
+                return
                 
-        names = []
-
-        # 遍历获取所有name
+        keys = []
         for i in range(self.list.count()):
             widget = self.list.itemWidget(self.list.item(i))
-            if widget.getItemType() == ContactListItemType.Friend:
-                names.append(widget.getName())
+            if widget.getItemType() == ContactListItemType.Friend and widget.getKey() != "user:0:newfriend":
+                keys.append(widget.getKey())
 
-        names.append(username)
-
-        names.sort()
-
-        index = names.index(username)
-
+        keys.append(key)
+        keys.sort()
+        
+        index = keys.index(key)
         item = ContactListFriendItem()
-        item.setHeadImg(headimg)
-        item.setName(username)
+        item.setHeadImg(self.__base64Utils.base64StringToPixmap(friend["headimg"]))
+        item.setName(friend["username"])
+        item.setKey(key)
         
         listItem = QListWidgetItem()
         listItem.setSizeHint(QSize(200, 65))
@@ -143,26 +141,24 @@ class ContactListPage(QWidget):
         self.list.insertItem(2 + index, listItem)
         self.list.setItemWidget(listItem, item)
         
-    def addGroup(self, headimg, groupname):
+    def addGroup(self, group):
+        key = self.__groupInfos.makeKey(group["groupid"], group["groupname"])
         for i in range(self.list.count()):
             widget = self.list.itemWidget(self.list.item(i))
-            if widget.getItemType() != ContactListItemType.Group:
-                continue
-            
-            if widget.getName() == groupname:
+            if widget.getKey() == key:
                 return
             
-        names = []
-        # 遍历获取所有群的消息
+        keys = []
         for i in range(self.list.count()):
             widget = self.list.itemWidget(self.list.item(i))
             if widget.getItemType() == ContactListItemType.Group:
-                names.append(widget.getName())
+                keys.append(widget.getKey())
 
-        names.append(groupname)
-        names.sort()
+        keys.append(key)
+        keys.sort()
 
-        index = names.index(groupname)
+        index = keys.index(key)
+        
         firstIndex = -1
         for i in range(self.list.count()):
             widget = self.list.itemWidget(self.list.item(i))
@@ -174,8 +170,9 @@ class ContactListPage(QWidget):
         index = firstIndex + index
 
         item = ContactListGroupItem()
-        item.setName(groupname)
-        item.setHeadImg(headimg)
+        item.setName(group["groupname"])
+        item.setHeadImg(self.__base64Utils.base64StringToPixmap(group["headimg"]))
+        item.setKey(key)
 
         listItem = QListWidgetItem()
         listItem.setSizeHint(QSize(200, 65))
@@ -202,6 +199,7 @@ class ContactListPage(QWidget):
         if widget.getItemType() == ContactListItemType.Tip:
             return
         
-        self.clickedListItem.emit(widget.getName())
+        # type, dict        
+        self.clickedListItem.emit(widget.getKey())
 
             

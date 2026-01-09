@@ -9,6 +9,7 @@ class _User:
         self.userid = -1
         self.username = ""
         self.nickname = ""
+        self.headimg = ""
         self.sex = -1
         self.state = -1
         self.createdate = -1
@@ -21,6 +22,9 @@ class Users:
         self.userid = -1
         self.loginDate = -1 #记录登录的时间
         self.list = []
+        
+    def makeKey(self, userid, username):
+        return "user:"+str(userid)+":" + username 
 
     def getId(self):
         return self.userid
@@ -81,6 +85,12 @@ class Users:
             
         return None
     
+    def getUserByName(self, name):
+        for user in self.list:
+            if user.username == name:
+                return user
+        return None
+    
     def hasById(self, id):
         for user in self.list:
             if user.userid == id:
@@ -91,9 +101,6 @@ class Users:
         for user in self.list:
             if user.userid == userid:
                 user.headimg = headimg
-
-
-    
 
 class _GroupMsg:
     def __init__(self):
@@ -159,6 +166,9 @@ class GroupInfos:
     def __init__(self):
         self.list = []
         
+    def makeKey(self, groupid, groupname):
+        return "group:"+str(groupid)+":"+groupname
+        
     def add(self, groupInfo):
         self.list.append(groupInfo)
         
@@ -167,6 +177,12 @@ class GroupInfos:
             if groupInfo.groupid == groupid:
                 return True
         return False
+    
+    def getGroupInfo(self, groupid):
+        for groupInfo in self.list:
+            if groupInfo.groupid == groupid:
+                return groupInfo
+        return None
         
     def addDetail(self, id, groupid, createid, groupname, headimg, createtime, groupsetting):
         groupInfo = _GroupInfo()

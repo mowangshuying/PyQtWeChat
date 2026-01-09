@@ -12,9 +12,16 @@ class MsgListItem(QFrame):
     def __init__(self, parent = None):
         super().__init__(parent)
         self.itemType = MsgListItemType.Friend
+        self.key = ""
         
     def setItemType(self, itemType: MsgListItemType):
         self.itemType = itemType
         
     def getItemType(self) -> MsgListItemType:
         return self.itemType
+    
+    def setKey(self, key: str):
+        self.key = key
+        
+    def getKey(self) -> str:
+        return self.key

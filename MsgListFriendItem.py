@@ -48,9 +48,7 @@ class MsgListFriendItem(MsgListItem):
         self.setUnReadLabel(0)
         
         StyleSheetUtils.setQssByFileName("./_rc/qss/MsgListFriendItem.qss", self)
-        
-        
-        
+    
     def setHeadImg(self, headimg: QPixmap):
         self.headImgLabel.setPixmap(headimg)
         self.headImgLabel.setScaledSize(QSize(40, 40))

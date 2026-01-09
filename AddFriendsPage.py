@@ -107,18 +107,3 @@ class AddFriendsPage(QFrame):
             # 遍历数组添加元素
             for item in data:
                 self.add(item)
-
-
-# if __name__ == "__main__":
-#     app = QApplication([])
-#     w = AddFriendsPage()
-#     w.resize(1200, 800)
-
-#     # add freiend card;
-#     for i in range(10):
-#         card = FindFriendsListItem()
-#         card.setNameAndImg("user" + str(i), QPixmap("./_rc/img/headImg.png"))
-#         w.add(card)
-
-#     w.show()
-#     app.exec()
